@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FPL Community!</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts & Font Awesome Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            pitchDark: '#070913',
+            cardDark: '#0e1326',
+            cardBorder: 'rgba(168, 85, 247, 0.3)',
+            emeraldGlow: '#8b5cf6',
+            emeraldNeon: '#06b6d4',
+            roseHot: '#ff007f',
+            goldRoyal: '#fbbf24',
+            goldLight: '#fef08a',
+            skyBright: '#38bdf8',
+            purpleGlow: '#a855f7',
+            electricCyan: '#00f0ff',
+            neonViolet: '#a855f7',
+            sunsetPink: '#f43f5e',
+          },
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+          },
+          animation: {
+            'burn-glow': 'burnGlow 2.5s ease-in-out infinite alternate',
+            'gold-shimmer': 'goldShimmer 3s ease-in-out infinite alternate',
+            'pulse-subtle': 'pulseSubtle 2.5s infinite',
+            'bg-shift': 'bgShift 12s ease infinite alternate',
+          },
+          keyframes: {
+            burnGlow: {
+              '0%': { boxShadow: '0 0 15px rgba(255, 0, 127, 0.4)', backgroundColor: 'rgba(255, 0, 127, 0.15)' },
+              '100%': { boxShadow: '0 0 35px rgba(255, 0, 127, 0.85)', backgroundColor: 'rgba(255, 0, 127, 0.35)' },
+            },
+            goldShimmer: {
+              '0%': { boxShadow: '0 0 20px rgba(168, 85, 247, 0.3)', borderColor: 'rgba(168, 85, 247, 0.6)' },
+              '100%': { boxShadow: '0 0 45px rgba(6, 182, 212, 0.75)', borderColor: 'rgba(6, 182, 212, 1)' },
+            },
+            pulseSubtle: {
+              '0%, 100%': { opacity: 1 },
+              '50%': { opacity: 0.85 },
+            },
+            bgShift: {
+              '0%': { backgroundPosition: '0% 0%' },
+              '100%': { backgroundPosition: '100% 100%' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #070913;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #a855f7;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #06b6d4;
+    }
+
+    /* Vibrant Midnight Aurora Background */
+    body {
+      background: linear-gradient(135deg, #05060f 0%, #12092b 25%, #08172e 50%, #1d072b 75%, #050b14 100%);
+      background-size: 200% 200%;
+      animation: bgShift 15s ease infinite alternate;
+      background-attachment: fixed;
+    }
+
+    .glass-panel {
+      background: rgba(14, 19, 38, 0.85);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      box-shadow: 0 12px 35px -10px rgba(0, 0, 0, 0.75);
+    }
+
+    .glass-panel-gold {
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.25) 0%, rgba(14, 19, 38, 0.95) 50%, rgba(6, 182, 212, 0.25) 100%);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 2px solid rgba(0, 240, 255, 0.75);
+    }
+
+    .glass-panel-rose {
+      background: linear-gradient(135deg, rgba(255, 0, 127, 0.2) 0%, rgba(14, 12, 28, 0.95) 50%, rgba(168, 85, 247, 0.2) 100%);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 0, 127, 0.5);
+    }
+
+    .glass-panel-amber {
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.2) 0%, rgba(12, 20, 36, 0.95) 50%, rgba(168, 85, 247, 0.2) 100%);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(6, 182, 212, 0.5);
+    }
+
+    .toast-enter {
+      opacity: 0;
+      transform: translateY(15px);
+    }
+    .toast-active {
+      opacity: 1;
+      transform: translateY(0);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Super Admin Live Cursor Glow Indicator */
+    .superadmin-active [contenteditable="true"] {
+      outline: 2px dashed rgba(6, 182, 212, 0.8) !important;
+      outline-offset: 3px;
+      cursor: text !important;
+    }
+    .superadmin-active [contenteditable="true"]:focus {
+      outline: 2px solid #00f0ff !important;
+      background-color: rgba(6, 182, 212, 0.2) !important;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body id="bodyRoot" class="text-slate-100 min-h-screen font-sans selection:bg-purple-600 selection:text-white pb-20">
+
+  <header class="sticky top-0 z-40 bg-pitchDark/90 backdrop-blur-xl border-b border-cardBorder shadow-2xl">
+    <div class="max-w-6xl mx-auto px-4 py-3 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+      
+      <!-- Top Left High-Visibility Slogan -->
+      <div class="text-center sm:text-left">
+        <span class="inline-block bg-gradient-to-r from-purple-600/30 via-cyan-500/30 to-purple-600/30 border-2 border-cyan-400 text-cyan-300 font-black text-xs sm:text-sm px-4 py-1.5 rounded-full shadow-[0_0_20px_rgba(6,182,212,0.4)] tracking-wide">
+          form ni kununua mercdiis 🏎️💨
+        </span>
+      </div>
+
+      <!-- Strictly Centered App Title -->
+      <div class="text-center">
+        <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-white flex items-center justify-center gap-2">
+          <span class="editable-node">FPL Community!</span> <span class="text-cyan-400 drop-shadow-[0_0_12px_rgba(6,182,212,0.9)]">👑</span>
+        </h1>
+        <p class="text-[10px] sm:text-xs text-purple-400 font-black uppercase tracking-widest mt-0.5 editable-node">Official Sweepstake Hub & Standings</p>
+      </div>
+
+      <!-- Access Mode Switcher -->
+      <div class="flex items-center gap-2 bg-cardDark/90 px-3.5 py-1.5 rounded-full border border-cardBorder shadow-inner">
+        <i id="modeIcon" class="fa-solid fa-user text-slate-400 text-xs"></i>
+        <select id="accessModeSelect" onchange="changeAccessMode(this.value)" class="bg-transparent text-xs font-bold text-slate-200 focus:outline-none cursor-pointer">
+          <option value="member" class="bg-cardDark text-slate-200">Member View</option>
+          <option value="admin" class="bg-cardDark text-cyan-400 font-bold">Admin View</option>
+          <option value="superadmin" class="bg-cardDark text-purple-400 font-bold">Super Admin Mode ⚡</option>
+        </select>
+      </div>
+
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 mt-6 space-y-8">
+
+    <section class="space-y-3">
+      <div class="flex items-center justify-between border-b border-cardBorder pb-2">
+        <h2 class="text-xs font-black uppercase tracking-widest text-electricCyan flex items-center gap-2">
+          <i class="fa-regular fa-clock"></i> <span class="editable-node">Time & Deadline</span>
+        </h2>
+        <span class="text-[11px] text-slate-300 font-semibold editable-node">Gameweek Deadline Countdown</span>
+      </div>
+
+      <div class="glass-panel rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row items-center justify-between gap-4 shadow-lg">
+        <div>
+          <span class="text-[10px] uppercase font-black text-cyan-300 tracking-wider block editable-node">Next Gameweek Deadline</span>
+          <div class="flex items-center gap-3 mt-2">
+            <div class="text-center"><span id="days" class="text-2xl sm:text-3xl font-black text-white">00</span><span class="block text-[9px] text-slate-400 font-bold uppercase">Days</span></div>
+            <span class="text-slate-500 font-black text-xl">:</span>
+            <div class="text-center"><span id="hours" class="text-2xl sm:text-3xl font-black text-white">00</span><span class="block text-[9px] text-slate-400 font-bold uppercase">Hours</span></div>
+            <span class="text-slate-500 font-black text-xl">:</span>
+            <div class="text-center"><span id="minutes" class="text-2xl sm:text-3xl font-black text-white">00</span><span class="block text-[9px] text-slate-400 font-bold uppercase">Mins</span></div>
+            <span class="text-slate-500 font-black text-xl">:</span>
+            <div class="text-center"><span id="seconds" class="text-2xl sm:text-3xl font-black text-electricCyan">00</span><span class="block text-[9px] text-slate-400 font-bold uppercase">Secs</span></div>
+          </div>
+        </div>
+
+        <div class="bg-purple-600/20 border-2 border-cyan-400/50 px-4 py-2.5 rounded-xl text-center md:text-right w-full md:w-auto">
+          <span class="block text-[10px] uppercase font-extrabold text-electricCyan tracking-wider editable-node">Status</span>
+          <span class="text-xs font-bold text-white editable-node">Deadline Approaching</span>
+        </div>
+      </div>
+
+      <!-- Super Admin Deadline Editor -->
+      <div class="superadmin-only hidden bg-cardDark p-3.5 rounded-xl border border-cyan-400/40">
+        <label class="block text-xs font-bold text-cyan-300 mb-1">Set Target Deadline (Super Admin):</label>
+        <input type="datetime-local" id="countdownInput" class="w-full bg-pitchDark border border-cardBorder text-xs text-white p-2 rounded-lg focus:outline-none focus:border-cyan-400" onchange="updateCountdownTarget()">
+      </div>
+    </section>
+
+    <section class="space-y-3">
+      <div class="border-b border-cardBorder pb-2">
+        <h2 class="text-xs font-black uppercase tracking-widest text-cyan-300 flex items-center gap-2">
+          <i class="fa-solid fa-crown"></i> <span class="editable-node">Winner Spotlight</span>
+        </h2>
+      </div>
+
+      <div class="glass-panel-gold rounded-2xl p-6 shadow-2xl relative overflow-hidden text-center sm:text-left animate-gold-shimmer">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-6 relative z-10">
+          
+          <div class="flex flex-col sm:flex-row items-center gap-4">
+            <div class="text-4xl sm:text-5xl drop-shadow-[0_0_20px_rgba(0,240,255,0.9)]">👑</div>
+            <div>
+              <span class="text-[10px] sm:text-xs uppercase tracking-widest font-black text-cyan-300 block editable-node">Gameweek Champion</span>
+              <div class="flex items-center justify-center sm:justify-start gap-3 mt-1">
+                <h3 id="winnerNameDisplay" class="text-2xl sm:text-4xl font-black text-white tracking-tight drop-shadow-md editable-node">Gemini</h3>
+                <span class="text-3xl sm:text-4xl">👑</span>
+              </div>
+              <p class="text-xs sm:text-sm text-cyan-100 font-bold mt-2 leading-relaxed editable-node">
+                Congratulations! Outstanding performance this gameweek. Long live the king! ⚽🔥
+              </p>
+            </div>
+          </div>
+
+          <div class="bg-pitchDark/90 border-2 border-cyan-400 px-7 py-4 rounded-2xl text-center shadow-2xl shrink-0">
+            <span class="block text-[10px] uppercase font-black text-cyan-300 tracking-wider mb-1 editable-node">Winning Score</span>
+            <span id="winnerPointsDisplay" class="text-3xl sm:text-4xl font-mono font-black text-electricCyan editable-node">88 pts</span>
+          </div>
+
+        </div>
+
+        <div class="admin-only hidden mt-6 pt-4 border-t border-cyan-400/40 text-left">
+          <label class="block text-xs font-bold text-cyan-300 mb-2">Publish / Edit Gameweek Champion:</label>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <input type="text" id="winnerNameInput" placeholder="Type Winner Name" class="bg-pitchDark border border-cyan-400/40 text-xs text-white p-2.5 rounded-lg focus:outline-none focus:border-cyan-300">
+            <input type="number" id="winnerPointsInput" placeholder="GW Score (e.g. 88)" class="bg-pitchDark border border-cyan-400/40 text-xs text-white p-2.5 rounded-lg focus:outline-none focus:border-cyan-300">
+            <button onclick="saveWinnerDetails()" class="bg-cyan-400 hover:bg-cyan-300 text-pitchDark font-black text-xs px-4 py-2.5 rounded-lg transition-all shadow-md">
+              Publish Winner 👑
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="space-y-3">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-cardBorder pb-2 gap-2">
+        <div class="flex items-center gap-3">
+          <h2 class="text-xs font-black uppercase tracking-widest text-electricCyan flex items-center gap-2">
+            <i class="fa-solid fa-list-ol"></i> <span class="editable-node">League Standings & Roster</span>
+          </h2>
+          <span class="bg-purple-600/20 text-cyan-300 border border-purple-500/40 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full editable-node">
+            GW 1-38 Active
+          </span>
+        </div>
+        
+        <div class="flex items-center gap-3">
+          <span class="text-xs font-extrabold text-roseHot bg-roseHot/15 border border-roseHot/40 px-3 py-1 rounded-full uppercase tracking-wider shadow-sm editable-node">
+            Don't be the loser! 🔥
+          </span>
+          <span class="text-xs font-bold text-slate-300">
+            Managers: <span id="memberCount" class="text-white font-black">0</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- Financial Progress Tracker -->
+      <div class="glass-panel p-4 rounded-2xl space-y-2 border border-purple-500/40">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs font-bold">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-chart-pie text-cyan-400 text-sm"></i>
+            <span class="text-slate-200">Sweepstake Payment Progress:</span>
+            <span id="paymentPercentageText" class="text-electricCyan font-black text-sm">0% Process Done</span>
+          </div>
+          <div class="text-slate-300">
+            Pot Collection: <span id="paymentAmountText" class="text-cyan-300 font-mono font-bold">KSh 0 / KSh 0</span>
+          </div>
+        </div>
+        <div class="w-full bg-pitchDark/90 rounded-full h-3.5 overflow-hidden p-0.5 border border-cardBorder">
+          <div id="paymentProgressBar" class="bg-gradient-to-r from-purple-600 via-cyan-400 to-pink-500 h-full rounded-full transition-all duration-500 ease-out" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <!-- Standings Table Container -->
+      <div class="glass-panel rounded-2xl overflow-hidden shadow-2xl border border-cardBorder">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b border-cardBorder text-[10px] uppercase tracking-wider text-purple-300 font-black bg-cardDark/90">
+                <th class="py-3.5 px-4 editable-node">Rank</th>
+                <th class="py-3.5 px-4 editable-node">Manager Name</th>
+                <th class="py-3.5 px-4 text-center editable-node">Payment Status (KSh 50)</th>
+                <th class="py-3.5 px-4 text-center editable-node">Movement</th>
+                <th class="py-3.5 px-4 text-right editable-node">GW Points</th>
+                <th class="py-3.5 px-4 text-right editable-node">Total Points</th>
+                <th class="admin-only hidden py-3.5 px-4 text-center">Admin Controls</th>
+              </tr>
+            </thead>
+            <tbody id="rosterTableBody" class="divide-y divide-cardBorder/50 text-sm">
+              <!-- Dynamic Roster Rows -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="admin-only hidden bg-cardDark/90 p-4 border-t border-cardBorder space-y-4">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-cardBorder/60 pb-3">
+            <h3 class="text-xs font-black uppercase tracking-wider text-cyan-300 flex items-center gap-2">
+              <i class="fa-solid fa-user-plus"></i> Add Manager to Roster
+            </h3>
+            <button onclick="clearEntireRoster()" class="superadmin-only hidden bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white border border-rose-500/40 text-xs font-bold px-3 py-1.5 rounded-lg transition-all">
+              <i class="fa-solid fa-rotate-left"></i> Reset Roster From Scratch
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+            <div>
+              <label class="block text-[10px] text-slate-300 mb-1 font-semibold">Manager Name:</label>
+              <input type="text" id="newMemberName" placeholder="Manager Name..." class="w-full bg-pitchDark border border-cardBorder text-xs text-white p-2.5 rounded-lg focus:outline-none focus:border-cyan-400">
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-300 mb-1 font-semibold">GW Points:</label>
+              <input type="number" id="newMemberGwPoints" placeholder="0" class="w-full bg-pitchDark border border-cardBorder text-xs text-white p-2.5 rounded-lg focus:outline-none focus:border-cyan-400">
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-300 mb-1 font-semibold">Total Points:</label>
+              <input type="number" id="newMemberPoints" placeholder="0" class="w-full bg-pitchDark border border-cardBorder text-xs text-white p-2.5 rounded-lg focus:outline-none focus:border-cyan-400">
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-300 mb-1 font-semibold">Rank Movement:</label>
+              <select id="newMemberMovement" class="w-full bg-pitchDark border border-cardBorder text-xs text-white p-2.5 rounded-lg focus:outline-none focus:border-cyan-400">
+                <option value="up">Jumped Up (▲)</option>
+                <option value="down">Fell Down (▼)</option>
+                <option value="same">No Change (-)</option>
+              </select>
+            </div>
+          </div>
+          <button onclick="addMember()" class="bg-cyan-400 hover:bg-cyan-300 text-pitchDark font-black text-xs px-5 py-2.5 rounded-lg transition-all flex items-center gap-2 shadow-md">
+            <i class="fa-solid fa-plus"></i> Add Manager to League
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="space-y-3">
+      <div class="border-b border-cardBorder pb-2">
+        <h2 class="text-xs font-black uppercase tracking-widest text-skyBright flex items-center gap-2">
+          <i class="fa-solid fa-money-bill-wave"></i> <span class="editable-node">Payments & Contributions</span>
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <div class="glass-panel rounded-2xl p-5 flex flex-col justify-between shadow-xl border-t-2 border-t-cyan-400">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="bg-cyan-500/20 text-cyan-300 border border-cyan-400/50 text-[10px] font-black px-2.5 py-1 rounded-full uppercase editable-node">
+                Sweepstake Contribution
+              </span>
+              <span class="text-sm font-black text-cyan-300 editable-node">KSh 50</span>
+            </div>
+
+            <h3 class="text-sm font-bold text-white mb-3 editable-node">Each member should contribute 50 shillings before the gameweek deadline.</h3>
+            
+            <div class="space-y-3 my-4">
+              <div class="bg-pitchDark/90 p-3.5 rounded-xl border border-cardBorder flex items-center justify-between">
+                <div>
+                  <span class="block text-[9px] uppercase text-slate-300 font-bold editable-node">M-Pesa Number</span>
+                  <span id="contribPhoneDisplay" class="text-base font-mono font-bold text-cyan-300 editable-node">Not Set Yet</span>
+                </div>
+                <button onclick="copyToClipboard('contribPhoneDisplay')" class="bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-400/40 px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5">
+                  <i class="fa-regular fa-copy"></i> Copy
+                </button>
+              </div>
+
+              <div class="bg-pitchDark/90 p-3.5 rounded-xl border border-cardBorder">
+                <span class="block text-[9px] uppercase text-slate-300 font-bold editable-node">Account / Name</span>
+                <span id="contribNameDisplay" class="text-xs font-semibold text-white editable-node">Not Set Yet</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="superadmin-only hidden space-y-2 mt-3 pt-3 border-t border-cardBorder">
+            <label class="block text-xs font-bold text-cyan-300">Edit Contribution Details (Super Admin):</label>
+            <input type="text" id="contribPhoneInput" placeholder="M-Pesa number..." class="w-full bg-pitchDark border border-cardBorder text-xs text-white p-2 rounded-lg focus:outline-none focus:border-cyan-400">
+            <input type="text" id="contribNameInput" placeholder="Account name..." class="w-full bg-pitchDark border border-cardBorder text-xs text-white p-2 rounded-lg focus:outline-none focus:border-cyan-400">
+            <button onclick="saveContribDetails()" class="w-full bg-cyan-400 hover:bg-cyan-300 text-pitchDark font-bold text-xs py-2 rounded-lg transition-all">
+              Save Details
+            </button>
+          </div>
+        </div>
+
+        <!-- Voluntary Support Card -->
+        <div class="glass-panel-amber rounded-2xl p-5 flex flex-col justify-between shadow-2xl border-2 border-cyan-400/80">
+          <div>
+            <div class="flex flex-col items-center justify-center text-center mb-4 space-y-2">
+              <div class="flex items-center justify-between w-full">
+                <span class="bg-purple-500/25 text-purple-300 border border-purple-400/60 text-[10px] font-black px-3 py-1 rounded-full uppercase editable-node shadow-sm">
+                  Voluntary Support
+                </span>
+              </div>
+              
+              <!-- Centered "Za Githeri. 🥺" Badge -->
+              <div class="my-3 w-full flex justify-center">
+                <span class="inline-block bg-gradient-to-r from-purple-600/40 via-cyan-500/30 to-purple-600/40 border-2 border-cyan-300 text-cyan-200 font-black text-base sm:text-lg px-7 py-3 rounded-full shadow-[0_0_30px_rgba(6,182,212,0.6)] tracking-wide editable-node">
+                  "Za Githeri. 🥺"
+                </span>
+              </div>
+            </div>
+
+            <h3 class="text-sm font-bold text-slate-100 text-center sm:text-left mb-3 editable-node leading-relaxed">
+              Any support, any contribution that you will put will be highly respected. 🤝
+            </h3>
+            
+            <div class="bg-pitchDark/90 p-3.5 rounded-xl border border-cyan-400/40 flex items-center justify-between my-4 shadow-lg">
+              <div>
+                <span class="block text-[9px] uppercase text-cyan-300 font-black editable-node">Voluntary Support Number</span>
+                <span id="supportPhoneDisplay" class="text-base font-mono font-bold text-cyan-300 editable-node">Not Set Yet</span>
+              </div>
+              <button onclick="copyToClipboard('supportPhoneDisplay')" class="bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-400/50 px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm">
+                <i class="fa-regular fa-copy"></i> Copy
+              </button>
+            </div>
+          </div>
+
+          <div class="superadmin-only hidden space-y-2 mt-3 pt-3 border-t border-cardBorder">
+            <label class="block text-xs font-bold text-cyan-300">Edit Voluntary Support Number (Super Admin):</label>
+            <input type="text" id="supportPhoneInput" placeholder="Voluntary number..." class="w-full bg-pitchDark border border-cardBorder text-xs text-white p-2 rounded-lg focus:outline-none focus:border-cyan-400">
+            <button onclick="saveSupportDetails()" class="w-full bg-cyan-400 hover:bg-cyan-300 text-pitchDark font-bold text-xs py-2 rounded-lg transition-all">
+              Save Support Number
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="space-y-3">
+      <div class="border-b border-cardBorder pb-2">
+        <h2 class="text-xs font-black uppercase tracking-widest text-purple-400 flex items-center gap-2">
+          <i class="fa-solid fa-vault"></i> <span class="editable-node">Transparency Proof</span>
+        </h2>
+      </div>
+
+      <div class="glass-panel rounded-2xl p-5 shadow-xl space-y-4">
+        <p class="text-xs text-slate-200 font-semibold editable-node">
+          Official M-Pesa receipt confirmation message and screenshot posted by Admin to prove the pot is 100% safe and unrigged.
+        </p>
+
+        <div class="bg-pitchDark/90 p-4 sm:p-5 rounded-xl border border-cardBorder space-y-4">
+          <div id="proofTextDisplay" class="text-xs sm:text-sm text-slate-100 whitespace-pre-wrap font-mono leading-relaxed editable-node">
+            No M-Pesa receipt message posted yet.
+          </div>
+          
+          <div id="proofImageContainer" class="hidden">
+            <p class="text-[10px] text-purple-300 font-black uppercase tracking-wider mb-2 editable-node">M-Pesa Receipt Screenshot Proof:</p>
+            <div class="w-full min-h-[300px] max-h-[600px] overflow-hidden rounded-xl border border-cardBorder bg-pitchDark/90 p-3 flex items-center justify-center">
+              <img id="proofImageDisplay" src="" alt="Proof Screenshot" class="max-h-[560px] w-auto object-contain rounded-lg shadow-2xl">
+            </div>
+          </div>
+        </div>
+
+        <div class="superadmin-only hidden space-y-3 pt-3 border-t border-cardBorder">
+          <h3 class="text-xs font-bold text-amber-300 uppercase">Publish M-Pesa Receipt Proof (Super Admin)</h3>
+          <div>
+            <label class="block text-[10px] text-slate-300 mb-1">Paste M-Pesa Message Text:</label>
+            <textarea id="proofTextInput" rows="3" placeholder="Paste M-Pesa receipt text..." class="w-full bg-pitchDark border border-cardBorder text-xs text-white p-2.5 rounded-lg focus:outline-none focus:border-purple-400 font-mono"></textarea>
+          </div>
+          <div>
+            <label class="block text-[10px] text-slate-300 mb-1">Upload Receipt Screenshot:</label>
+            <input type="file" id="proofImageInput" accept="image/*" class="text-xs text-slate-400 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-purple-600 file:text-white hover:file:bg-purple-500 cursor-pointer">
+          </div>
+          <button onclick="saveProofVault()" class="bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs px-5 py-2.5 rounded-lg transition-all shadow-md">
+            Publish Proof Vault
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      
+      <section class="space-y-3">
+        <div class="border-b border-cardBorder pb-2">
+          <h2 class="text-xs font-black uppercase tracking-widest text-skyBright flex items-center gap-2">
+            <i class="fa-solid fa-bullhorn"></i> <span class="editable-node">Announcements</span>
+          </h2>
+        </div>
+
+        <div class="glass-panel rounded-2xl p-5 shadow-xl flex flex-col justify-between h-full">
+          <div class="bg-pitchDark/90 p-4 rounded-xl border border-cardBorder min-h-[90px] flex items-center mb-3">
+            <p id="announcementText" class="text-xs sm:text-sm text-slate-100 font-medium italic leading-relaxed editable-node">
+              No active announcements yet. Admin broadcasts will chime with sound!
+            </p>
+          </div>
+
+          <div class="superadmin-only hidden space-y-2 pt-2 border-t border-cardBorder">
+            <label class="block text-[10px] text-amber-300 font-bold">Broadcast Announcement (Triggers Chime Sound):</label>
+            <div class="flex gap-2">
+              <input type="text" id="announcementInput" placeholder="Type announcement..." class="flex-grow bg-pitchDark border border-cardBorder text-xs text-white p-2.5 rounded-lg focus:outline-none focus:border-skyBright">
+              <button onclick="saveAnnouncement()" class="bg-skyBright hover:bg-sky-300 text-pitchDark font-bold text-xs px-4 py-2.5 rounded-lg transition-all shrink-0">
+                Broadcast 🔔
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="space-y-3">
+        <div class="border-b border-cardBorder pb-2">
+          <h2 class="text-xs font-black uppercase tracking-widest text-emeraldNeon flex items-center gap-2">
+            <i class="fa-solid fa-book-open"></i> <span class="editable-node">Rules & Guidelines</span>
+          </h2>
+        </div>
+
+        <div class="glass-panel rounded-2xl p-5 shadow-xl flex flex-col justify-between h-full">
+          <div id="rulesDisplay" class="bg-pitchDark/90 p-4 rounded-xl border border-cardBorder text-xs text-slate-100 font-medium whitespace-pre-wrap leading-relaxed font-sans mb-3 editable-node">
+1. All members must submit their KSh 50 contribution before the Gameweek deadline.
+2. The Gameweek winner with the highest score takes the designated weekly pot.
+3. Ranking ties will share the week's pot equally.
+4. Ensure your payment is verified by Admin for payment tick approvals.
+5. Have fun, support each other, and enjoy the Premier League season! ⚽🔥
+          </div>
+
+          <div class="superadmin-only hidden space-y-2 pt-2 border-t border-cardBorder">
+            <label class="block text-[10px] text-amber-300 font-bold">Edit Rules (Super Admin):</label>
+            <textarea id="rulesInput" rows="4" class="w-full bg-pitchDark border border-cardBorder text-xs text-white p-2.5 rounded-lg focus:outline-none focus:border-emeraldNeon font-sans"></textarea>
+            <button onclick="saveRules()" class="bg-emeraldNeon hover:bg-emerald-400 text-pitchDark font-bold text-xs px-4 py-2 rounded-lg transition-all">
+              Save Rules
+            </button>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+      <!-- Trash Talk Arena -->
+      <section class="space-y-3">
+        <div class="border-b border-roseHot/40 pb-2">
+          <h2 class="text-xs font-black uppercase tracking-widest text-roseHot flex items-center gap-2">
+            <i class="fa-solid fa-fire-flame-curved"></i> <span class="editable-node">Trash Talk & Banter 🗣️🔥</span>
+          </h2>
+        </div>
+
+        <div class="glass-panel-rose rounded-2xl p-5 shadow-2xl space-y-4">
+          <p class="text-xs text-rose-100 font-semibold editable-node">
+            Roast your rivals, celebrate wins, or acknowledge payout receipts!
+          </p>
+
+          <div class="bg-pitchDark/90 p-4 rounded-xl border border-roseHot/40 space-y-3 shadow-inner">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+              <input type="text" id="trashAuthorInput" placeholder="Your Name" class="bg-cardDark border border-roseHot/40 text-xs text-white p-2.5 rounded-lg focus:outline-none focus:border-roseHot font-bold placeholder-slate-400">
+              <input type="text" id="trashTextInput" placeholder="Type banter or payout confirmation..." class="sm:col-span-2 bg-cardDark border border-roseHot/40 text-xs text-white p-2.5 rounded-lg focus:outline-none focus:border-roseHot font-medium placeholder-slate-400">
+            </div>
+            <button onclick="submitTrashTalk()" class="w-full sm:w-auto bg-gradient-to-r from-rose-600 to-roseHot hover:from-rose-500 hover:to-rose-400 text-white font-black text-xs px-5 py-2.5 rounded-lg transition-all shadow-lg flex items-center justify-center gap-2">
+              <i class="fa-solid fa-paper-plane"></i> Post Banter 🔥
+            </button>
+          </div>
+
+          <div id="trashFeed" class="space-y-2.5 mt-3 max-h-72 overflow-y-auto pr-1">
+            <!-- Dynamic Banter Cards -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Suggestions Feed -->
+      <section class="space-y-3">
+        <div class="border-b border-amber-400/40 pb-2">
+          <h2 class="text-xs font-black uppercase tracking-widest text-amber-300 flex items-center gap-2">
+            <i class="fa-solid fa-comments"></i> <span class="editable-node">Suggestions</span>
+          </h2>
+        </div>
+
+        <div class="glass-panel-amber rounded-2xl p-5 shadow-2xl space-y-4">
+          <p class="text-xs text-amber-100 font-semibold editable-node">
+            Open discussion space for managers and admin to share feedback and ideas.
+          </p>
+
+          <div class="bg-pitchDark/90 p-4 rounded-xl border border-amber-400/40 space-y-3 shadow-inner">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+              <input type="text" id="sugAuthorInput" placeholder="Your Name" class="bg-cardDark border border-amber-400/40 text-xs text-white p-2.5 rounded-lg focus:outline-none focus:border-amber-400 font-bold placeholder-slate-400">
+              <input type="text" id="sugTextInput" placeholder="Type suggestion..." class="sm:col-span-2 bg-cardDark border border-amber-400/40 text-xs text-white p-2.5 rounded-lg focus:outline-none focus:border-amber-400 font-medium placeholder-slate-400">
+            </div>
+            <button onclick="submitSuggestion()" class="w-full sm:w-auto bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-pitchDark font-black text-xs px-5 py-2.5 rounded-lg transition-all shadow-lg flex items-center justify-center gap-2">
+              <i class="fa-solid fa-paper-plane"></i> Post Suggestion 💬
+            </button>
+          </div>
+
+          <div id="suggestionFeed" class="space-y-2.5 mt-3 max-h-72 overflow-y-auto pr-1">
+            <!-- Dynamic Suggestion Cards -->
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- Notification Toast Container -->
+  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 pointer-events-none"></div>
+
+  <script>
+    let state = {
+      accessMode: 'member', // 'member', 'admin', 'superadmin'
+      contribPhone: '',
+      contribName: '',
+      supportPhone: '',
+      announcement: '',
+      countdownTarget: '',
+      proofText: '',
+      proofImageData: '',
+      winnerName: 'Gemini',
+      winnerPoints: 88,
+      rulesText: `1. All members must submit their KSh 50 contribution before the Gameweek deadline.\n2. The Gameweek winner with the highest score takes the designated weekly pot.\n3. Ranking ties will share the week's pot equally.\n4. Ensure your payment is verified by Admin for payment tick approvals.\n5. Have fun, support each other, and enjoy the Premier League season! ⚽🔥`,
+      suggestions: [],
+      trashTalks: [],
+      members: [
+        { id: '1', name: 'Manager 1', points: 142, gwPoints: 88, paid: true, movement: 'up' },
+        { id: '2', name: 'Manager 2', points: 128, gwPoints: 65, paid: true, movement: 'same' },
+        { id: '3', name: 'Manager 3', points: 115, gwPoints: 58, paid: false, movement: 'up' },
+        { id: '4', name: 'Manager 4', points: 110, gwPoints: 42, paid: true, movement: 'down' },
+        { id: '5', name: 'Manager 5', points: 85, gwPoints: 31, paid: false, movement: 'down' }
+      ]
+    };
+
+    window.onload = function() {
+      loadStateFromLocalStorage();
+      renderApp();
+      startCountdownTimer();
+    };
+
+    function loadStateFromLocalStorage() {
+      const saved = localStorage.getItem('fpl_community_v4_state');
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          state = { ...state, ...parsed };
+        } catch (e) {
+          console.error('Error loading state:', e);
+        }
+      }
+    }
+
+    function saveStateToLocalStorage() {
+      localStorage.setItem('fpl_community_v4_state', JSON.stringify(state));
+    }
+
+    // Web Audio API Notification Sound
+    function playChimeSound() {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
+        osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.15); // A5
+
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.6);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.6);
+      } catch (e) {
+        console.log('Audio playback restricted');
+      }
+    }
+
+    function changeAccessMode(mode) {
+      state.accessMode = mode;
+      
+      const adminEls = document.querySelectorAll('.admin-only');
+      const superAdminEls = document.querySelectorAll('.superadmin-only');
+      const icon = document.getElementById('modeIcon');
+      const body = document.getElementById('bodyRoot');
+
+      if (mode === 'member') {
+        adminEls.forEach(el => el.classList.add('hidden'));
+        superAdminEls.forEach(el => el.classList.add('hidden'));
+        icon.className = "fa-solid fa-user text-slate-400 text-xs";
+        body.classList.remove('superadmin-active');
+        setInlineEditable(false);
+        showToast('Member View Active (Read-Only)');
+      } else if (mode === 'admin') {
+        adminEls.forEach(el => el.classList.remove('hidden'));
+        superAdminEls.forEach(el => el.classList.add('hidden'));
+        icon.className = "fa-solid fa-user-gear text-emeraldNeon text-xs";
+        body.classList.remove('superadmin-active');
+        setInlineEditable(false);
+        showToast('Admin View Active (Roster & Winner Controls)');
+      } else if (mode === 'superadmin') {
+        adminEls.forEach(el => el.classList.remove('hidden'));
+        superAdminEls.forEach(el => el.classList.remove('hidden'));
+        icon.className = "fa-solid fa-user-ninja text-amber-400 text-xs";
+        body.classList.add('superadmin-active');
+        setInlineEditable(true);
+        showToast('Super Admin Mode Active ⚡ (Cursor Edit Anything)');
+      }
+
+      renderRoster();
+      renderSuggestions();
+      renderTrashTalk();
+    }
+
+    function setInlineEditable(editable) {
+      const editableNodes = document.querySelectorAll('.editable-node');
+      editableNodes.forEach(node => {
+        if (editable) {
+          node.setAttribute('contenteditable', 'true');
+        } else {
+          node.removeAttribute('contenteditable');
+        }
+      });
+    }
+
+    function renderApp() {
+      document.getElementById('contribPhoneDisplay').textContent = state.contribPhone || 'Not Set Yet';
+      document.getElementById('contribNameDisplay').textContent = state.contribName || 'Not Set Yet';
+      document.getElementById('contribPhoneInput').value = state.contribPhone || '';
+      document.getElementById('contribNameInput').value = state.contribName || '';
+
+      document.getElementById('supportPhoneDisplay').textContent = state.supportPhone || 'Not Set Yet';
+      document.getElementById('supportPhoneInput').value = state.supportPhone || '';
+
+      document.getElementById('winnerNameDisplay').textContent = state.winnerName || 'Gemini';
+      document.getElementById('winnerPointsDisplay').textContent = (state.winnerPoints || 0) + ' pts';
+      document.getElementById('winnerNameInput').value = state.winnerName || '';
+      document.getElementById('winnerPointsInput').value = state.winnerPoints || '';
+
+      document.getElementById('rulesDisplay').textContent = state.rulesText || '';
+      document.getElementById('rulesInput').value = state.rulesText || '';
+
+      if (state.announcement && state.announcement.trim() !== '') {
+        document.getElementById('announcementText').textContent = state.announcement;
+      } else {
+        document.getElementById('announcementText').textContent = "No active announcements yet. Admin broadcasts will chime with sound!";
+      }
+      document.getElementById('announcementInput').value = state.announcement || '';
+
+      if (state.countdownTarget) {
+        document.getElementById('countdownInput').value = state.countdownTarget;
+      }
+
+      document.getElementById('proofTextDisplay').textContent = state.proofText || 'No M-Pesa receipt message posted yet.';
+      document.getElementById('proofTextInput').value = state.proofText || '';
+      
+      const imgContainer = document.getElementById('proofImageContainer');
+      const imgDisplay = document.getElementById('proofImageDisplay');
+      if (state.proofImageData) {
+        imgDisplay.src = state.proofImageData;
+        imgContainer.classList.remove('hidden');
+      } else {
+        imgContainer.classList.add('hidden');
+      }
+
+      renderRoster();
+      renderSuggestions();
+      renderTrashTalk();
+
+      if (state.accessMode === 'superadmin') {
+        setInlineEditable(true);
+      }
+    }
+
+    function updatePaymentProgress() {
+      const totalMembers = state.members.length;
+      if (totalMembers === 0) {
+        document.getElementById('paymentPercentageText').textContent = '0% Process Done';
+        document.getElementById('paymentAmountText').textContent = 'KSh 0 / KSh 0';
+        document.getElementById('paymentProgressBar').style.width = '0%';
+        return;
+      }
+
+      const paidMembersCount = state.members.filter(m => m.paid).length;
+      const percentage = Math.round((paidMembersCount / totalMembers) * 100);
+      
+      const currentPotSum = paidMembersCount * 50;
+      const targetPotSum = totalMembers * 50;
+
+      document.getElementById('paymentPercentageText').textContent = `${percentage}% Process Done`;
+      document.getElementById('paymentAmountText').textContent = `KSh ${currentPotSum} / KSh ${targetPotSum}`;
+      document.getElementById('paymentProgressBar').style.width = `${percentage}%`;
+    }
+
+    function renderRoster() {
+      const tbody = document.getElementById('rosterTableBody');
+      tbody.innerHTML = '';
+
+      const sortedMembers = [...state.members].sort((a, b) => b.points - a.points);
+      document.getElementById('memberCount').textContent = sortedMembers.length;
+
+      updatePaymentProgress();
+
+      if (sortedMembers.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" class="py-8 text-center text-slate-300 text-xs italic font-medium">
+              No managers on the roster yet. Use Admin / Super Admin view to add managers or build from scratch!
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      const totalCount = sortedMembers.length;
+      const isAdminOrSuper = state.accessMode === 'admin' || state.accessMode === 'superadmin';
+
+      sortedMembers.forEach((m, index) => {
+        const rank = index + 1;
+        const isLeader = rank === 1;
+        const isBottom = rank === totalCount && totalCount > 1;
+
+        let movementHTML = '<span class="text-slate-400 font-bold">-</span>';
+        if (m.movement === 'up') {
+          movementHTML = '<span class="text-electricCyan font-black"><i class="fa-solid fa-arrow-up"></i></span>';
+        } else if (m.movement === 'down') {
+          movementHTML = '<span class="text-roseHot font-black"><i class="fa-solid fa-arrow-down"></i></span>';
+        }
+
+        let paidHTML = '';
+        if (isAdminOrSuper) {
+          paidHTML = `
+            <button onclick="togglePayment('${m.id}')" class="px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${m.paid ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/40' : 'bg-roseHot/20 text-roseHot border border-roseHot/40'}">
+              ${m.paid ? '✓ Paid (KSh 50)' : '✗ Pending'}
+            </button>
+          `;
+        } else {
+          paidHTML = m.paid 
+            ? '<span class="text-cyan-300 bg-cyan-500/20 px-2.5 py-1 rounded-md border border-cyan-400/50 font-black text-xs shadow-sm"><i class="fa-solid fa-check"></i> Paid</span>'
+            : '<span class="text-roseHot bg-roseHot/20 px-2.5 py-1 rounded-md border border-roseHot/50 font-black text-xs shadow-sm"><i class="fa-solid fa-xmark"></i> Pending</span>';
+        }
+
+        let nameDisplayHTML = '';
+        let gwPointsHTML = '';
+        let totalPointsHTML = '';
+
+        if (isAdminOrSuper) {
+          nameDisplayHTML = `
+            <input type="text" value="${m.name}" onchange="updateMemberName('${m.id}', this.value)" class="bg-pitchDark border border-cardBorder text-xs text-white p-1.5 rounded focus:outline-none focus:border-cyan-400 w-full max-w-[150px]">
+          `;
+          gwPointsHTML = `
+            <input type="number" value="${m.gwPoints !== undefined ? m.gwPoints : 0}" onchange="updateMemberGwPoints('${m.id}', this.value)" class="bg-pitchDark border border-cardBorder text-xs text-skyBright p-1 rounded focus:outline-none text-right w-16 font-mono font-bold">
+          `;
+          totalPointsHTML = `
+            <input type="number" value="${m.points}" onchange="updateMemberTotalPoints('${m.id}', this.value)" class="bg-pitchDark border border-cardBorder text-xs text-electricCyan p-1 rounded focus:outline-none text-right w-16 font-mono font-black">
+          `;
+        } else {
+          nameDisplayHTML = `<span class="font-bold text-white editable-node">${m.name}</span>`;
+          gwPointsHTML = `<span class="font-mono font-bold text-skyBright editable-node">${m.gwPoints !== undefined ? m.gwPoints : 0} pts</span>`;
+          totalPointsHTML = `<span class="font-mono font-black text-electricCyan editable-node">${m.points} pts</span>`;
+        }
+
+        const row = document.createElement('tr');
+        
+        if (isBottom) {
+          row.className = "animate-burn-glow border-b border-roseHot/60 transition-colors";
+        } else {
+          row.className = "hover:bg-cardDark/60 transition-colors border-b border-cardBorder/50";
+        }
+
+        row.innerHTML = `
+          <td class="py-3.5 px-4 font-bold">
+            <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg ${isLeader ? 'bg-amber-400/30 text-amber-300 border border-amber-400/60 font-black' : isBottom ? 'bg-roseHot/30 text-rose-200 border border-roseHot/60 font-black' : 'bg-pitchDark text-slate-200 border border-cardBorder'}">
+              ${isLeader ? '👑' : isBottom ? '🔥' : rank}
+            </span>
+          </td>
+          <td class="py-3.5 px-4">
+            <div class="flex items-center gap-2">
+              ${nameDisplayHTML}
+              ${isLeader ? '<span class="text-[9px] bg-amber-400/20 text-amber-300 border border-amber-400/40 px-2 py-0.5 rounded font-black">CHAMPION</span>' : ''}
+              ${isBottom ? '<span class="text-[9px] bg-roseHot/30 text-rose-200 border border-roseHot/60 px-2 py-0.5 rounded font-black uppercase">BURNING SEAT 🔥</span>' : ''}
+            </div>
+          </td>
+          <td class="py-3.5 px-4 text-center">${paidHTML}</td>
+          <td class="py-3.5 px-4 text-center">${movementHTML}</td>
+          <td class="py-3.5 px-4 text-right">${gwPointsHTML}</td>
+          <td class="py-3.5 px-4 text-right">${totalPointsHTML}</td>
+          <td class="admin-only ${isAdminOrSuper ? '' : 'hidden'} py-3.5 px-4 text-center">
+            <button onclick="removeMember('${m.id}')" class="bg-roseHot/20 hover:bg-roseHot text-roseHot hover:text-white px-2.5 py-1 rounded text-xs font-bold transition-all border border-roseHot/30">
+              <i class="fa-solid fa-trash-can"></i> Remove
+            </button>
+          </td>
+        `;
+
+        tbody.appendChild(row);
+      });
+
+      if (state.accessMode === 'superadmin') {
+        setInlineEditable(true);
+      }
+    }
+
+    function updateMemberName(id, val) {
+      const member = state.members.find(m => m.id === id);
+      if (member) {
+        member.name = val.trim();
+        saveStateToLocalStorage();
+      }
+    }
+
+    function updateMemberGwPoints(id, val) {
+      const member = state.members.find(m => m.id === id);
+      if (member) {
+        member.gwPoints = parseInt(val) || 0;
+        saveStateToLocalStorage();
+      }
+    }
+
+    function updateMemberTotalPoints(id, val) {
+      const member = state.members.find(m => m.id === id);
+      if (member) {
+        member.points = parseInt(val) || 0;
+        saveStateToLocalStorage();
+        renderRoster();
+      }
+    }
+
+    function togglePayment(id) {
+      const member = state.members.find(m => m.id === id);
+      if (member) {
+        member.paid = !member.paid;
+        saveStateToLocalStorage();
+        renderRoster();
+        showToast(`${member.name} payment: ${member.paid ? 'PAID ✓ (KSh 50)' : 'PENDING ✗'}`);
+      }
+    }
+
+    function saveWinnerDetails() {
+      state.winnerName = document.getElementById('winnerNameInput').value.trim() || 'Gemini';
+      state.winnerPoints = parseInt(document.getElementById('winnerPointsInput').value) || 0;
+      saveStateToLocalStorage();
+      renderApp();
+      showToast('Winner published 👑');
+    }
+
+    function saveRules() {
+      state.rulesText = document.getElementById('rulesInput').value.trim();
+      saveStateToLocalStorage();
+      renderApp();
+      showToast('Rules saved 📖');
+    }
+
+    function saveContribDetails() {
+      state.contribPhone = document.getElementById('contribPhoneInput').value.trim();
+      state.contribName = document.getElementById('contribNameInput').value.trim();
+      saveStateToLocalStorage();
+      renderApp();
+      showToast('Contribution details saved 💳');
+    }
+
+    function saveSupportDetails() {
+      state.supportPhone = document.getElementById('supportPhoneInput').value.trim();
+      saveStateToLocalStorage();
+      renderApp();
+      showToast('Support details saved 🤝');
+    }
+
+    function saveAnnouncement() {
+      state.announcement = document.getElementById('announcementInput').value.trim();
+      saveStateToLocalStorage();
+      playChimeSound();
+      renderApp();
+      showToast('Announcement broadcasted with sound 🔔');
+    }
+
+    function saveProofVault() {
+      state.proofText = document.getElementById('proofTextInput').value.trim();
+      const fileInput = document.getElementById('proofImageInput');
+      if (fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          state.proofImageData = e.target.result;
+          saveStateToLocalStorage();
+          renderApp();
+          showToast('Proof image uploaded to vault 🛡️');
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+      } else {
+        saveStateToLocalStorage();
+        renderApp();
+        showToast('Proof text saved to vault 🛡️');
+      }
+    }
+
+    function addMember() {
+      const nameInput = document.getElementById('newMemberName');
+      const gwPointsInput = document.getElementById('newMemberGwPoints');
+      const pointsInput = document.getElementById('newMemberPoints');
+      const movementInput = document.getElementById('newMemberMovement');
+
+      const name = nameInput.value.trim();
+      const gwPoints = parseInt(gwPointsInput.value) || 0;
+      const points = parseInt(pointsInput.value) || 0;
+      const movement = movementInput.value;
+
+      if (!name) {
+        showToast('Please type a manager name');
+        return;
+      }
+
+      state.members.push({
+        id: Date.now().toString(),
+        name: name,
+        points: points,
+        gwPoints: gwPoints,
+        paid: false,
+        movement: movement
+      });
+
+      saveStateToLocalStorage();
+      renderRoster();
+
+      nameInput.value = '';
+      gwPointsInput.value = '';
+      pointsInput.value = '';
+      showToast(`Added ${name} to roster ⚽`);
+    }
+
+    function removeMember(id) {
+      const member = state.members.find(m => m.id === id);
+      const name = member ? member.name : 'this manager';
+
+      state.members = state.members.filter(m => m.id !== id);
+      saveStateToLocalStorage();
+      renderRoster();
+      showToast(`Removed ${name} from roster`);
+    }
+
+    function clearEntireRoster() {
+      if (confirm('Are you sure you want to wipe the entire roster and start from scratch?')) {
+        state.members = [];
+        saveStateToLocalStorage();
+        renderRoster();
+        showToast('Roster wiped clean. Build from scratch!');
+      }
+    }
+
+    function submitTrashTalk() {
+      const author = document.getElementById('trashAuthorInput').value.trim();
+      const text = document.getElementById('trashTextInput').value.trim();
+
+      if (!author || !text) {
+        showToast('Type your name and banter message');
+        return;
+      }
+
+      state.trashTalks.unshift({
+        id: Date.now().toString(),
+        author: author,
+        text: text,
+        time: 'Just now'
+      });
+
+      saveStateToLocalStorage();
+      renderTrashTalk();
+
+      document.getElementById('trashAuthorInput').value = '';
+      document.getElementById('trashTextInput').value = '';
+      showToast('Banter posted 🔥');
+    }
+
+    function deleteTrashTalk(id) {
+      state.trashTalks = state.trashTalks.filter(t => t.id !== id);
+      saveStateToLocalStorage();
+      renderTrashTalk();
+      showToast('Banter deleted');
+    }
+
+    function renderTrashTalk() {
+      const feed = document.getElementById('trashFeed');
+      feed.innerHTML = '';
+
+      if (state.trashTalks.length === 0) {
+        feed.innerHTML = `<p class="text-xs text-rose-200/70 italic py-2">No banter posted yet. Start the roasts!</p>`;
+        return;
+      }
+
+      const isAdminOrSuper = state.accessMode === 'admin' || state.accessMode === 'superadmin';
+
+      state.trashTalks.forEach(t => {
+        const div = document.createElement('div');
+        div.className = "bg-pitchDark/95 p-3.5 rounded-xl border border-roseHot/50 flex items-start justify-between gap-3 text-xs shadow-lg";
+        
+        let deleteBtn = '';
+        if (isAdminOrSuper) {
+          deleteBtn = `<button onclick="deleteTrashTalk('${t.id}')" class="text-roseHot hover:text-white hover:underline font-extrabold shrink-0">Delete</button>`;
+        }
+
+        div.innerHTML = `
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <span class="font-black text-rose-300 bg-rose-500/20 px-2 py-0.5 rounded border border-rose-500/40 editable-node">${t.author}</span>
+              <span class="text-[10px] text-slate-400 font-bold">${t.time}</span>
+            </div>
+            <p class="text-white font-semibold text-sm leading-snug editable-node">${t.text}</p>
+          </div>
+          ${deleteBtn}
+        `;
+        feed.appendChild(div);
+      });
+
+      if (state.accessMode === 'superadmin') {
+        setInlineEditable(true);
+      }
+    }
+
+    function submitSuggestion() {
+      const author = document.getElementById('sugAuthorInput').value.trim();
+      const text = document.getElementById('sugTextInput').value.trim();
+
+      if (!author || !text) {
+        showToast('Type your name and suggestion');
+        return;
+      }
+
+      state.suggestions.unshift({
+        id: Date.now().toString(),
+        author: author,
+        text: text,
+        time: 'Just now'
+      });
+
+      saveStateToLocalStorage();
+      renderSuggestions();
+
+      document.getElementById('sugAuthorInput').value = '';
+      document.getElementById('sugTextInput').value = '';
+      showToast('Suggestion posted 💬');
+    }
+
+    function deleteSuggestion(id) {
+      state.suggestions = state.suggestions.filter(s => s.id !== id);
+      saveStateToLocalStorage();
+      renderSuggestions();
+      showToast('Suggestion deleted');
+    }
+
+    function renderSuggestions() {
+      const feed = document.getElementById('suggestionFeed');
+      feed.innerHTML = '';
+
+      if (state.suggestions.length === 0) {
+        feed.innerHTML = `<p class="text-xs text-amber-200/70 italic py-2">No suggestions yet. Share your feedback!</p>`;
+        return;
+      }
+
+      const isAdminOrSuper = state.accessMode === 'admin' || state.accessMode === 'superadmin';
+
+      state.suggestions.forEach(s => {
+        const div = document.createElement('div');
+        div.className = "bg-pitchDark/95 p-3.5 rounded-xl border border-amber-400/50 flex items-start justify-between gap-3 text-xs shadow-lg";
+        
+        let deleteBtn = '';
+        if (isAdminOrSuper) {
+          deleteBtn = `<button onclick="deleteSuggestion('${s.id}')" class="text-roseHot hover:text-white hover:underline font-extrabold shrink-0">Delete</button>`;
+        }
+
+        div.innerHTML = `
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <span class="font-black text-amber-300 bg-amber-500/20 px-2 py-0.5 rounded border border-amber-400/40 editable-node">${s.author}</span>
+              <span class="text-[10px] text-slate-400 font-bold">${s.time}</span>
+            </div>
+            <p class="text-white font-semibold text-sm leading-snug editable-node">${s.text}</p>
+          </div>
+          ${deleteBtn}
+        `;
+        feed.appendChild(div);
+      });
+
+      if (state.accessMode === 'superadmin') {
+        setInlineEditable(true);
+      }
+    }
+
+    function updateCountdownTarget() {
+      state.countdownTarget = document.getElementById('countdownInput').value;
+      saveStateToLocalStorage();
+    }
+
+    function startCountdownTimer() {
+      setInterval(() => {
+        if (!state.countdownTarget) {
+          document.getElementById('days').textContent = '00';
+          document.getElementById('hours').textContent = '00';
+          document.getElementById('minutes').textContent = '00';
+          document.getElementById('seconds').textContent = '00';
+          return;
+        }
+
+        const target = new Date(state.countdownTarget).getTime();
+        const now = new Date().getTime();
+        const diff = target - now;
+
+        if (diff <= 0) {
+          document.getElementById('days').textContent = '00';
+          document.getElementById('hours').textContent = '00';
+          document.getElementById('minutes').textContent = '00';
+          document.getElementById('seconds').textContent = '00';
+          return;
+        }
+
+        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+        document.getElementById('days').textContent = d < 10 ? '0' + d : d;
+        document.getElementById('hours').textContent = h < 10 ? '0' + h : h;
+        document.getElementById('minutes').textContent = m < 10 ? '0' + m : m;
+        document.getElementById('seconds').textContent = s < 10 ? '0' + s : s;
+      }, 1000);
+    }
+
+    function copyToClipboard(elementId) {
+      const text = document.getElementById(elementId).textContent;
+      if (!text || text === 'Not Set Yet') {
+        showToast('Number not set by Admin yet');
+        return;
+      }
+
+      const tempInput = document.createElement('input');
+      tempInput.value = text;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempInput);
+
+      showToast('Number copied 🤝');
+    }
+
+    function showToast(message) {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      
+      toast.className = "bg-cardDark text-white border border-emeraldNeon/50 px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 text-xs sm:text-sm font-bold pointer-events-auto toast-enter mb-2";
+      toast.innerHTML = `
+        <span class="text-amber-400 text-base">👑</span>
+        <span>${message}</span>
+      `;
+
+      container.appendChild(toast);
+
+      setTimeout(() => toast.classList.add('toast-active'), 10);
+
+      setTimeout(() => {
+        toast.classList.remove('toast-active');
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+  </script>
+
+</body>
+</html>
