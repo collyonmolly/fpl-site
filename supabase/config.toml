@@ -1,0 +1,2 @@
+[functions.fpl-site]
+verify_jwt = false
