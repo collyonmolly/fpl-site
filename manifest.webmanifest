@@ -1,0 +1,9 @@
+{
+  "name": "FPL Community",
+  "short_name": "FPL Community",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#070913",
+  "theme_color": "#070913"
+}
