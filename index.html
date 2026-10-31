@@ -3,10 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FPL Community Hub</title>
-  <!-- Tailwind CSS & Icons -->
-  <script src="https://tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cloudflare.com">
+  <title>FPL Community!</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts & Font Awesome Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <script src="./fpl-config.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -15,134 +24,1493 @@
             pitchDark: '#070913',
             cardDark: '#0e1326',
             cardBorder: 'rgba(168, 85, 247, 0.3)',
-            electricCyan: '#00f0ff',
+            emeraldGlow: '#8b5cf6',
+            emeraldNeon: '#06b6d4',
             roseHot: '#ff007f',
-            amberNeon: '#fbbf24'
+            goldRoyal: '#fbbf24',
+            goldLight: '#fef08a',
+            skyBright: '#38bdf8',
+            purpleGlow: '#a855f7',
+            electricCyan: '#00f0ff',
+            neonViolet: '#a855f7',
+            sunsetPink: '#f43f5e',
+          },
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+          },
+          animation: {
+            'burn-glow': 'burnGlow 2.5s ease-in-out infinite alternate',
+            'gold-shimmer': 'goldShimmer 3s ease-in-out infinite alternate',
+            'pulse-subtle': 'pulseSubtle 2.5s infinite',
+            'bg-shift': 'bgShift 12s ease infinite alternate',
+          },
+          keyframes: {
+            burnGlow: {
+              '0%': { boxShadow: '0 0 15px rgba(255, 0, 127, 0.4)', backgroundColor: 'rgba(255, 0, 127, 0.15)' },
+              '100%': { boxShadow: '0 0 35px rgba(255, 0, 127, 0.85)', backgroundColor: 'rgba(255, 0, 127, 0.35)' },
+            },
+            goldShimmer: {
+              '0%': { boxShadow: '0 0 20px rgba(168, 85, 247, 0.3)', borderColor: 'rgba(168, 85, 247, 0.6)' },
+              '100%': { boxShadow: '0 0 45px rgba(6, 182, 212, 0.75)', borderColor: 'rgba(6, 182, 212, 1)' },
+            },
+            pulseSubtle: {
+              '0%, 100%': { opacity: 1 },
+              '50%': { opacity: 0.85 },
+            },
+            bgShift: {
+              '0%': { backgroundPosition: '0% 0%' },
+              '100%': { backgroundPosition: '100% 100%' }
+            }
           }
         }
       }
     }
   </script>
+
   <style>
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #070913;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #a855f7;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #06b6d4;
+    }
+
+    /* Vibrant Midnight Aurora Background */
     body {
-      background: linear-gradient(135deg, #05060f 0%, #12092b 50%, #050b14 100%);
+      background: linear-gradient(135deg, #05060f 0%, #12092b 25%, #08172e 50%, #1d072b 75%, #050b14 100%);
+      background-size: 200% 200%;
+      animation: bgShift 15s ease infinite alternate;
       background-attachment: fixed;
     }
+
     .glass-panel {
       background: rgba(14, 19, 38, 0.85);
       backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
       border: 1px solid rgba(168, 85, 247, 0.3);
+      box-shadow: 0 12px 35px -10px rgba(0, 0, 0, 0.75);
     }
-    .burning-seat {
-      box-shadow: 0 0 25px rgba(255, 0, 127, 0.6);
-      background-color: rgba(255, 0, 127, 0.15);
+
+    .glass-panel-gold {
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.25) 0%, rgba(14, 19, 38, 0.95) 50%, rgba(6, 182, 212, 0.25) 100%);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 2px solid rgba(0, 240, 255, 0.75);
     }
-  </style>
+
+    .glass-panel-rose {
+      background: linear-gradient(135deg, rgba(255, 0, 127, 0.2) 0%, rgba(14, 12, 28, 0.95) 50%, rgba(168, 85, 247, 0.2) 100%);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 0, 127, 0.5);
+    }
+
+    .glass-panel-amber {
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.2) 0%, rgba(12, 20, 36, 0.95) 50%, rgba(168, 85, 247, 0.2) 100%);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(6, 182, 212, 0.5);
+    }
+
+    .toast-enter {
+      opacity: 0;
+      transform: translateY(15px);
+    }
+    .toast-active {
+      opacity: 1;
+      transform: translateY(0);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Super Admin Live Cursor Glow Indicator */
+    .superadmin-active [contenteditable="true"] {
+      outline: 2px dashed rgba(6, 182, 212, 0.8) !important;
+      outline-offset: 3px;
+      cursor: text !important;
+    }
+    .superadmin-active [contenteditable="true"]:focus {
+      outline: 2px solid #00f0ff !important;
+      background-color: rgba(6, 182, 212, 0.2) !important;
+      border-radius: 4px;
+    }
+      @media (max-width: 640px) {
+      #saveAllButton { left: 1rem; right: 1rem; bottom: 5.25rem; width: calc(100% - 2rem); justify-content: center; }
+      #toastContainer { left: 1rem; right: 1rem; bottom: 1rem; }
+      #toastContainer > div { max-width: 100%; }
+    }</style>
 </head>
-<body class="text-slate-100 min-h-screen pb-20">
+<body id="bodyRoot" class="text-slate-100 min-h-screen font-sans selection:bg-purple-600 selection:text-white pb-20">
+
   <header class="sticky top-0 z-40 bg-pitchDark/90 backdrop-blur-xl border-b border-cardBorder shadow-2xl">
-    <div class="max-w-6xl mx-auto px-4 py-3 sm:px-6 flex items-center justify-between gap-3">
-      <!-- Header content including title, crown trigger, and hidden admin controls -->
-      ...
+    <div class="max-w-6xl mx-auto px-4 py-3 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+
+      <!-- Top Left High-Visibility Slogan -->
+      <div class="text-center sm:text-left">
+        <span class="inline-block bg-gradient-to-r from-purple-600/30 via-cyan-500/30 to-purple-600/30 border-2 border-cyan-400 text-cyan-300 font-black text-xs sm:text-sm px-4 py-1.5 rounded-full shadow-[0_0_20px_rgba(6,182,212,0.4)] tracking-wide">
+          form ni kununua mercdiis 🏎️💨
+        </span>
+      </div>
+
+      <!-- Strictly Centered App Title -->
+      <div class="text-center">
+        <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-white flex items-center justify-center gap-2">
+          <span class="editable-node">FPL Community!</span> <button type="button" id="crownMark" aria-label="Crown" title="Crown" tabindex="0" onclick="handleCrownClick()" class="text-cyan-400 drop-shadow-[0_0_12px_rgba(6,182,212,0.9)] bg-transparent border-0 text-2xl" style="cursor:pointer;outline:none">👑</button>
+        </h1>
+        <p class="text-[10px] sm:text-xs text-purple-400 font-black uppercase tracking-widest mt-0.5 editable-node">Official Sweepstake Hub & Standings</p>
+      </div>
+
+      <!-- Access Mode Switcher -->
+      <div class="flex items-center gap-2 bg-cardDark/90 px-3.5 py-1.5 rounded-full border border-cardBorder shadow-inner">
+        <i id="modeIcon" class="fa-solid fa-user text-slate-400 text-xs"></i>
+        <select id="accessModeSelect" onchange="changeAccessMode(this.value)" class="bg-transparent text-xs font-bold text-slate-200 focus:outline-none cursor-pointer">
+          <option value="member" class="bg-cardDark text-slate-200">Member View</option>
+
+
+        </select>
+      </div>
+
     </div>
   </header>
-  
-  <!-- Master Save Panel and main container initialization -->
-  ...
+
+  <nav aria-label="Quick sections" class="fixed inset-x-0 bottom-0 z-40 border-t border-cardBorder bg-pitchDark/95 px-1 pb-[env(safe-area-inset-bottom)] shadow-2xl backdrop-blur-xl sm:sticky sm:top-[88px] sm:bottom-auto sm:z-30 sm:border-x-0 sm:border-t-0 sm:border-b sm:px-4">
+    <div class="mx-auto grid max-w-6xl grid-cols-5 gap-1 py-2 sm:flex sm:justify-center sm:gap-3">
+      <a href="#homeTop" class="flex min-h-11 flex-col items-center justify-center gap-1 rounded-lg px-1 text-[9px] font-bold text-slate-200 hover:bg-white/10 sm:flex-row sm:gap-2 sm:px-4 sm:text-xs"><i class="fa-solid fa-house" aria-hidden="true"></i><span>Home</span></a>
+      <a href="#league" class="flex min-h-11 flex-col items-center justify-center gap-1 rounded-lg px-1 text-[9px] font-bold text-slate-200 hover:bg-white/10 sm:flex-row sm:gap-2 sm:px-4 sm:text-xs"><i class="fa-solid fa-ranking-star" aria-hidden="true"></i><span>League</span></a>
+      <a href="#payments" class="flex min-h-11 flex-col items-center justify-center gap-1 rounded-lg px-1 text-[9px] font-bold text-slate-200 hover:bg-white/10 sm:flex-row sm:gap-2 sm:px-4 sm:text-xs"><i class="fa-solid fa-receipt" aria-hidden="true"></i><span>Payments</span></a>
+      <a href="#community" class="flex min-h-11 flex-col items-center justify-center gap-1 rounded-lg px-1 text-[9px] font-bold text-slate-200 hover:bg-white/10 sm:flex-row sm:gap-2 sm:px-4 sm:text-xs"><i class="fa-solid fa-comments" aria-hidden="true"></i><span>Community</span></a>
+      <a href="#funActivities" class="flex min-h-11 flex-col items-center justify-center gap-1 rounded-lg px-1 text-[9px] font-bold text-slate-200 hover:bg-white/10 sm:flex-row sm:gap-2 sm:px-4 sm:text-xs"><i class="fa-solid fa-trophy" aria-hidden="true"></i><span>Activities</span></a>
+    </div>
+  </nav>
+
   <main class="max-w-6xl mx-auto px-4 sm:px-6 mt-6 space-y-8">
-    <!-- 1. LEAGUE STANDINGS & ROSTER SECTION (NOW AT THE TOP) -->
-    <section class="space-y-3">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-cardBorder pb-2 gap-2">
+
+    <section id="homeTop" class="space-y-3 scroll-mt-28">
+      <div class="flex items-center justify-between border-b border-cardBorder pb-2">
         <h2 class="text-xs font-black uppercase tracking-widest text-electricCyan flex items-center gap-2">
-          <i class="fa-solid fa-list-ol"></i> <span>League Standings & Roster</span>
+          <i class="fa-regular fa-clock"></i> <span class="editable-node">Time & Deadline</span>
         </h2>
+        <span class="text-[11px] text-slate-300 font-semibold editable-node">Gameweek Deadline Countdown</span>
+      </div>
+
+      <div class="glass-panel rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row items-center justify-between gap-4 shadow-lg">
+        <div>
+          <span class="text-[10px] uppercase font-black text-cyan-300 tracking-wider block editable-node">Next Gameweek Deadline</span>
+          <div class="flex items-center gap-3 mt-2">
+            <div class="text-center"><span id="days" class="text-2xl sm:text-3xl font-black text-white">00</span><span class="block text-[9px] text-slate-400 font-bold uppercase">Days</span></div>
+            <span class="text-slate-500 font-black text-xl">:</span>
+            <div class="text-center"><span id="hours" class="text-2xl sm:text-3xl font-black text-white">00</span><span class="block text-[9px] text-slate-400 font-bold uppercase">Hours</span></div>
+            <span class="text-slate-500 font-black text-xl">:</span>
+            <div class="text-center"><span id="minutes" class="text-2xl sm:text-3xl font-black text-white">00</span><span class="block text-[9px] text-slate-400 font-bold uppercase">Mins</span></div>
+            <span class="text-slate-500 font-black text-xl">:</span>
+            <div class="text-center"><span id="seconds" class="text-2xl sm:text-3xl font-black text-electricCyan">00</span><span class="block text-[9px] text-slate-400 font-bold uppercase">Secs</span></div>
+          </div>
+        </div>
+
+        <div class="bg-purple-600/20 border-2 border-cyan-400/50 px-4 py-2.5 rounded-xl text-center md:text-right w-full md:w-auto">
+          <span class="block text-[10px] uppercase font-extrabold text-electricCyan tracking-wider editable-node">Status</span>
+          <span id="deadlineStatusText" class="text-xs font-bold text-white editable-node">Set a deadline</span>
+        </div>
+      </div>
+
+      <!-- Admin and Super Admin deadline editor -->
+      <div class="admin-only hidden bg-cardDark p-3.5 rounded-xl border border-cyan-400/40">
+        <label class="block text-xs font-bold text-cyan-300 mb-1">Current Gameweek:</label><input id="gameweekInput" type="text" value="Gameweek 1" onchange="saveGameweek()" class="w-full bg-pitchDark border border-cardBorder text-xs text-white p-2 rounded-lg mb-2"><label class="block text-xs font-bold text-cyan-300 mb-1">Set Target Deadline:</label>
+        <input type="datetime-local" id="countdownInput" class="w-full bg-pitchDark border border-cardBorder text-xs text-white p-2 rounded-lg focus:outline-none focus:border-cyan-400" onchange="updateCountdownTarget()">
       </div>
     </section>
 
-    <!-- 2. WINNER SPOTLIGHT -->
     <section class="space-y-3">
       <div class="border-b border-cardBorder pb-2">
-        <h2 class="text-xs font-black uppercase tracking-widest text-amberNeon flex items-center gap-2">
-          <i class="fa-solid fa-crown"></i> <span>Winner Spotlight</span>
+        <h2 class="text-xs font-black uppercase tracking-widest text-cyan-300 flex items-center gap-2">
+          <i class="fa-solid fa-crown"></i> <span class="editable-node">Winner Spotlight</span>
         </h2>
       </div>
+
+      <div class="glass-panel-gold rounded-2xl p-6 shadow-2xl relative overflow-hidden text-center sm:text-left animate-gold-shimmer">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-6 relative z-10">
+
+          <div class="flex flex-col sm:flex-row items-center gap-4">
+            <div class="text-4xl sm:text-5xl drop-shadow-[0_0_20px_rgba(0,240,255,0.9)]">👑</div>
+            <div>
+              <span class="text-[10px] sm:text-xs uppercase tracking-widest font-black text-cyan-300 block editable-node">Gameweek Champion</span>
+              <div class="flex items-center justify-center sm:justify-start gap-3 mt-1">
+                <h3 id="winnerNameDisplay" class="text-2xl sm:text-4xl font-black text-white tracking-tight drop-shadow-md editable-node">Gemini</h3>
+                <span class="text-3xl sm:text-4xl">👑</span>
+              </div>
+              <p class="text-xs sm:text-sm text-cyan-100 font-bold mt-2 leading-relaxed editable-node">
+                Congratulations! Outstanding performance this gameweek. Long live the king! ⚽🔥
+              </p>
+            </div>
+          </div>
+
+          <div class="bg-pitchDark/90 border-2 border-cyan-400 px-7 py-4 rounded-2xl text-center shadow-2xl shrink-0">
+            <span class="block text-[10px] uppercase font-black text-cyan-300 tracking-wider mb-1 editable-node">Winning Score</span>
+            <span id="winnerPointsDisplay" class="text-3xl sm:text-4xl font-black text-electricCyan editable-node">88</span>
+          </div>
+
+        </div>
+
+        <div class="admin-only hidden mt-6 pt-4 border-t border-cyan-400/40 text-left">
+          <label class="block text-xs font-bold text-cyan-300 mb-2">Publish / Edit Gameweek Champion:</label>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <input type="text" id="winnerNameInput" placeholder="Type Winner Name" class="bg-pitchDark border border-cyan-400/40 text-xs text-white p-2.5 rounded-lg focus:outline-none focus:border-cyan-300">
+            <input type="number" id="winnerPointsInput" placeholder="GW Score (e.g. 88)" class="bg-pitchDark border border-cyan-400/40 text-xs text-white p-2.5 rounded-lg focus:outline-none focus:border-cyan-300">
+            <button onclick="saveWinnerDetails()" class="bg-cyan-400 hover:bg-cyan-300 text-pitchDark font-black text-xs px-4 py-2.5 rounded-lg transition-all shadow-md">
+              Publish Winner 👑
+            </button>
+          </div>
+        </div>
+      </div>
     </section>
-    <!-- 3. FUN ACTIVITIES DASHBOARD -->
-    <section class="space-y-6">
+
+    <section id="league" class="space-y-3 scroll-mt-28">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-cardBorder pb-2 gap-2">
+        <div class="flex items-center gap-3">
+          <h2 class="text-xs font-black uppercase tracking-widest text-electricCyan flex items-center gap-2">
+            <i class="fa-solid fa-list-ol"></i> <span class="editable-node">League Standings & Roster</span>
+          </h2>
+          <span id="gameweekBadge" class="bg-purple-600/20 text-cyan-300 border border-purple-500/40 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full editable-node">
+            GW 1-38 Active
+          </span>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <span class="text-xs font-extrabold text-roseHot bg-roseHot/15 border border-roseHot/40 px-3 py-1 rounded-full uppercase tracking-wider shadow-sm editable-node">
+
+          </span>
+          <span class="text-xs font-bold text-slate-300">
+            Managers: <span id="memberCount" class="text-white font-black">0</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- Financial Progress Tracker -->
+      <div class="glass-panel p-4 rounded-2xl space-y-2 border border-purple-500/40">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs font-bold">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-chart-pie text-cyan-400 text-sm"></i>
+            <span class="text-slate-200">Sweepstake Payment Progress:</span>
+            <span id="paymentPercentageText" class="text-electricCyan font-black text-sm">0% Process Done</span>
+          </div>
+          <div class="text-slate-300">
+            Pot Collection: <span id="paymentAmountText" class="text-cyan-300 font-mono font-bold">KSh 0 / KSh 0</span>
+          </div>
+        </div>
+        <div class="w-full bg-pitchDark/90 rounded-full h-3.5 overflow-hidden p-0.5 border border-cardBorder">
+          <div id="paymentProgressBar" class="bg-gradient-to-r from-purple-600 via-cyan-400 to-pink-500 h-full rounded-full transition-all duration-500 ease-out" style="width: 0%"></div>
+        </div>
+      </div>
+      <a href="#transparencyProof" class="inline-flex min-h-10 items-center gap-2 rounded-lg border border-purple-400/40 bg-purple-400/10 px-4 py-2 text-xs font-bold text-purple-200 hover:bg-purple-400/20"><i class="fa-solid fa-receipt" aria-hidden="true"></i> View payment updates and proof</a>
+
+      <!-- Standings Table Container -->
+      <div class="glass-panel rounded-2xl overflow-hidden shadow-2xl border border-cardBorder">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b border-cardBorder text-[10px] uppercase tracking-wider text-purple-300 font-black bg-cardDark/90">
+                <th class="py-3.5 px-4 editable-node">Rank</th>
+                <th class="py-3.5 px-4 editable-node">Manager Name</th>
+                <th class="py-3.5 px-4 text-center editable-node">Payment Status (KSh 50)</th>
+                <th class="py-3.5 px-4 text-center editable-node">Movement</th>
+                <th class="py-3.5 px-4 text-right editable-node">GW Points</th>
+                <th class="py-3.5 px-4 text-right editable-node">Total Points</th>
+                <th class="admin-only hidden py-3.5 px-4 text-center">Admin Controls</th>
+              </tr>
+            </thead>
+            <tbody id="rosterTableBody" class="divide-y divide-cardBorder/50 text-sm">
+              <!-- Dynamic Roster Rows -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="admin-only hidden bg-cardDark/90 p-4 border-t border-cardBorder space-y-4">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-cardBorder/60 pb-3">
+            <h3 class="text-xs font-black uppercase tracking-wider text-cyan-300 flex items-center gap-2">
+              <i class="fa-solid fa-user-plus"></i> Add Manager to Roster
+            </h3>
+            <button onclick="clearEntireRoster()" class="superadmin-only hidden bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white border border-rose-500/40 text-xs font-bold px-3 py-1.5 rounded-lg transition-all">
+              <i class="fa-solid fa-rotate-left"></i> Reset Roster From Scratch
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+            <div>
+              <label class="block text-[10px] text-slate-300 mb-1 font-semibold">Manager Name:</label>
+              <input type="text" id="newMemberName" placeholder="Manager Name..." class="w-full bg-pitchDark border border-cardBorder text-xs text-white p-2.5 rounded-lg focus:outline-none focus:border-cyan-400">
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-300 mb-1 font-semibold">GW Points:</label>
+              <input type="number" id="newMemberGwPoints" placeholder="0" class="w-full bg-pitchDark border border-cardBorder text-xs text-white p-2.5 rounded-lg focus:outline-none focus:border-cyan-400">
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-300 mb-1 font-semibold">Total Points:</label>
+              <input type="number" id="newMemberPoints" placeholder="0" class="w-full bg-pitchDark border border-cardBorder text-xs text-white p-2.5 rounded-lg focus:outline-none focus:border-cyan-400">
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-300 mb-1 font-semibold">Rank Movement:</label>
+              <select id="newMemberMovement" class="w-full bg-pitchDark border border-cardBorder text-xs text-white p-2.5 rounded-lg focus:outline-none focus:border-cyan-400">
+                <option value="up">Jumped Up (▲)</option>
+                <option value="down">Fell Down (▼)</option>
+                <option value="same">No Change (-)</option>
+              </select>
+            </div>
+          </div>
+          <button onclick="addMember()" class="bg-cyan-400 hover:bg-cyan-300 text-pitchDark font-black text-xs px-5 py-2.5 rounded-lg transition-all flex items-center gap-2 shadow-md">
+            <i class="fa-solid fa-plus"></i> Add Manager to League
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section id="payments" class="space-y-3 scroll-mt-28">
+      <div class="border-b border-cardBorder pb-2">
+        <h2 class="text-xs font-black uppercase tracking-widest text-skyBright flex items-center gap-2">
+          <i class="fa-solid fa-money-bill-wave"></i> <span class="editable-node">Payments & Contributions</span>
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <div class="glass-panel rounded-2xl p-5 flex flex-col justify-between shadow-xl border-t-2 border-t-cyan-400">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="bg-cyan-500/20 text-cyan-300 border border-cyan-400/50 text-[10px] font-black px-2.5 py-1 rounded-full uppercase editable-node">
+                Sweepstake Contribution
+              </span>
+              <span class="text-sm font-black text-cyan-300 editable-node">KSh 50</span>
+            </div>
+
+            <h3 class="text-sm font-bold text-white mb-3 editable-node">Each member should contribute 50 shillings before the gameweek deadline.</h3>
+
+            <div class="space-y-3 my-4">
+              <div class="bg-pitchDark/90 p-3.5 rounded-xl border border-cardBorder flex items-center justify-between">
+                <div>
+                  <span class="block text-[9px] uppercase text-slate-300 font-bold editable-node">M-Pesa Number</span>
+                  <span id="contribPhoneDisplay" class="text-base font-mono font-bold text-cyan-300 editable-node">Not Set Yet</span>
+                </div>
+                <button onclick="copyToClipboard('contribPhoneDisplay')" class="bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-400/40 px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5">
+                  <i class="fa-regular fa-copy"></i> Copy
+                </button>
+              </div>
+
+              <div class="bg-pitchDark/90 p-3.5 rounded-xl border border-cardBorder">
+                <span class="block text-[9px] uppercase text-slate-300 font-bold editable-node">Account / Name</span>
+                <span id="contribNameDisplay" class="text-xs font-semibold text-white editable-node">Not Set Yet</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="superadmin-only hidden space-y-2 mt-3 pt-3 border-t border-cardBorder">
+            <label class="block text-xs font-bold text-cyan-300">Edit Contribution Details (Super Admin):</label>
+            <input type="text" id="contribPhoneInput" placeholder="M-Pesa number..." class="w-full bg-pitchDark border border-cardBorder text-xs text-white p-2 rounded-lg focus:outline-none focus:border-cyan-400">
+            <input type="text" id="contribNameInput" placeholder="Account name..." class="w-full bg-pitchDark border border-cardBorder text-xs text-white p-2 rounded-lg focus:outline-none focus:border-cyan-400">
+            <button onclick="saveContribDetails()" class="w-full bg-cyan-400 hover:bg-cyan-300 text-pitchDark font-bold text-xs py-2 rounded-lg transition-all">
+              Save Details
+            </button>
+          </div>
+        </div>
+
+        <!-- Voluntary Support Card -->
+        <div class="glass-panel-amber rounded-2xl p-5 flex flex-col justify-between shadow-2xl border-2 border-cyan-400/80">
+          <div>
+            <div class="flex flex-col items-center justify-center text-center mb-4 space-y-2">
+              <div class="flex items-center justify-between w-full">
+                <span class="bg-purple-500/25 text-purple-300 border border-purple-400/60 text-[10px] font-black px-3 py-1 rounded-full uppercase editable-node shadow-sm">
+                  Voluntary Support
+                </span>
+              </div>
+
+              <!-- Centered "Za Githeri. 🥺" Badge -->
+              <div class="my-3 w-full flex justify-center">
+                <span class="inline-block bg-gradient-to-r from-purple-600/40 via-cyan-500/30 to-purple-600/40 border-2 border-cyan-300 text-cyan-200 font-black text-base sm:text-lg px-7 py-3 rounded-full shadow-[0_0_30px_rgba(6,182,212,0.6)] tracking-wide editable-node">
+                  "Za Githeri. 🥺"
+                </span>
+              </div>
+            </div>
+
+            <h3 class="text-sm font-bold text-slate-100 text-center sm:text-left mb-3 editable-node leading-relaxed">
+              Any support, any contribution that you will put will be highly respected. 🤝
+            </h3>
+
+            <div class="bg-pitchDark/90 p-3.5 rounded-xl border border-cyan-400/40 flex items-center justify-between my-4 shadow-lg">
+              <div>
+                <span class="block text-[9px] uppercase text-cyan-300 font-black editable-node">Voluntary Support Number</span>
+                <span id="supportPhoneDisplay" class="text-base font-mono font-bold text-cyan-300 editable-node">Not Set Yet</span>
+              </div>
+              <button onclick="copyToClipboard('supportPhoneDisplay')" class="bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-400/50 px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm">
+                <i class="fa-regular fa-copy"></i> Copy
+              </button>
+            </div>
+          </div>
+
+          <div class="superadmin-only hidden space-y-2 mt-3 pt-3 border-t border-cardBorder">
+            <label class="block text-xs font-bold text-cyan-300">Edit Voluntary Support Number (Super Admin):</label>
+            <input type="text" id="supportPhoneInput" placeholder="Voluntary number..." class="w-full bg-pitchDark border border-cardBorder text-xs text-white p-2 rounded-lg focus:outline-none focus:border-cyan-400">
+            <button onclick="saveSupportDetails()" class="w-full bg-cyan-400 hover:bg-cyan-300 text-pitchDark font-bold text-xs py-2 rounded-lg transition-all">
+              Save Support Number
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section id="transparencyProof" class="space-y-3 scroll-mt-6">
       <div class="border-b border-cardBorder pb-2">
         <h2 class="text-xs font-black uppercase tracking-widest text-purple-400 flex items-center gap-2">
-          <i class="fa-solid fa-trophy"></i> <span>Fun Activities Arena</span>
+          <i class="fa-solid fa-vault"></i> <span class="editable-node">Payment Updates & Proof</span>
         </h2>
       </div>
-      
-      <!-- Tournament & Bench Swap Panels -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Champions League Bracket Configuration -->
-        <div class="glass-panel p-5 rounded-2xl border-t-2 border-amberNeon shadow-xl">
-          <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-cup-straw text-amberNeon"></i> Manager Tournament (KSh 100)</h3>
-          <p class="text-xs text-slate-300">Manually advance participants through Group and Knockout phases to cross the finish line.</p>
+
+      <div class="glass-panel rounded-2xl p-5 shadow-xl space-y-4">
+        <p class="text-xs text-slate-200 font-semibold editable-node">
+          Admin-posted M-Pesa message and receipt image for members to review. This page displays what was submitted; it does not independently verify a transaction. Please redact private phone numbers and transaction details before posting.
+        </p>
+
+        <div class="bg-pitchDark/90 p-4 sm:p-5 rounded-xl border border-cardBorder space-y-4">
+          <div id="proofTextDisplay" class="text-xs sm:text-sm text-slate-100 whitespace-pre-wrap font-mono leading-relaxed editable-node">
+            No M-Pesa receipt message posted yet.
+          </div>
+
+          <div id="proofImageContainer" class="hidden">
+            <p class="text-[10px] text-purple-300 font-black uppercase tracking-wider mb-2 editable-node">M-Pesa Receipt Screenshot Proof:</p>
+            <div class="w-full min-h-[300px] max-h-[600px] overflow-hidden rounded-xl border border-cardBorder bg-pitchDark/90 p-3 flex items-center justify-center">
+              <img id="proofImageDisplay" src="" alt="Proof Screenshot" class="max-h-[560px] w-auto object-contain rounded-lg shadow-2xl">
+            </div>
+          </div>
         </div>
 
-        <!-- Bench Swap Configuration Panel -->
-        <div class="glass-panel p-5 rounded-2xl border-t-2 border-electricCyan shadow-xl">
-          <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-arrows-rotate text-electricCyan"></i> Bench Swapping Desk (KSh 30)</h3>
-          <p class="text-xs text-slate-300">Authorize swaps for injured, red-carded, or 0-point captain players.</p>
+        <div class="superadmin-only hidden space-y-3 pt-3 border-t border-cardBorder">
+          <h3 class="text-xs font-bold text-amber-300 uppercase">Publish M-Pesa Receipt Proof (Super Admin)</h3>
+          <div>
+            <label class="block text-[10px] text-slate-300 mb-1">Paste M-Pesa Message Text:</label>
+            <textarea id="proofTextInput" rows="3" placeholder="Paste M-Pesa receipt text..." class="w-full bg-pitchDark border border-cardBorder text-xs text-white p-2.5 rounded-lg focus:outline-none focus:border-purple-400 font-mono"></textarea>
+          </div>
+          <div>
+            <label class="block text-[10px] text-slate-300 mb-1">Upload Receipt Screenshot:</label>
+            <input type="file" id="proofImageInput" accept="image/*" class="text-xs text-slate-400 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-purple-600 file:text-white hover:file:bg-purple-500 cursor-pointer">
+          </div>
+          <button onclick="saveProofVault()" class="bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs px-5 py-2.5 rounded-lg transition-all shadow-md">
+            Publish Proof Vault
+          </button>
         </div>
       </div>
     </section>
-    <!-- 4. SOCIAL FEEDS & TRANSPARENCY VAULT -->
-    <section class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-      <div class="glass-panel p-5 rounded-2xl">
-        <h3 class="text-xs font-black uppercase tracking-widest text-roseHot mb-3"><i class="fa-solid fa-fire"></i> Trash Talk & Banter Feed</h3>
-        <div id="trashFeed" class="space-y-2 max-h-60 overflow-y-auto"></div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+      <section class="space-y-3">
+        <div class="border-b border-cardBorder pb-2">
+          <h2 class="text-xs font-black uppercase tracking-widest text-skyBright flex items-center gap-2">
+            <i class="fa-solid fa-bullhorn"></i> <span class="editable-node">Announcements</span>
+          </h2>
+        </div>
+
+        <div class="glass-panel rounded-2xl p-5 shadow-xl flex flex-col justify-between h-full">
+          <div class="bg-pitchDark/90 p-4 rounded-xl border border-cardBorder min-h-[90px] flex items-center mb-3">
+            <p id="announcementText" class="text-xs sm:text-sm text-slate-100 font-medium italic leading-relaxed editable-node">
+              No active announcements yet. Admin broadcasts will chime with sound!
+            </p>
+          </div>
+
+          <div class="superadmin-only hidden space-y-2 pt-2 border-t border-cardBorder">
+            <label class="block text-[10px] text-amber-300 font-bold">Broadcast Announcement (Triggers Chime Sound):</label>
+            <div class="flex gap-2">
+              <textarea rows="3" id="announcementInput" placeholder="Write announcement or paste M-Pesa message..." class="flex-grow bg-pitchDark border border-cardBorder text-xs text-white p-2.5 rounded-lg focus:outline-none focus:border-skyBright"></textarea>
+              <label class="block text-[10px] text-slate-300">Admin alert sound <select id="adminSoundSelect" onchange="saveSoundChoice()" class="bg-pitchDark p-2 rounded"><option value="chime">Chime</option><option value="beep">Beep</option><option value="fanfare">Fanfare</option><option value="soft">Soft</option></select> <button type="button" onclick="playAdminSound()" class="underline">Preview</button></label><label class="block text-[10px] text-slate-300">Member post sound <select id="memberSoundSelect" onchange="saveSoundChoice()" class="bg-pitchDark p-2 rounded"><option value="pop">Pop</option><option value="beep">Beep</option><option value="chime">Chime</option><option value="soft">Soft</option></select> <button type="button" onclick="playMemberSound()" class="underline">Preview</button></label><button onclick="saveAnnouncement()" class="bg-skyBright hover:bg-sky-300 text-pitchDark font-bold text-xs px-4 py-2.5 rounded-lg transition-all shrink-0">
+                Broadcast 🔔
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="space-y-3">
+        <div class="border-b border-cardBorder pb-2">
+          <h2 class="text-xs font-black uppercase tracking-widest text-emeraldNeon flex items-center gap-2">
+            <i class="fa-solid fa-book-open"></i> <span class="editable-node">Rules & Guidelines</span>
+          </h2>
+        </div>
+
+        <div class="glass-panel rounded-2xl p-5 shadow-xl flex flex-col justify-between h-full">
+          <div id="rulesDisplay" class="bg-pitchDark/90 p-4 rounded-xl border border-cardBorder text-xs text-slate-100 font-medium whitespace-pre-wrap leading-relaxed font-sans mb-3 editable-node">
+1. All members must submit their KSh 50 contribution before the Gameweek deadline.
+2. The Gameweek winner with the highest score takes the designated weekly pot.
+3. Ranking ties will share the week's pot equally.
+4. Ensure your payment is verified by Admin for payment tick approvals.
+5. Have fun, support each other, and enjoy the Premier League season! ⚽🔥
+          </div>
+
+          <div class="superadmin-only hidden space-y-2 pt-2 border-t border-cardBorder">
+            <label class="block text-[10px] text-amber-300 font-bold">Edit Rules (Super Admin):</label>
+            <textarea id="rulesInput" rows="4" class="w-full bg-pitchDark border border-cardBorder text-xs text-white p-2.5 rounded-lg focus:outline-none focus:border-emeraldNeon font-sans"></textarea>
+            <button onclick="saveRules()" class="bg-emeraldNeon hover:bg-emerald-400 text-pitchDark font-bold text-xs px-4 py-2 rounded-lg transition-all">
+              Save Rules
+            </button>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+      <!-- Trash Talk Arena -->
+      <section id="community" class="space-y-3 scroll-mt-28">
+        <div class="border-b border-roseHot/40 pb-2">
+          <h2 class="text-xs font-black uppercase tracking-widest text-roseHot flex items-center gap-2">
+            <i class="fa-solid fa-fire-flame-curved"></i> <span class="editable-node">Trash Talk & Banter 🗣️🔥</span>
+          </h2>
+        </div>
+
+        <div class="glass-panel-rose rounded-2xl p-5 shadow-2xl space-y-4">
+          <p class="text-xs text-rose-100 font-semibold editable-node">
+            Roast your rivals, celebrate wins, or acknowledge payout receipts!
+          </p>
+
+          <div class="bg-pitchDark/90 p-4 rounded-xl border border-roseHot/40 space-y-3 shadow-inner">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+              <input type="text" id="trashAuthorInput" placeholder="Your Name" class="bg-cardDark border border-roseHot/40 text-xs text-white p-2.5 rounded-lg focus:outline-none focus:border-roseHot font-bold placeholder-slate-400">
+              <textarea rows="3" id="trashTextInput" placeholder="Type banter or paste a message..." class="sm:col-span-2 bg-cardDark border border-roseHot/40 text-xs text-white p-2.5 rounded-lg focus:outline-none focus:border-roseHot font-medium placeholder-slate-400"></textarea>
+            </div>
+            <button onclick="submitTrashTalk()" class="w-full sm:w-auto bg-gradient-to-r from-rose-600 to-roseHot hover:from-rose-500 hover:to-rose-400 text-white font-black text-xs px-5 py-2.5 rounded-lg transition-all shadow-lg flex items-center justify-center gap-2">
+              <i class="fa-solid fa-paper-plane"></i> Post Banter 🔥
+            </button>
+          </div>
+
+          <div id="trashFeed" class="space-y-2.5 mt-3 max-h-72 overflow-y-auto pr-1">
+            <!-- Dynamic Banter Cards -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Suggestions Feed -->
+      <section class="space-y-3">
+        <div class="border-b border-amber-400/40 pb-2">
+          <h2 class="text-xs font-black uppercase tracking-widest text-amber-300 flex items-center gap-2">
+            <i class="fa-solid fa-comments"></i> <span class="editable-node">Suggestions</span>
+          </h2>
+        </div>
+
+        <div class="glass-panel-amber rounded-2xl p-5 shadow-2xl space-y-4">
+          <p class="text-xs text-amber-100 font-semibold editable-node">
+            Open discussion space for managers and admin to share feedback and ideas.
+          </p>
+
+          <div class="bg-pitchDark/90 p-4 rounded-xl border border-amber-400/40 space-y-3 shadow-inner">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+              <input type="text" id="sugAuthorInput" placeholder="Your Name" class="bg-cardDark border border-amber-400/40 text-xs text-white p-2.5 rounded-lg focus:outline-none focus:border-amber-400 font-bold placeholder-slate-400">
+              <textarea rows="3" id="sugTextInput" placeholder="Type or paste a suggestion..." class="sm:col-span-2 bg-cardDark border border-amber-400/40 text-xs text-white p-2.5 rounded-lg focus:outline-none focus:border-amber-400 font-medium placeholder-slate-400"></textarea>
+            </div>
+            <button onclick="submitSuggestion()" class="w-full sm:w-auto bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-pitchDark font-black text-xs px-5 py-2.5 rounded-lg transition-all shadow-lg flex items-center justify-center gap-2">
+              <i class="fa-solid fa-paper-plane"></i> Post Suggestion 💬
+            </button>
+          </div>
+
+          <div id="suggestionFeed" class="space-y-2.5 mt-3 max-h-72 overflow-y-auto pr-1">
+            <!-- Dynamic Suggestion Cards -->
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <section id="funActivities" class="glass-panel rounded-2xl p-5 sm:p-7 space-y-6">
+      <div class="border-b border-cardBorder pb-3">
+        <h2 class="text-base sm:text-lg font-black uppercase tracking-wider text-cyan-300 flex items-center gap-3"><i class="fa-solid fa-trophy"></i> Fun Activities</h2>
+        <p class="mt-2 text-sm text-slate-300">Optional games and requests for the community. Members can view standings, vote, and send requests. Admin manages the schedule, results, approvals, and payments.</p>
       </div>
-      <div class="glass-panel p-5 rounded-2xl">
-        <h3 class="text-xs font-black uppercase tracking-widest text-cyan-400 mb-3"><i class="fa-solid fa-vault"></i> Transparency Proof Box</h3>
-        <textarea id="proofTextContainer" class="w-full bg-slate-900 border border-cardBorder text-xs p-2.5 rounded-lg focus:outline-none font-mono text-white h-24" placeholder="Paste full multi-line M-Pesa confirmation texts here..."></textarea>
+      <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+        <article class="rounded-2xl border border-amber-400/40 bg-pitchDark/80 p-4 sm:p-5 space-y-5">
+          <div class="flex flex-wrap items-start justify-between gap-3">
+            <div><h3 class="text-base sm:text-lg font-black text-amber-300 flex items-center gap-2"><i class="fa-solid fa-trophy"></i> Manager Tournament</h3><p class="text-xs text-slate-300 mt-1">A multi-gameweek cup: group tables first, then Admin-entered knockout rounds.</p></div>
+            <button onclick="voteActivity('tournament')" class="rounded-lg border border-amber-300/50 bg-amber-400/10 px-3 py-2 text-xs font-bold text-amber-200">Support this idea · <span id="tournamentVotes">0</span> votes</button>
+          </div>
+          <p class="-mt-3 text-[10px] text-slate-400">Support so far: <b id="tournamentVoteRate" class="text-amber-200">0 votes</b></p>
+          <p class="-mt-3 text-[10px] text-slate-400">Voting is an optional interest check. It does not register you or collect an entry fee.</p>
+          <div class="grid grid-cols-2 gap-2 rounded-xl border border-amber-300/25 bg-amber-400/5 p-3 text-xs"><div><span class="block text-[9px] font-bold uppercase text-slate-400">Managers entered</span><b id="tournamentEntrantCount" class="mt-1 block text-white">0</b></div><div class="text-right"><span class="block text-[9px] font-bold uppercase text-slate-400">Expected pot · KSh 100 one-time entry</span><b id="tournamentExpectedPot" class="mt-1 block text-amber-200">KSh 0</b></div><p class="col-span-2 text-[10px] leading-relaxed text-slate-400">The KSh 100 registration fee is paid once for the entire tournament, not per gameweek. The prize estimate multiplies the number of confirmed entrants by KSh 100; Admin confirms payments and the final payout.</p></div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            <div class="rounded-xl bg-cardDark p-3"><b class="text-white">1 · Register</b><p class="mt-1 text-slate-300">Entry is a one-time KSh 100 per manager for the whole tournament. It is not charged again for each gameweek. Admin writes the confirmed participants and tracks the collected entry pot.</p></div>
+            <div class="rounded-xl bg-cardDark p-3"><b class="text-white">2 · Play the groups</b><p class="mt-1 text-slate-300">The tournament runs over the gameweeks Admin sets. Admin enters each manager’s group record and combined FPL points for those gameweeks. Group tables sort by group points, goal difference, goals scored, then name.</p></div>
+            <div class="rounded-xl bg-cardDark p-3"><b class="text-white">3 · Draw and advance</b><p class="mt-1 text-slate-300">Admin enters the participants and draws fair random pairings. After recording each round’s winners, Admin can draw the next round automatically through the final.</p></div>
+            <div class="rounded-xl bg-cardDark p-3"><b class="text-white">4 · Prize winner</b><p class="mt-1 text-slate-300">The manager with the highest combined FPL points across the tournament gameweeks wins the KSh 100-per-entry pot and is shown with the cup. A points tie is decided by group points, goal difference, goals scored, then manager name. The knockout bracket tracks progression; it does not decide the cash prize.</p></div>
+          </div>
+          <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_190px] gap-3 items-stretch">
+            <div class="space-y-2 min-w-0"><h4 class="text-xs font-black uppercase tracking-widest text-amber-200">Group Standings</h4><p class="text-[11px] text-slate-400">Champions League-style group tables. Admin enters each manager’s group results and combined FPL points; each group table sorts itself.</p><div id="tournamentGroupTable" class="space-y-4"></div></div>
+            <aside class="rounded-2xl border border-amber-300/40 bg-gradient-to-b from-amber-400/15 to-cardDark p-4 flex flex-col items-center justify-center text-center min-h-52"><div class="text-[10px] font-black uppercase tracking-[0.2em] text-amber-200">FPL Points Cup</div><i class="fa-solid fa-trophy text-6xl sm:text-7xl text-amber-300 drop-shadow-[0_0_18px_rgba(251,191,36,0.35)] my-4" aria-hidden="true"></i><div id="tournamentCupWinner" class="text-xs font-black text-white">Waiting for FPL points</div><p class="mt-2 text-[10px] leading-relaxed text-slate-300">The highest combined FPL points across the tournament gameweeks wins the prize and lifts the cup.</p></aside>
+          </div>
+          <div class="space-y-2"><h4 class="text-xs font-black uppercase tracking-widest text-amber-200">Knockout Bracket</h4><div id="tournamentBracket" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div></div>
+          <div class="admin-only hidden space-y-3 rounded-xl border border-cyan-400/30 bg-cardDark p-4">
+            <h4 class="font-black text-cyan-200">Admin tournament desk</h4>
+            <label class="block text-xs font-bold text-slate-200">Confirmed participants — one manager per line:<textarea id="tournamentParticipantsInput" rows="5" placeholder="Manager One&#10;Manager Two&#10;Manager Three&#10;Manager Four" class="mt-1 w-full rounded-lg border border-cardBorder bg-pitchDark p-2.5 text-xs text-white"></textarea></label>
+            <div class="flex flex-wrap gap-2"><button onclick="drawTournamentFixtures()" class="rounded-lg bg-amber-300 px-4 py-2.5 text-xs font-black text-pitchDark">Draw opening fixtures</button><button onclick="drawTournamentNextRound()" class="rounded-lg border border-cyan-300/50 bg-cyan-400/10 px-4 py-2.5 text-xs font-bold text-cyan-100">Draw next round from winners</button></div>
+            <p class="text-[10px] leading-relaxed text-slate-400">For uneven entrant counts, some managers receive a bye into the next round. Enter each match result and the advancing manager in the fixture list, save, then draw the next round.</p>
+            <label class="block text-xs font-bold text-slate-200">Group table — one manager per line (include combined FPL points):<textarea id="tournamentGroupInput" rows="6" placeholder="Group, Manager, P, W, D, L, GF, GA, Group Pts, Total FPL Pts&#10;A, Manager One, 3, 2, 1, 0, 7, 3, 7, 245" class="mt-1 w-full rounded-lg border border-cardBorder bg-pitchDark p-2.5 text-xs text-white"></textarea></label>
+            <label class="block text-xs font-bold text-slate-200">Knockout fixtures — one match per line:<textarea id="tournamentKnockoutInput" rows="5" placeholder="Round, Manager A, Score A, Manager B, Score B, Winner&#10;Quarter-final, Manager One, 2, Manager Two, 1, Manager One" class="mt-1 w-full rounded-lg border border-cardBorder bg-pitchDark p-2.5 text-xs text-white"></textarea></label>
+            <button onclick="saveTournamentStandings()" class="rounded-lg bg-cyan-400 px-4 py-2.5 text-xs font-black text-pitchDark">Save tournament tables</button>
+          </div>
+        </article>
+        <article class="rounded-2xl border border-cyan-400/40 bg-pitchDark/80 p-4 sm:p-5 space-y-4">
+          <div class="flex flex-wrap items-start justify-between gap-3">
+            <div><h3 class="text-base sm:text-lg font-black text-cyan-300 flex items-center gap-2"><i class="fa-solid fa-arrows-rotate"></i> Bench Swapping</h3><p class="mt-1 text-xs text-slate-300">An optional, admin-reviewed substitution request.</p></div>
+            <button onclick="voteActivity('benchSwap')" class="rounded-lg border border-cyan-300/50 bg-cyan-400/10 px-3 py-2 text-xs font-bold text-cyan-200">Support this idea · <span id="benchSwapVotes">0</span> votes</button>
+          </div>
+          <p class="-mt-3 text-[10px] text-slate-400">Support so far: <b id="benchSwapVoteRate" class="text-cyan-200">0 votes</b></p>
+          <div class="rounded-xl border border-cyan-300/20 bg-cardDark p-3"><h4 class="text-xs font-black uppercase tracking-widest text-cyan-100">How Bench Swapping works</h4><ol class="mt-2 list-decimal space-y-2 pl-5 text-xs text-slate-300"><li>Send your manager name, the starting player, and the reason for the request.</li><li>The request fee is KSh 30; Admin confirms payment before approving a swap.</li><li>The replacement must be the highest-scoring eligible player on your substitutes bench.</li><li>The starting player must be injured or have a red card; zero points qualifies only when that starting player is your captain.</li><li>Admin checks the player status, points, captain status, and payment before confirming the outcome.</li></ol></div>
+          <div class="rounded-xl border border-roseHot/30 bg-roseHot/10 p-3 text-xs text-rose-100"><b>Late contribution penalty:</b> Pay by the countdown deadline. A KSh 30 penalty applies to a contribution recorded after it. Admin checks payment time and marks the payment status.</div>
+          <div class="space-y-2"><label class="block text-xs font-bold text-slate-200">Manager name<input id="swapAuthor" type="text" placeholder="Your manager name" class="mt-1 w-full rounded-lg border border-cardBorder bg-cardDark p-2.5 text-xs text-white"></label><label class="block text-xs font-bold text-slate-200">Player and reason<textarea id="swapDetails" rows="3" placeholder="Bench player, starting player, and reason" class="mt-1 w-full rounded-lg border border-cardBorder bg-cardDark p-2.5 text-xs text-white"></textarea></label><button onclick="submitSwapRequest()" class="rounded-lg bg-cyan-400 px-4 py-2.5 text-xs font-black text-pitchDark">Send swap request</button></div>
+          <div class="space-y-2"><h4 class="text-xs font-black uppercase tracking-widest text-cyan-200">Swap Requests</h4><div id="swapRequests" class="space-y-2"></div></div>
+        </article>
       </div>
     </section>
   </main>
 
+  <!-- Notification Toast Container -->
+  <div id="toastContainer" class="fixed bottom-20 right-3 sm:bottom-5 sm:right-5 z-50 pointer-events-none"></div><button id="saveAllButton" onclick="saveAllChanges()" class="hidden fixed bottom-20 left-3 sm:bottom-5 sm:left-5 z-50 bg-cyan-400 text-pitchDark font-black px-5 py-3 rounded-xl shadow-2xl">Save changes</button>
+
   <script>
-    // CORE PERSISTENT STATE AND CONFIGURATION ENGINE
+    let lastSharedUpdateAt = null;
+    let lastSharedActor = 'system';
+    let lastSharedPayload = null;
+    let hasLoadedSharedState = false;
+    let pendingSharedSaves = 0;
+    let needsSharedRender = false;
+    let sharedSaveQueue = Promise.resolve();
     let state = {
-      accessMode: 'member',
-      currentGameweek: 1,
-      codeKey: '15469007',
-      selectedAdminSound: 'chimeHigh',
-      selectedMemberSound: 'clickSubtle'
+      accessMode: 'member', // 'member', 'admin', 'superadmin'
+      gameweek: 'Gameweek 1', tournamentVotes: 0, benchSwapVotes: 0, tournamentEntries: [], tournamentParticipants: [], tournamentByes: [], swapRequests: [],
+      contribPhone: '',
+      contribName: '',
+      supportPhone: '',
+      announcement: '',
+      countdownTarget: '',
+      proofText: '',
+      proofImageData: '',
+      winnerName: 'Gemini',
+      winnerPoints: 88,
+      rulesText: `1. All members must submit their KSh 50 contribution before the Gameweek deadline.\n2. The Gameweek winner with the highest score takes the designated weekly pot.\n3. Ranking ties will share the week's pot equally.\n4. Ensure your payment is verified by Admin for payment tick approvals.\n5. Have fun, support each other, and enjoy the Premier League season! ⚽🔥`,
+      suggestions: [],
+      trashTalks: [],
+      members: [
+        { id: '1', name: 'Manager 1', points: 142, gwPoints: 88, paid: true, movement: 'up' },
+        { id: '2', name: 'Manager 2', points: 128, gwPoints: 65, paid: true, movement: 'same' },
+        { id: '3', name: 'Manager 3', points: 115, gwPoints: 58, paid: false, movement: 'up' },
+        { id: '4', name: 'Manager 4', points: 110, gwPoints: 42, paid: true, movement: 'down' },
+        { id: '5', name: 'Manager 5', points: 85, gwPoints: 31, paid: false, movement: 'down' }
+      ]
     };
 
-    // OFFLINE INTEGRATED AUDIO SYNTHESIZER MATRIX
-    function playToneMatrix(type) {
+    window.onload = function() {
+      loadStateFromLocalStorage();
+      renderApp();
+      const restoredMode=storedAdminMode();if(restoredMode)changeAccessMode(restoredMode);
+      startCountdownTimer();
+      renderActivities();
+      renderActivities();
+      loadSharedState().then(flushPendingMemberActions);
+      if(fplEndpoint()){window.setInterval(()=>{loadSharedState().then(flushPendingMemberActions)},30000);window.addEventListener('focus',()=>{loadSharedState().then(flushPendingMemberActions)});window.addEventListener('online',flushPendingMemberActions)}
+    };
+
+    function loadStateFromLocalStorage() {
+      const saved = localStorage.getItem('fpl_community_v4_state');
+      try { lastSharedPayload=JSON.parse(localStorage.getItem('fpl_community_v4_remote_baseline')||'null'); } catch (_) { lastSharedPayload=null; }
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          state = { ...state, ...parsed };
+          state.accessMode = 'member';
+        } catch (e) {
+          console.error('Error loading state:', e);
+        }
+      }
+    }
+
+    function saveStateToLocalStorage() {
+      const payload=stateSnapshot();
+      localStorage.setItem('fpl_community_v4_state', JSON.stringify({ ...payload, accessMode: 'member' }));
+      if (['admin', 'superadmin'].includes(state.accessMode)) { const fields=changedSharedFields(payload);if(!fields.length)return Promise.resolve(true);pendingSharedSaves++;return saveSharedState(fields).finally(()=>pendingSharedSaves=Math.max(0,pendingSharedSaves-1)); }
+      return Promise.resolve(true);
+    }
+    function stateSnapshot(source=state) { const payload={...source};delete payload.accessMode;return payload; }
+    function stableStateJSON(value) { if(Array.isArray(value))return '['+value.map(stableStateJSON).join(',')+']';if(value&&typeof value==='object')return '{'+Object.keys(value).sort().map(key=>JSON.stringify(key)+':'+stableStateJSON(value[key])).join(',')+'}';return JSON.stringify(value); }
+    function changedSharedFields(payload=stateSnapshot()) { if(!lastSharedPayload)return Object.keys(payload);const keys=new Set([...Object.keys(payload),...Object.keys(lastSharedPayload)]);return [...keys].filter(key=>stableStateJSON(payload[key])!==stableStateJSON(lastSharedPayload[key])); }
+
+    function fplEndpoint() {
+      const cfg = window.FPL_CONFIG || {};
+      if (!cfg.supabaseUrl || !cfg.supabaseAnonKey) return null;
+      return { url: cfg.supabaseUrl.replace(/\/$/, '') + '/functions/v1/fpl-site', key: cfg.supabaseAnonKey };
+    }
+    function memberDeviceId() {
+      let id=localStorage.getItem('fpl_member_device_id');
+      if(!id){id=window.crypto?.randomUUID?.()||('browser-'+Date.now()+'-'+Math.random().toString(36).slice(2));localStorage.setItem('fpl_member_device_id',id)}
+      return id;
+    }
+    function storedAdminMode() {
+      try { const token=sessionStorage.getItem('fpl_admin_session');if(!token)return null;const encoded=token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');const claims=JSON.parse(atob(encoded+'='.repeat((4-encoded.length%4)%4)));if(claims.exp<=Date.now()/1000||!['admin','superadmin'].includes(claims.mode))return null;return claims.mode; } catch (_) { return null; }
+    }
+    function readPendingMemberActions(){try{return JSON.parse(localStorage.getItem('fpl_pending_member_actions')||'[]')}catch(_){return []}}
+    function writePendingMemberActions(items){localStorage.setItem('fpl_pending_member_actions',JSON.stringify(items))}
+    function makeActionId(){return window.crypto?.randomUUID?.()||('action-'+Date.now()+'-'+Math.random().toString(36).slice(2)+'-'+Math.random().toString(36).slice(2))}
+    function addPendingAction(memberAction,payload,actionId){const items=readPendingMemberActions();items.push({actionId,memberAction,payload,deviceId:memberDeviceId()});writePendingMemberActions(items);if(memberAction==='suggestion')state.suggestions.unshift({id:actionId,author:payload.author,text:payload.text});if(memberAction==='banter')state.trashTalks.unshift({id:actionId,author:payload.author,text:payload.text});if(memberAction==='swap-request')state.swapRequests.unshift({id:actionId,a:payload.author,d:payload.text});localStorage.setItem('fpl_community_v4_state',JSON.stringify({...stateSnapshot(),accessMode:'member'}));renderActivities();renderSuggestions();renderTrashTalk()}
+    async function postMemberAction(memberAction,payload,queuedItem=null) {
+      const api=fplEndpoint();if(!api)return null;
+      if(!queuedItem&&memberAction==='vote'&&readPendingMemberActions().some(item=>item.memberAction==='vote'&&item.payload?.poll===payload.poll)){showToast('Your vote is waiting to sync');return{queued:true}}
+      const item=queuedItem||{actionId:makeActionId(),memberAction,payload,deviceId:memberDeviceId()};
+      if(!queuedItem&&navigator.onLine===false){addPendingAction(memberAction,payload,item.actionId);return{queued:true}}
+      try {
+        const response=await fetch(api.url,{method:'POST',headers:{apikey:api.key,'Content-Type':'application/json'},body:JSON.stringify({action:'member-action',...item})});
+        const result=await response.json().catch(()=>({}));
+        if(!response.ok){if(response.status>=500||response.status===429){if(!queuedItem)addPendingAction(memberAction,payload,item.actionId);return{queued:true}}showToast(result.error||'Could not submit.');return false;}
+        await loadSharedState();return result;
+      } catch (_) {if(!queuedItem)addPendingAction(memberAction,payload,item.actionId);return{queued:true};}
+    }
+    async function flushPendingMemberActions(){const api=fplEndpoint();if(!api||navigator.onLine===false)return;const items=readPendingMemberActions();if(!items.length)return;let done=0;for(let i=0;i<items.length;i++){const item=items[i];const result=await postMemberAction(item.memberAction,item.payload,item);if(result?.queued)break;done++;}writePendingMemberActions(items.slice(done));if(done)await loadSharedState();}
+    async function loadSharedState() {
+      const api = fplEndpoint(); if (!api) return;
+      try {
+        const response = await fetch(api.url, { headers: { apikey: api.key } });
+        if (!response.ok) return;
+        const data = await response.json();
+        if (data.payload && typeof data.payload === 'object') {
+          const changed=hasLoadedSharedState&&data.updated_at&&data.updated_at!==lastSharedUpdateAt;
+          const pendingFields=changedSharedFields();
+          const active=document.activeElement;
+          const editing=active&&(active.isContentEditable||['INPUT','TEXTAREA','SELECT'].includes(active.tagName));
+          if(hasLoadedSharedState&&!changed&&!pendingFields.length){if(needsSharedRender&&!editing){renderApp();renderActivities();needsSharedRender=false}return;}
+          if(changed&&(editing||(state.accessMode!=='member'&&pendingSharedSaves>0)))return;
+          const localPayload=stateSnapshot();
+          const preserved={};
+          if(state.accessMode!=='member')pendingFields.forEach(key=>{if(Object.prototype.hasOwnProperty.call(localPayload,key))preserved[key]=localPayload[key]});
+          const mode=state.accessMode;
+          const firstLoad=!lastSharedPayload;
+          if(firstLoad)state={...state,...data.payload,accessMode:mode};
+          else state={...state,...data.payload,...preserved,accessMode:mode};
+          readPendingMemberActions().forEach(item=>{const key=item.memberAction==='suggestion'?'suggestions':item.memberAction==='banter'?'trashTalks':item.memberAction==='swap-request'?'swapRequests':null;if(!key)return;const list=state[key]||(state[key]=[]);if(list.some(entry=>entry.id===item.actionId))return;list.unshift(key==='swapRequests'?{id:item.actionId,a:item.payload.author,d:item.payload.text}:{id:item.actionId,author:item.payload.author,text:item.payload.text})});
+          lastSharedPayload=firstLoad?stateSnapshot():{...lastSharedPayload,...data.payload};
+          localStorage.setItem('fpl_community_v4_remote_baseline',JSON.stringify(lastSharedPayload));
+          hasLoadedSharedState=true;
+          lastSharedUpdateAt=data.updated_at||lastSharedUpdateAt;
+          lastSharedActor=data.updated_by||lastSharedActor;
+          localStorage.setItem('fpl_community_v4_state', JSON.stringify(state));
+          if(editing)needsSharedRender=true;else{renderApp();renderActivities();needsSharedRender=false}
+          if(changed){showToast('New community update');if(['admin','superadmin'].includes(lastSharedActor))playAdminSound();else playMemberSound()}
+          if(!firstLoad&&pendingFields.length&&mode!=='member')saveStateToLocalStorage();
+        }
+      } catch (_) { /* Keep the offline copy available when the network is down. */ }
+    }
+    function saveSharedState(changedFields=changedSharedFields()) {
+      const api = fplEndpoint(); const token = sessionStorage.getItem('fpl_admin_session');
+      if (!api || !token || !changedFields.length) return Promise.resolve(false);
+      const payload=JSON.parse(JSON.stringify(stateSnapshot()));
+      const fields=[...changedFields];
+      sharedSaveQueue=sharedSaveQueue.then(async()=>{try {
+        const response = await fetch(api.url, { method: 'POST', headers: { apikey: api.key, 'Content-Type': 'application/json', authorization: `Bearer ${token}` }, body: JSON.stringify({ action: 'save-state', payload, changedFields: fields }) });
+        if (response.status === 401) { sessionStorage.removeItem('fpl_admin_session'); state.accessMode = 'member'; renderApp(); showToast('Admin session expired.'); return; }
+        const result=await response.json().catch(()=>({}));
+        if (!response.ok) { showToast(result.error || 'Shared save failed.'); return false; }
+        if(result.payload){const current=stateSnapshot();const preserveKeys=new Set([...fields,...changedSharedFields(current)]);const mode=state.accessMode;state={...result.payload,accessMode:mode};for(const key of preserveKeys){if(Object.prototype.hasOwnProperty.call(current,key))state[key]=current[key];else delete state[key]}lastSharedPayload={...result.payload};localStorage.setItem('fpl_community_v4_remote_baseline',JSON.stringify(lastSharedPayload));localStorage.setItem('fpl_community_v4_state',JSON.stringify(state));const active=document.activeElement;const editing=active&&(active.isContentEditable||['INPUT','TEXTAREA','SELECT'].includes(active.tagName));if(editing)needsSharedRender=true;else{renderApp();renderActivities();needsSharedRender=false}}
+        if(result.updated_at)lastSharedUpdateAt=result.updated_at;
+        if(result.updated_by)lastSharedActor=result.updated_by;
+        return true;
+      } catch (_) { showToast('Offline: saved on this device; shared save will need a connection.');return false; }});
+      return sharedSaveQueue;
+    }
+
+    // Web Audio API Notification Sound
+    function playChimeSound() {
       try {
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
-        osc.type = 'sine';
-        if (type === 'admin') {
-          osc.frequency.setValueAtTime(659.25, audioCtx.currentTime); // E5
-          osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.15); // A5
-        } else {
-          osc.frequency.setValueAtTime(440, audioCtx.currentTime); // A4
-        }
-        osc.connect(gain); gain.connect(audioCtx.destination);
-        osc.start(); osc.stop(audioCtx.currentTime + 0.3);
-      } catch (e) { console.log('Audio pending user interaction'); }
-    }
 
-    // SECRET PANEL GATEKEEPER TRIGGER
-    function clickCrownTrigger() {
-      const pinEntry = prompt("Enter Administration Code Authorization Key:");
-      if (pinEntry === state.codeKey) {
-        state.accessMode = 'superadmin';
-        document.body.classList.add('superadmin-active');
-        playToneMatrix('admin');
-        alert("Super Admin Mode Active ⚡ Control nodes unlocked.");
-      } else {
-        alert("Unauthorized Access Logged.");
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
+        osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.15); // A5
+
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.6);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.6);
+      } catch (e) {
+        console.log('Audio playback restricted');
       }
     }
-  </script>
+
+    function changeAccessMode(mode) {
+      if (mode === 'member') sessionStorage.removeItem('fpl_admin_session');
+      const authorizedMode=mode==='member'?null:storedAdminMode();
+      if (mode !== 'member' && (!authorizedMode || (mode==='superadmin'&&authorizedMode!=='superadmin'))) { state.accessMode = 'member'; return; }
+      state.accessMode = mode;
+
+      const saveButton = document.getElementById('saveAllButton'); if (saveButton) saveButton.classList.toggle('hidden', !['admin','superadmin'].includes(mode));
+      const adminEls = document.querySelectorAll('.admin-only');
+      const superAdminEls = document.querySelectorAll('.superadmin-only');
+      const icon = document.getElementById('modeIcon');
+      const body = document.getElementById('bodyRoot');
+
+      if (mode === 'member') {
+        adminEls.forEach(el => el.classList.add('hidden'));
+        superAdminEls.forEach(el => el.classList.add('hidden'));
+        icon.className = "fa-solid fa-user text-slate-400 text-xs";
+        body.classList.remove('superadmin-active');
+        setInlineEditable(false);
+        showToast('Member View Active (Read-Only)');
+      } else if (mode === 'admin') {
+        adminEls.forEach(el => el.classList.remove('hidden'));
+        superAdminEls.forEach(el => el.classList.add('hidden'));
+        icon.className = "fa-solid fa-user-gear text-emeraldNeon text-xs";
+        body.classList.remove('superadmin-active');
+        setInlineEditable(false);
+        showToast('Admin View Active (Roster & Winner Controls)');
+      } else if (mode === 'superadmin') {
+        adminEls.forEach(el => el.classList.remove('hidden'));
+        superAdminEls.forEach(el => el.classList.remove('hidden'));
+        icon.className = "fa-solid fa-user-ninja text-amber-400 text-xs";
+        body.classList.add('superadmin-active');
+        setInlineEditable(true);
+        showToast('Super Admin Mode Active ⚡ (Cursor Edit Anything)');
+      }
+
+      renderRoster();
+      renderSuggestions();
+      renderTrashTalk();
+    }
+
+    function setInlineEditable(editable) {
+      const editableNodes = document.querySelectorAll('.editable-node');
+      editableNodes.forEach(node => {
+        if (editable) {
+          node.setAttribute('contenteditable', 'true');
+        } else {
+          node.removeAttribute('contenteditable');
+        }
+      });
+    }
+
+    function renderApp() {
+      document.getElementById('contribPhoneDisplay').textContent = state.contribPhone || 'Not Set Yet';
+      document.getElementById('contribNameDisplay').textContent = state.contribName || 'Not Set Yet';
+      document.getElementById('contribPhoneInput').value = state.contribPhone || '';
+      document.getElementById('contribNameInput').value = state.contribName || '';
+
+      document.getElementById('supportPhoneDisplay').textContent = state.supportPhone || 'Not Set Yet';
+      document.getElementById('supportPhoneInput').value = state.supportPhone || '';
+
+      document.getElementById('winnerNameDisplay').textContent = state.winnerName || 'Gemini';
+      document.getElementById('winnerPointsDisplay').textContent = (state.winnerPoints || 0).toLocaleString();
+      document.getElementById('winnerNameInput').value = state.winnerName || '';
+      document.getElementById('winnerPointsInput').value = state.winnerPoints || '';
+
+      document.getElementById('rulesDisplay').textContent = state.rulesText || '';
+      document.getElementById('rulesInput').value = state.rulesText || '';
+
+      if (state.announcement && state.announcement.trim() !== '') {
+        document.getElementById('announcementText').textContent = state.announcement;
+      } else {
+        document.getElementById('announcementText').textContent = "No active announcements yet. Admin broadcasts will chime with sound!";
+      }
+      document.getElementById('announcementInput').value = state.announcement || '';
+
+      if (state.countdownTarget) {
+        document.getElementById('countdownInput').value = state.countdownTarget;
+      }
+
+      document.getElementById('proofTextDisplay').textContent = state.proofText || 'No M-Pesa receipt message posted yet.';
+      document.getElementById('proofTextInput').value = state.proofText || '';
+
+      const imgContainer = document.getElementById('proofImageContainer');
+      const imgDisplay = document.getElementById('proofImageDisplay');
+      if (state.proofImageData) {
+        imgDisplay.src = state.proofImageData;
+        imgContainer.classList.remove('hidden');
+      } else {
+        imgContainer.classList.add('hidden');
+      }
+
+      renderRoster();
+      renderSuggestions();
+      renderTrashTalk();
+
+      if (state.accessMode === 'superadmin') {
+        setInlineEditable(true);
+      }
+    }
+
+    function updatePaymentProgress() {
+      const totalMembers = state.members.length;
+      if (totalMembers === 0) {
+        document.getElementById('paymentPercentageText').textContent = '0% Process Done';
+        document.getElementById('paymentAmountText').textContent = 'KSh 0 / KSh 0';
+        document.getElementById('paymentProgressBar').style.width = '0%';
+        return;
+      }
+
+      const paidMembersCount = state.members.filter(m => m.paid).length;
+      const percentage = Math.round((paidMembersCount / totalMembers) * 100);
+
+      const lateFees = state.members.reduce((sum, m) => sum + (m.paid ? (m.lateFee || 0) : 0), 0);
+      const currentPotSum = paidMembersCount * 50 + lateFees;
+      const targetPotSum = totalMembers * 50;
+
+      document.getElementById('paymentPercentageText').textContent = `${percentage}% Process Done`;
+      document.getElementById('paymentAmountText').textContent = `KSh ${currentPotSum} / KSh ${targetPotSum}`;
+      document.getElementById('paymentProgressBar').style.width = `${percentage}%`;
+    }
+
+    function renderRoster() {
+      const tbody = document.getElementById('rosterTableBody');
+      tbody.innerHTML = '';
+
+      const sortedMembers = [...state.members].sort((a, b) => b.points - a.points);
+      document.getElementById('memberCount').textContent = sortedMembers.length;
+
+      updatePaymentProgress();
+
+      if (sortedMembers.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" class="py-8 text-center text-slate-300 text-xs italic font-medium">
+              No managers on the roster yet. Use Admin / Super Admin view to add managers or build from scratch!
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      const totalCount = sortedMembers.length;
+      const isAdminOrSuper = state.accessMode === 'admin' || state.accessMode === 'superadmin';
+
+      sortedMembers.forEach((m, index) => {
+        const rank = index + 1;
+        const isLeader = rank === 1;
+        const isBottom = rank === totalCount && totalCount > 1;
+
+        let movementHTML = '<span class="text-slate-400 font-bold">-</span>';
+        if (m.movement === 'up') {
+          movementHTML = '<span class="text-electricCyan font-black"><i class="fa-solid fa-arrow-up"></i></span>';
+        } else if (m.movement === 'down') {
+          movementHTML = '<span class="text-roseHot font-black"><i class="fa-solid fa-arrow-down"></i></span>';
+        }
+
+        let paidHTML = '';
+        if (isAdminOrSuper) {
+          paidHTML = `
+            <button onclick="togglePayment('${m.id}')" class="px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${m.paid ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/40' : 'bg-roseHot/20 text-roseHot border border-roseHot/40'}">
+              ${m.paid ? 'Paid' : 'Pending'}
+            </button>
+          `;
+        } else {
+          paidHTML = m.paid
+            ? '<span class="text-cyan-300 bg-cyan-500/20 px-2.5 py-1 rounded-md border border-cyan-400/50 font-black text-xs shadow-sm">Paid</span>'
+            : '<span class="text-roseHot bg-roseHot/20 px-2.5 py-1 rounded-md border border-roseHot/50 font-black text-xs shadow-sm">Pending</span>';
+        }
+
+        let nameDisplayHTML = '';
+        let gwPointsHTML = '';
+        let totalPointsHTML = '';
+
+        if (isAdminOrSuper) {
+          nameDisplayHTML = `
+            <input type="text" value="${m.name}" onchange="updateMemberName('${m.id}', this.value)" class="bg-pitchDark border border-cardBorder text-xs text-white p-1.5 rounded focus:outline-none focus:border-cyan-400 w-full max-w-[150px]">
+          `;
+          gwPointsHTML = `
+            <input type="number" value="${m.gwPoints !== undefined ? m.gwPoints : 0}" onchange="updateMemberGwPoints('${m.id}', this.value)" class="bg-pitchDark border border-cardBorder text-xs text-skyBright p-1 rounded focus:outline-none text-right w-16 font-semibold">
+          `;
+          totalPointsHTML = `
+            <input type="number" value="${m.points}" onchange="updateMemberTotalPoints('${m.id}', this.value)" class="bg-pitchDark border border-cardBorder text-xs text-electricCyan p-1 rounded focus:outline-none text-right w-16 font-bold">
+          `;
+        } else {
+          nameDisplayHTML = `<span class="font-bold text-white editable-node">${m.name}</span>`;
+          gwPointsHTML = `<span class="font-semibold text-skyBright editable-node">${Number(m.gwPoints !== undefined ? m.gwPoints : 0).toLocaleString()}</span>`;
+          totalPointsHTML = `<span class="font-bold text-electricCyan editable-node">${Number(m.points || 0).toLocaleString()}</span>`;
+        }
+
+        const row = document.createElement('tr');
+
+        if (isBottom) {
+          row.className = "animate-burn-glow border-b border-roseHot/60 transition-colors";
+        } else {
+          row.className = "hover:bg-cardDark/60 transition-colors border-b border-cardBorder/50";
+        }
+
+        row.innerHTML = `
+          <td class="py-3.5 px-4 font-bold">
+            <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg ${isLeader ? 'bg-amber-400/30 text-amber-300 border border-amber-400/60 font-black' : isBottom ? 'bg-roseHot/30 text-rose-200 border border-roseHot/60 font-black' : 'bg-pitchDark text-slate-200 border border-cardBorder'}">
+              ${isLeader ? '👑' : rank}
+            </span>
+          </td>
+          <td class="py-3.5 px-4">
+            <div class="flex items-center gap-2">
+              ${nameDisplayHTML}
+              ${isLeader ? '' : ''}
+              ${isBottom ? '' : ''}
+            </div>
+          </td>
+          <td class="py-3.5 px-4 text-center">${paidHTML}</td>
+          <td class="py-3.5 px-4 text-center">${movementHTML}</td>
+          <td class="py-3.5 px-4 text-right">${gwPointsHTML}</td>
+          <td class="py-3.5 px-4 text-right">${totalPointsHTML}</td>
+          <td class="admin-only ${isAdminOrSuper ? '' : 'hidden'} py-3.5 px-4 text-center">
+            <button onclick="removeMember('${m.id}')" class="bg-roseHot/20 hover:bg-roseHot text-roseHot hover:text-white px-2.5 py-1 rounded text-xs font-bold transition-all border border-roseHot/30">
+              <i class="fa-solid fa-trash-can"></i> Remove
+            </button>
+          </td>
+        `;
+
+        tbody.appendChild(row);
+      });
+
+      if (state.accessMode === 'superadmin') {
+        setInlineEditable(true);
+      }
+    }
+
+    function updateMemberName(id, val) {
+      const member = state.members.find(m => m.id === id);
+      if (member) {
+        member.name = val.trim();
+        saveStateToLocalStorage();
+      }
+    }
+
+    function updateMemberGwPoints(id, val) {
+      const member = state.members.find(m => m.id === id);
+      if (member) {
+        member.gwPoints = parseInt(val) || 0;
+        saveStateToLocalStorage();
+      }
+    }
+
+    function updateMemberTotalPoints(id, val) {
+      const before = Object.fromEntries([...state.members].sort((a,b)=>b.points-a.points).map((m,i)=>[m.id,i+1]));
+      const member = state.members.find(m => m.id === id);
+      if (member) {
+        member.points = parseInt(val) || 0;
+        const after = [...state.members].sort((a,b)=>b.points-a.points);
+        after.forEach((m,i)=>{const old=before[m.id];if(old!==undefined)m.movement=i+1<old?'up':i+1>old?'down':'same'});
+        saveStateToLocalStorage();
+        renderRoster();
+      }
+    }
+
+    function togglePayment(id) {
+      const member = state.members.find(m => m.id === id);
+      if (member) {
+        member.paid = !member.paid;
+        member.paidAt = member.paid ? Date.now() : null;
+        const deadline = state.countdownTarget ? new Date(state.countdownTarget).getTime() : 0;
+        member.lateFee = member.paid && deadline && member.paidAt > deadline ? 30 : 0;
+        saveStateToLocalStorage();
+        renderRoster();
+        showToast(`${member.name} payment: ${member.paid ? `PAID (KSh ${50 + (member.lateFee || 0)})` : 'PENDING'}`);
+      }
+    }
+
+    function saveWinnerDetails() {
+      state.winnerName = document.getElementById('winnerNameInput').value.trim() || 'Gemini';
+      state.winnerPoints = parseInt(document.getElementById('winnerPointsInput').value) || 0;
+      saveStateToLocalStorage();
+      renderApp();
+      showToast('Winner published 👑');
+    }
+
+    function saveRules() {
+      state.rulesText = document.getElementById('rulesInput').value.trim();
+      saveStateToLocalStorage();
+      renderApp();
+      showToast('Rules saved 📖');
+    }
+
+    function saveContribDetails() {
+      state.contribPhone = document.getElementById('contribPhoneInput').value.trim();
+      state.contribName = document.getElementById('contribNameInput').value.trim();
+      saveStateToLocalStorage();
+      renderApp();
+      showToast('Contribution details saved 💳');
+    }
+
+    function saveSupportDetails() {
+      state.supportPhone = document.getElementById('supportPhoneInput').value.trim();
+      saveStateToLocalStorage();
+      renderApp();
+      showToast('Support details saved 🤝');
+    }
+
+    function saveAnnouncement() {
+      state.announcement = document.getElementById('announcementInput').value.trim();
+      saveStateToLocalStorage();
+      renderApp();
+      showToast('Announcement broadcasted with sound 🔔');
+    }
+
+    function saveProofVault() {
+      state.proofText = document.getElementById('proofTextInput').value.trim();
+      const fileInput = document.getElementById('proofImageInput');
+      if (fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          state.proofImageData = e.target.result;
+          saveStateToLocalStorage();
+          renderApp();
+          showToast('Proof image uploaded to vault 🛡️');
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+      } else {
+        saveStateToLocalStorage();
+        renderApp();
+        showToast('Proof text saved to vault 🛡️');
+      }
+    }
+
+    function addMember() {
+      const nameInput = document.getElementById('newMemberName');
+      const gwPointsInput = document.getElementById('newMemberGwPoints');
+      const pointsInput = document.getElementById('newMemberPoints');
+      const movementInput = document.getElementById('newMemberMovement');
+
+      const name = nameInput.value.trim();
+      const gwPoints = parseInt(gwPointsInput.value) || 0;
+      const points = parseInt(pointsInput.value) || 0;
+      const movement = movementInput.value;
+
+      if (!name) {
+        showToast('Please type a manager name');
+        return;
+      }
+
+      state.members.push({
+        id: Date.now().toString(),
+        name: name,
+        points: points,
+        gwPoints: gwPoints,
+        paid: false,
+        movement: movement
+      });
+
+      saveStateToLocalStorage();
+      renderRoster();
+
+      nameInput.value = '';
+      gwPointsInput.value = '';
+      pointsInput.value = '';
+      showToast(`Added ${name} to roster ⚽`);
+    }
+
+    function removeMember(id) {
+      const member = state.members.find(m => m.id === id);
+      const name = member ? member.name : 'this manager';
+
+      state.members = state.members.filter(m => m.id !== id);
+      saveStateToLocalStorage();
+      renderRoster();
+      showToast(`Removed ${name} from roster`);
+    }
+
+    function clearEntireRoster() {
+      if (confirm('Are you sure you want to wipe the entire roster and start from scratch?')) {
+        state.members = [];
+        saveStateToLocalStorage();
+        renderRoster();
+        showToast('Roster wiped clean. Build from scratch!');
+      }
+    }
+
+    async function submitTrashTalk() {
+      const author = document.getElementById('trashAuthorInput').value.trim();
+      const text = document.getElementById('trashTextInput').value.trim();
+
+      if (!author || !text) {
+        showToast('Type your name and banter message');
+        return;
+      }
+
+      const shared=await postMemberAction('banter',{author,text});
+      if(shared===false)return;
+      if(shared===null)state.trashTalks.unshift({
+        id: Date.now().toString(),
+        author: author,
+        text: text,
+      });
+
+      if(shared===null)saveStateToLocalStorage();
+      renderTrashTalk();
+
+      document.getElementById('trashAuthorInput').value = '';
+      document.getElementById('trashTextInput').value = '';
+      showToast(shared?.queued?'Saved offline; it will post when you reconnect':'Banter posted 🔥'); if(!shared?.queued)playMemberSound();
+    }
+
+    function deleteTrashTalk(id) {
+      state.trashTalks = state.trashTalks.filter(t => t.id !== id);
+      saveStateToLocalStorage();
+      renderTrashTalk();
+      showToast('Banter deleted');
+    }
+
+    function renderTrashTalk() {
+      const feed = document.getElementById('trashFeed');
+      feed.innerHTML = '';
+
+      if (state.trashTalks.length === 0) {
+        feed.innerHTML = `<p class="text-xs text-rose-200/70 italic py-2">No banter posted yet. Start the roasts!</p>`;
+        return;
+      }
+
+      const isAdminOrSuper = state.accessMode === 'admin' || state.accessMode === 'superadmin';
+
+      state.trashTalks.forEach(t => {
+        const div = document.createElement('div');
+        div.className = "bg-pitchDark/95 p-3.5 rounded-xl border border-roseHot/50 flex items-start justify-between gap-3 text-xs shadow-lg";
+
+        let deleteBtn = '';
+        if (isAdminOrSuper) {
+          deleteBtn = `<button onclick="deleteTrashTalk('${t.id}')" class="text-roseHot hover:text-white hover:underline font-extrabold shrink-0">Delete</button>`;
+        }
+
+        div.innerHTML = `
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <span class="font-black text-rose-300 bg-rose-500/20 px-2 py-0.5 rounded border border-rose-500/40 editable-node">${escapeHTML(t.author)}</span>
+
+            </div>
+            <p class="text-white font-semibold text-sm leading-snug editable-node">${escapeHTML(t.text)}</p>
+          </div>
+          ${deleteBtn}
+        `;
+        feed.appendChild(div);
+      });
+
+      if (state.accessMode === 'superadmin') {
+        setInlineEditable(true);
+      }
+    }
+
+    async function submitSuggestion() {
+      const author = document.getElementById('sugAuthorInput').value.trim();
+      const text = document.getElementById('sugTextInput').value.trim();
+
+      if (!author || !text) {
+        showToast('Type your name and suggestion');
+        return;
+      }
+
+      const shared=await postMemberAction('suggestion',{author,text});
+      if(shared===false)return;
+      if(shared===null)state.suggestions.unshift({
+        id: Date.now().toString(),
+        author: author,
+        text: text,
+      });
+
+      if(shared===null)saveStateToLocalStorage();
+      renderSuggestions();
+
+      document.getElementById('sugAuthorInput').value = '';
+      document.getElementById('sugTextInput').value = '';
+      showToast(shared?.queued?'Saved offline; it will post when you reconnect':'Suggestion posted 💬'); if(!shared?.queued)playMemberSound();
+    }
+
+    function deleteSuggestion(id) {
+      state.suggestions = state.suggestions.filter(s => s.id !== id);
+      saveStateToLocalStorage();
+      renderSuggestions();
+      showToast('Suggestion deleted');
+    }
+
+    function renderSuggestions() {
+      const feed = document.getElementById('suggestionFeed');
+      feed.innerHTML = '';
+
+      if (state.suggestions.length === 0) {
+        feed.innerHTML = `<p class="text-xs text-amber-200/70 italic py-2">No suggestions yet. Share your feedback!</p>`;
+        return;
+      }
+
+      const isAdminOrSuper = state.accessMode === 'admin' || state.accessMode === 'superadmin';
+
+      state.suggestions.forEach(s => {
+        const div = document.createElement('div');
+        div.className = "bg-pitchDark/95 p-3.5 rounded-xl border border-amber-400/50 flex items-start justify-between gap-3 text-xs shadow-lg";
+
+        let deleteBtn = '';
+        if (isAdminOrSuper) {
+          deleteBtn = `<button onclick="deleteSuggestion('${s.id}')" class="text-roseHot hover:text-white hover:underline font-extrabold shrink-0">Delete</button>`;
+        }
+
+        div.innerHTML = `
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <span class="font-black text-amber-300 bg-amber-500/20 px-2 py-0.5 rounded border border-amber-400/40 editable-node">${escapeHTML(s.author)}</span>
+
+            </div>
+            <p class="text-white font-semibold text-sm leading-snug editable-node">${escapeHTML(s.text)}</p>
+          </div>
+          ${deleteBtn}
+        `;
+        feed.appendChild(div);
+      });
+
+      if (state.accessMode === 'superadmin') {
+        setInlineEditable(true);
+      }
+    }
+
+    function updateCountdownTarget() {
+      state.countdownTarget = document.getElementById('countdownInput').value;
+      saveStateToLocalStorage();
+      updateCountdownDisplay();
+      showToast(state.countdownTarget ? 'Gameweek deadline saved' : 'Gameweek deadline cleared');
+    }
+
+    function startCountdownTimer() {
+      updateCountdownDisplay();
+      setInterval(updateCountdownDisplay, 1000);
+    }
+
+    function updateCountdownDisplay() {
+        const status = document.getElementById('deadlineStatusText');
+        if (!state.countdownTarget) {
+          document.getElementById('days').textContent = '00';
+          document.getElementById('hours').textContent = '00';
+          document.getElementById('minutes').textContent = '00';
+          document.getElementById('seconds').textContent = '00';
+          if (status) status.textContent = 'Set a deadline';
+          return;
+        }
+
+        const target = new Date(state.countdownTarget).getTime();
+        const now = new Date().getTime();
+        const diff = target - now;
+
+        if (diff <= 0) {
+          document.getElementById('days').textContent = '00';
+          document.getElementById('hours').textContent = '00';
+          document.getElementById('minutes').textContent = '00';
+          document.getElementById('seconds').textContent = '00';
+          if (status) status.textContent = 'Deadline reached';
+          return;
+        }
+
+        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+        document.getElementById('days').textContent = d < 10 ? '0' + d : d;
+        document.getElementById('hours').textContent = h < 10 ? '0' + h : h;
+        document.getElementById('minutes').textContent = m < 10 ? '0' + m : m;
+        document.getElementById('seconds').textContent = s < 10 ? '0' + s : s;
+        if (status) status.textContent = 'Time remaining';
+    }
+
+    function copyToClipboard(elementId) {
+      const text = document.getElementById(elementId).textContent;
+      if (!text || text === 'Not Set Yet') {
+        showToast('Number not set by Admin yet');
+        return;
+      }
+
+      const tempInput = document.createElement('input');
+      tempInput.value = text;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempInput);
+
+      showToast('Number copied 🤝');
+    }
+
+    function showToast(message) {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+
+      toast.className = "bg-cardDark text-white border border-emeraldNeon/50 px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 text-xs sm:text-sm font-bold pointer-events-auto toast-enter mb-2";
+      toast.innerHTML = `
+        <span class="text-amber-400 text-base">👑</span>
+        <span>${message}</span>
+      `;
+
+      container.appendChild(toast);
+
+      setTimeout(() => toast.classList.add('toast-active'), 10);
+
+      setTimeout(() => {
+        toast.classList.remove('toast-active');
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    async function saveAllChanges(){if(!['admin','superadmin'].includes(state.accessMode))return;const saved=await saveStateToLocalStorage();showToast(saved?'Changes saved and shared with members':'Saved on this device; reconnect to share changes')}
+    async function voteActivity(k){const poll=k==='tournament'?'tournament':'benchSwap';const shared=await postMemberAction('vote',{poll});if(shared===false)return;if(shared===null){if(poll==='tournament')state.tournamentVotes++;else state.benchSwapVotes++;saveStateToLocalStorage();renderActivities()}showToast(shared?.queued?'Vote saved offline; it will sync when you reconnect':shared?'Vote counted':'Vote saved on this device')}
+    function saveTournament(){if(state.accessMode!=='superadmin')return;state.tournamentEntries=document.getElementById('tournamentInput').value.split(/\r?\n/).map(x=>{let a=x.split(',');return{name:(a[0]||'').trim(),points:+a[1]||0}}).filter(x=>x.name).sort((a,b)=>b.points-a.points);saveStateToLocalStorage();renderActivities()}
+    function submitSwapRequest(){let a=document.getElementById('swapAuthor').value.trim(),d=document.getElementById('swapDetails').value.trim();if(!a||!d)return showToast('Enter your name and swap details');state.swapRequests.unshift({a,d});saveStateToLocalStorage();renderActivities();showToast('Request sent')}
+    function escapeHTML(x){return String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+    function renderActivities(){let t=document.getElementById('tournamentVotes'),b=document.getElementById('benchSwapVotes');if(!t||!b)return;t.textContent=state.tournamentVotes||0;b.textContent=state.benchSwapVotes||0;let d=document.getElementById('tournamentDisplay');if(d)d.innerHTML=(state.tournamentEntries||[]).map((x,i)=>`<div>${i+1}. ${escapeHTML(x.name)} — ${Number(x.points||0).toLocaleString()}</div>`).join('')||'No standings entered yet';let r=document.getElementById('swapRequests');if(r)r.innerHTML=(state.swapRequests||[]).map(x=>`<p>${escapeHTML(x.a)}: ${escapeHTML(x.d)}</p>`).join('')||'No requests yet'}
+    window.addEventListener('storage',e=>{if(e.key==='fpl_community_v4_state'&&e.newValue){try{state={...state,...JSON.parse(e.newValue)};renderApp();showToast('Page updated in another tab');playChimeSound()}catch(_){}}});
+    function saveGameweek(){state.gameweek=document.getElementById('gameweekInput').value.trim()||'Gameweek';document.getElementById('gameweekBadge').textContent=state.gameweek;saveStateToLocalStorage();showToast('Gameweek saved')}
+    const priorRenderForGameweek=renderApp; renderApp=function(){priorRenderForGameweek();const b=document.getElementById('gameweekBadge');if(b)b.textContent=state.gameweek||'GW 1-38 Active';const i=document.getElementById('gameweekInput');if(i)i.value=state.gameweek||'Gameweek 1';renderActivities()};
+    state.customTexts=state.customTexts||{};
+    function tagEditableNodes(){document.querySelectorAll('.editable-node').forEach((n,i)=>{if(!n.dataset.saveKey&&!n.closest('#trashFeed,#suggestionFeed'))n.dataset.saveKey='text-'+i})}
+    document.addEventListener('DOMContentLoaded',tagEditableNodes);
+    const priorSaveAll=saveAllChanges; saveAllChanges=async function(){if(!['admin','superadmin'].includes(state.accessMode))return;if(state.accessMode==='superadmin'){tagEditableNodes();document.querySelectorAll('.editable-node[data-save-key]').forEach(n=>state.customTexts[n.dataset.saveKey]=n.textContent)}await priorSaveAll()};
+    const priorRenderRoster=renderRoster; renderRoster=function(){priorRenderRoster();document.querySelectorAll('.editable-node[data-save-key]').forEach(n=>{if(state.customTexts[n.dataset.saveKey]!==undefined)n.textContent=state.customTexts[n.dataset.saveKey]})};
+    document.addEventListener('DOMContentLoaded',()=>{const main=document.querySelector('main');if(!main)return;const sections=[...main.children].filter(e=>e.tagName==='SECTION');if(sections.length>=3){const winner=sections[1],standings=sections[2];main.insertBefore(standings,winner)}});
+    state.adminSound=state.adminSound||'chime'; state.memberSound=state.memberSound||'pop';
+    function saveSoundChoice(){state.adminSound=document.getElementById('adminSoundSelect').value;state.memberSound=document.getElementById('memberSoundSelect').value;saveStateToLocalStorage();showToast('Sound choices saved')}
+    function playSoundPreset(which){try{const ctx=new (window.AudioContext||window.webkitAudioContext)();const presets={chime:[587,880],beep:[740],fanfare:[523,659,784],soft:[440,523],pop:[880,660]};const seq=presets[which]||presets.chime;seq.forEach((f,i)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type=which==='soft'?'sine':'triangle';o.frequency.value=f;g.gain.setValueAtTime(.001,ctx.currentTime+i*.13);g.gain.exponentialRampToValueAtTime(.12,ctx.currentTime+i*.13+.025);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+i*.13+.17);o.connect(g);g.connect(ctx.destination);o.start(ctx.currentTime+i*.13);o.stop(ctx.currentTime+i*.13+.19)})}catch(e){}}
+    function playAdminSound(){playSoundPreset(state.adminSound||'chime')} function playMemberSound(){playSoundPreset(state.memberSound||'pop')}
+    const oldRenderSound=renderApp;renderApp=function(){oldRenderSound();const a=document.getElementById('adminSoundSelect'),m=document.getElementById('memberSoundSelect');if(a)a.value=state.adminSound||'chime';if(m)m.value=state.memberSound||'pop'};
+    const saveTournamentBase=saveTournament;saveTournament=function(){saveTournamentBase();state.tournamentRound=document.getElementById('tournamentRoundInput').value.trim();state.advancingNames=document.getElementById('advancingInput').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);saveStateToLocalStorage();renderActivities();showToast('Round progression saved')};
+    const renderActivitiesBase=renderActivities;renderActivities=function(){renderActivitiesBase();const input=document.getElementById('tournamentRoundInput'),adv=document.getElementById('advancingInput');if(input&&document.activeElement!==input)input.value=state.tournamentRound||'';if(adv&&document.activeElement!==adv)adv.value=(state.advancingNames||[]).join('\n');const d=document.getElementById('tournamentDisplay');if(d&&(state.tournamentRound||state.advancingNames?.length)){const extra=`<div class="font-bold text-cyan-200">${escapeHTML(state.tournamentRound||'Current round')}</div>`+(state.advancingNames||[]).map((n,i)=>`<div>${i+1}. ${escapeHTML(n)} ${state.tournamentRound?.toLowerCase().includes('final')?'🏆':''}</div>`).join('');d.innerHTML=extra+d.innerHTML}};
+
+    const showToastBase=showToast;showToast=function(message){showToastBase(message);if((state.accessMode==='admin'||state.accessMode==='superadmin')&&!String(message).startsWith('New community update'))playAdminSound()};
+
+    function handleCrownClick(){
+      const entered=window.prompt('Enter access code');
+      if(entered===null)return;
+      const api=fplEndpoint();
+      if(!api){showToast('Secure access is not connected yet.');return;}
+      fetch(api.url,{method:'POST',headers:{apikey:api.key,'Content-Type':'application/json'},body:JSON.stringify({action:'login',code:entered})})
+        .then(async response=>{const result=await response.json().catch(()=>({}));if(!response.ok){if(response.status===404)throw new Error('Admin access is not set up yet: the Supabase function has not been deployed.');if(response.status===503)throw new Error('Admin access is not configured yet.');throw new Error(result.error||'Access unavailable.');}const selected=window.prompt('Enter 1 for Admin or 2 for Super Admin');const mode=selected==='1'?'admin':selected==='2'?'superadmin':null;if(!mode)return null;const selectedResponse=await fetch(api.url,{method:'POST',headers:{apikey:api.key,'Content-Type':'application/json'},body:JSON.stringify({action:'select-mode',challenge:result.challenge,mode})});const selectedResult=await selectedResponse.json().catch(()=>({}));if(!selectedResponse.ok)throw new Error(selectedResult.error||'Access unavailable.');return selectedResult;})
+        .then(result=>{if(!result)return;sessionStorage.setItem('fpl_admin_session',result.token);changeAccessMode(result.mode);showToast('Access enabled for this session.');})
+        .catch(error=>showToast(error instanceof TypeError?'Could not reach admin access. Check your internet connection and try again.':error.message||'Access unavailable.'));
+    }
+    function saveTournamentStandings(){
+      if(!['admin','superadmin'].includes(state.accessMode))return;
+      state.tournamentGroups=document.getElementById('tournamentGroupInput').value.split(/\r?\n/).map(line=>{const p=line.split(',').map(x=>x.trim());if(p.length<9||!p[1])return null;return{group:p[0]||'A',name:p[1],played:Number(p[2])||0,won:Number(p[3])||0,drawn:Number(p[4])||0,lost:Number(p[5])||0,gf:Number(p[6])||0,ga:Number(p[7])||0,points:Number(p[8])||0,totalFplPoints:Number(p[9])||0};}).filter(Boolean);
+      state.tournamentMatches=document.getElementById('tournamentKnockoutInput').value.split(/\r?\n/).map(line=>{const p=line.split(',').map(x=>x.trim());if(p.length<6||!p[1]||!p[3])return null;return{round:p[0],home:p[1],homeScore:Number(p[2])||0,away:p[3],awayScore:Number(p[4])||0,winner:p[5]};}).filter(Boolean);
+      saveStateToLocalStorage();renderActivities();showToast('Tournament standings saved');
+    }
+    function shuffleManagers(names){const shuffled=[...names];for(let i=shuffled.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]]}return shuffled}
+    function roundNameForEntrants(count){if(count<=2)return 'Final';if(count<=4)return 'Semi-final';if(count<=8)return 'Quarter-final';if(count<=16)return 'Round of 16';return `Round of ${count}`}
+    function makeTournamentDraw(names){const shuffled=shuffleManagers(names),lowerPower=2**Math.floor(Math.log2(shuffled.length));if(shuffled.length===lowerPower)return{round:roundNameForEntrants(shuffled.length),byes:[],matches:Array.from({length:shuffled.length/2},(_,i)=>({round:roundNameForEntrants(shuffled.length),home:shuffled[i*2],homeScore:'',away:shuffled[i*2+1],awayScore:'',winner:''}))};const matchCount=shuffled.length-lowerPower,playing=shuffled.slice(0,matchCount*2),byes=shuffled.slice(matchCount*2);return{round:'Preliminary',byes,matches:Array.from({length:matchCount},(_,i)=>({round:'Preliminary',home:playing[i*2],homeScore:'',away:playing[i*2+1],awayScore:'',winner:''}))}}
+    function drawTournamentFixtures(){if(!['admin','superadmin'].includes(state.accessMode))return;const names=document.getElementById('tournamentParticipantsInput').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean),unique=new Set(names.map(x=>x.toLocaleLowerCase()));if(names.length<2){showToast('Enter at least two participants');return}if(unique.size!==names.length){showToast('Remove duplicate participant names before drawing');return}const draw=makeTournamentDraw(names);state.tournamentParticipants=names;state.tournamentByes=draw.byes;state.tournamentMatches=draw.matches;saveStateToLocalStorage();renderActivities();showToast(`${draw.round} fixtures drawn`)}
+    function drawTournamentNextRound(){if(!['admin','superadmin'].includes(state.accessMode))return;const matches=state.tournamentMatches||[];if(!matches.length){showToast('Draw the opening fixtures first');return}const lastRound=matches[matches.length-1].round,current=matches.filter(m=>m.round===lastRound);if(current.some(m=>!m.winner||![m.home,m.away].includes(m.winner))){showToast(`Enter and save every ${lastRound} winner first`);return}const advancing=[...(state.tournamentByes||[]),...current.map(m=>m.winner)];if(advancing.length<2){showToast('The tournament winner is already decided');return}const draw=makeTournamentDraw(advancing);state.tournamentByes=draw.byes;state.tournamentMatches=[...matches,...draw.matches];saveStateToLocalStorage();renderActivities();showToast(`${draw.round} fixtures drawn from the advancing managers`)}
+    function renderTournamentTables(){
+      const groupHost=document.getElementById('tournamentGroupTable'),bracketHost=document.getElementById('tournamentBracket');if(!groupHost||!bracketHost)return;
+      const rows=state.tournamentGroups||[];const grouped={};rows.forEach(row=>(grouped[row.group]||(grouped[row.group]=[])).push({...row,gd:row.gf-row.ga}));
+      const groupNames=Object.keys(grouped).sort((a,b)=>a.localeCompare(b));
+      groupHost.innerHTML=groupNames.length?groupNames.map(group=>{const sorted=grouped[group].sort((a,b)=>b.points-a.points||b.gd-a.gd||b.gf-a.gf||a.name.localeCompare(b.name));return `<div class="overflow-x-auto rounded-xl border border-cardBorder"><div class="bg-cardDark px-3 py-2 text-xs font-black text-amber-200">Group ${escapeHTML(group)}</div><table class="w-full min-w-[620px] text-left text-[10px]"><thead><tr class="bg-cardDark/70 text-slate-400"><th class="p-2">#</th><th class="p-2">Manager</th><th class="p-2">P</th><th class="p-2">W</th><th class="p-2">D</th><th class="p-2">L</th><th class="p-2">GF</th><th class="p-2">GA</th><th class="p-2">GD</th><th class="p-2">GROUP POINTS</th><th class="p-2">FPL POINTS</th></tr></thead><tbody>${sorted.map((r,i)=>`<tr class="border-t border-cardBorder/60 ${i<2?'text-white':'text-slate-300'}"><td class="p-2 font-bold">${i+1}</td><td class="p-2 font-semibold">${escapeHTML(r.name)}</td><td class="p-2">${r.played}</td><td class="p-2">${r.won}</td><td class="p-2">${r.drawn}</td><td class="p-2">${r.lost}</td><td class="p-2">${r.gf}</td><td class="p-2">${r.ga}</td><td class="p-2">${r.gd>0?'+':''}${r.gd}</td><td class="p-2 font-black text-amber-200">${Number(r.points||0).toLocaleString()}</td><td class="p-2 font-black text-cyan-200">${Number(r.totalFplPoints||0).toLocaleString()}</td></tr>`).join('')}</tbody></table></div>`}).join(''):'<p class="rounded-xl border border-dashed border-cardBorder p-4 text-xs text-slate-400">Group tables will appear here after Admin enters the results.</p>';
+      const matches=state.tournamentMatches||[];const rounds=[...new Set(matches.map(m=>m.round))];const byeCard=(state.tournamentByes||[]).length?`<div class="col-span-full rounded-xl border border-amber-300/30 bg-amber-400/5 p-3 text-xs"><b class="text-amber-200">Bye into the next round:</b> <span class="text-slate-200">${state.tournamentByes.map(escapeHTML).join(', ')}</span></div>`:'';const roundCards=rounds.map(round=>{const list=matches.filter(m=>m.round===round);return `<div class="rounded-xl border border-cardBorder bg-cardDark/70 p-3 space-y-2"><h5 class="text-[10px] font-black uppercase tracking-wider text-cyan-200">${escapeHTML(round)}</h5>${list.map((m,i)=>`<div class="rounded-lg border border-cardBorder/70 bg-pitchDark p-2 text-[11px]"><div class="mb-1 text-[9px] font-bold uppercase tracking-wide text-slate-500">Match ${i+1}</div><div class="flex justify-between gap-2 ${m.winner===m.home?'font-black text-amber-200':'text-slate-200'}"><span>${escapeHTML(m.home)}</span><b>${m.homeScore===''||m.homeScore===undefined?'—':m.homeScore}</b></div><div class="my-1 border-t border-cardBorder/50"></div><div class="flex justify-between gap-2 ${m.winner===m.away?'font-black text-amber-200':'text-slate-200'}"><span>${escapeHTML(m.away)}</span><b>${m.awayScore===''||m.awayScore===undefined?'—':m.awayScore}</b></div>${round.toLowerCase()==='final'&&m.winner?`<div class="mt-2 text-center text-[10px] font-black text-amber-300">Cup winner: ${escapeHTML(m.winner)} 🏆</div>`:''}</div>`).join('')}</div>`});bracketHost.innerHTML=roundCards.length?[byeCard,...roundCards].filter(Boolean).join(''):'<p class="col-span-full rounded-xl border border-dashed border-cardBorder p-4 text-xs text-slate-400">Fixtures will appear here when Admin draws the tournament.</p>';
+      const cupWinner=document.getElementById('tournamentCupWinner');const leader=[...rows].sort((a,b)=>(b.totalFplPoints||0)-(a.totalFplPoints||0)||b.points-a.points||b.gf-b.ga-(a.gf-a.ga)||b.gf-a.gf||a.name.localeCompare(b.name))[0];if(cupWinner)cupWinner.innerHTML=leader&&leader.totalFplPoints>0?`${escapeHTML(leader.name)} · ${leader.totalFplPoints} FPL points`:'Waiting for FPL points';const entrantCount=document.getElementById('tournamentEntrantCount'),expectedPot=document.getElementById('tournamentExpectedPot'),entrants=(state.tournamentParticipants||[]).length||rows.length;if(entrantCount)entrantCount.textContent=String(entrants);if(expectedPot)expectedPot.textContent=`KSh ${entrants*100}`;
+      const gi=document.getElementById('tournamentGroupInput'),ki=document.getElementById('tournamentKnockoutInput'),pi=document.getElementById('tournamentParticipantsInput');if(gi&&document.activeElement!==gi)gi.value=rows.map(r=>[r.group,r.name,r.played,r.won,r.drawn,r.lost,r.gf,r.ga,r.points,r.totalFplPoints||0].join(', ')).join('\n');if(ki&&document.activeElement!==ki)ki.value=matches.map(m=>[m.round,m.home,m.homeScore,m.away,m.awayScore,m.winner].join(', ')).join('\n');if(pi&&document.activeElement!==pi)pi.value=(state.tournamentParticipants||[]).join('\n');
+    }
+    renderActivities=function(){const tv=document.getElementById('tournamentVotes'),bv=document.getElementById('benchSwapVotes');const tournamentVotes=Number(state.tournamentVotes)||0,benchSwapVotes=Number(state.benchSwapVotes)||0;if(tv)tv.textContent=tournamentVotes;if(bv)bv.textContent=benchSwapVotes;const rosterSize=Array.isArray(state.members)?state.members.length:0;const tournamentRate=document.getElementById('tournamentVoteRate'),benchSwapRate=document.getElementById('benchSwapVoteRate');if(tournamentRate)tournamentRate.textContent=rosterSize?`${Math.round(tournamentVotes/rosterSize*100)}% of ${rosterSize} listed managers`:`${tournamentVotes} votes`;if(benchSwapRate)benchSwapRate.textContent=rosterSize?`${Math.round(benchSwapVotes/rosterSize*100)}% of ${rosterSize} listed managers`:`${benchSwapVotes} votes`;renderTournamentTables();const host=document.getElementById('swapRequests');if(!host)return;const requests=state.swapRequests||[];host.innerHTML=requests.length?requests.map((r,i)=>`<div class="flex items-start justify-between gap-2 rounded-lg border border-cardBorder bg-cardDark p-3 text-xs"><div><b class="text-white">${escapeHTML(r.a||r.author||'Manager')}</b><p class="mt-1 whitespace-pre-wrap text-slate-300">${escapeHTML(r.d||r.details||'')}</p></div>${['admin','superadmin'].includes(state.accessMode)?`<button onclick="deleteSwapRequest(${i})" class="shrink-0 font-bold text-rose-300">Delete</button>`:''}</div>`).join(''):'<p class="rounded-lg border border-dashed border-cardBorder p-3 text-xs text-slate-400">No swap requests yet.</p>'};
+    async function submitSwapRequest(){const a=document.getElementById('swapAuthor').value.trim(),d=document.getElementById('swapDetails').value.trim();if(!a||!d){showToast('Enter your name and swap details');return;}const shared=await postMemberAction('swap-request',{author:a,text:d});if(shared===false)return;if(shared===null){state.swapRequests.unshift({a,d});saveStateToLocalStorage();renderActivities()}document.getElementById('swapAuthor').value='';document.getElementById('swapDetails').value='';showToast(shared?.queued?'Saved offline; it will send when you reconnect':'Swap request sent');if(!shared?.queued)playMemberSound();}
+    function deleteSwapRequest(index){if(!['admin','superadmin'].includes(state.accessMode))return;state.swapRequests.splice(index,1);saveStateToLocalStorage();renderActivities();showToast('Swap request deleted');}
+    if(!state.tournamentGroups)state.tournamentGroups=[];if(!state.tournamentMatches)state.tournamentMatches=[];  </script>
+
+  <script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}))}</script>
 </body>
 </html>
