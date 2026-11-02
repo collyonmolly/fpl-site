@@ -275,7 +275,7 @@
     .action-trigger-ready:hover, .epl-btn-primary:hover {
       opacity: 0.9;
     }
-    .admin-control-badge, .audio-panel-title, #super-admin-audio-config {
+    .admin-control-badge, #super-admin-tournament-controls {
       border-left: 4px solid var(--epl-admin-pink) !important;
     }
     .spinner-icon {
@@ -381,30 +381,6 @@
               <input type="datetime-local" id="countdownInput" class="w-full bg-pitchDark border border-cardBorder text-xs text-white p-2 rounded-lg focus:outline-none focus:border-cyan-400" onchange="updateCountdownTarget()">
             </div>
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <div>
-              <label class="block text-xs font-bold text-cyan-300 mb-1">Admin Alert Audio Profile:</label>
-              <select id="adminSoundSelect" onchange="saveSoundChoice()" class="w-full bg-pitchDark border border-cardBorder text-xs text-white p-2 rounded-lg focus:outline-none focus:border-cyan-400">
-                <option value="imperial">Imperial Fanfare</option>
-                <option value="stadium">Stadium Horn</option>
-                <option value="digital">Digital Alert Pulse</option>
-                <option value="gavel">Championship Gavel</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-xs font-bold text-cyan-300 mb-1">Member Notification Audio:</label>
-              <select id="memberSoundSelect" onchange="saveSoundChoice()" class="w-full bg-pitchDark border border-cardBorder text-xs text-white p-2 rounded-lg focus:outline-none focus:border-cyan-400">
-                <option value="pop">Generic Pop</option>
-                <option value="beep">Beep</option>
-                <option value="chime">Chime</option>
-                <option value="soft">Soft Tone</option>
-              </select>
-            </div>
-          </div>
-          <div class="flex flex-wrap gap-2">
-            <button type="button" onclick="playAdminSound()" class="bg-cyan-400 hover:bg-cyan-300 text-pitchDark font-black text-[10px] px-3 py-2 rounded-lg">Preview Admin Audio</button>
-            <button type="button" onclick="playMemberSound()" class="bg-slate-700 hover:bg-slate-600 text-white font-black text-[10px] px-3 py-2 rounded-lg">Preview Member Audio</button>
-          </div>
         </div>
       </div>
 
@@ -492,39 +468,16 @@
             <label class="text-[10px] font-bold text-slate-300">Current anthem stream URL
               <input id="currentAnthemUrlInput" type="url" placeholder="Official stream URL" class="mt-1 w-full rounded-lg border border-cardBorder bg-pitchDark p-2.5 text-xs text-white">
             </label>
-            <label class="text-[10px] font-bold text-slate-300">Current anthem peak (seconds)
-              <input id="currentAnthemPeakInput" type="number" min="0" step="1" placeholder="0" class="mt-1 w-full rounded-lg border border-cardBorder bg-pitchDark p-2.5 text-xs text-white">
-            </label>
             <label class="text-[10px] font-bold text-slate-300">Classic anthem stream URL
               <input id="classicAnthemUrlInput" type="url" placeholder="Official stream URL" class="mt-1 w-full rounded-lg border border-cardBorder bg-pitchDark p-2.5 text-xs text-white">
-            </label>
-            <label class="text-[10px] font-bold text-slate-300">Classic anthem peak (seconds)
-              <input id="classicAnthemPeakInput" type="number" min="0" step="1" placeholder="0" class="mt-1 w-full rounded-lg border border-cardBorder bg-pitchDark p-2.5 text-xs text-white">
             </label>
           </div>
           <div class="mt-3 flex flex-wrap gap-2">
             <button type="button" onclick="authorizePayoutWinner()" class="rounded-lg bg-cyan-400 px-4 py-2.5 text-xs font-black text-pitchDark">Authorize Winner</button>
             <button type="button" onclick="resetPayoutStatus()" class="rounded-lg border border-rose-400/50 bg-rose-500/10 px-4 py-2.5 text-xs font-bold text-rose-200">Reset Payout Status</button>
           </div>
-          <p class="mt-2 text-[10px] text-slate-400">Stream URLs and peak positions are set by Admin; browsers may block playback if a host disallows audio streaming or seeking.</p>
-          <div id="super-admin-audio-config" class="admin-panel-wrapper mt-6 rounded-lg bg-[#1a1a1a] p-5">
-            <h3 class="audio-panel-title mb-5 pl-2.5 text-white">🎵 Custom Audio Segment Manager (Instagram Style)</h3>
-            <div class="audio-setting-block mb-6 border-b border-[#333] pb-4">
-              <label class="mb-2.5 block font-bold text-white" for="epl-start-input">English Premier League Anthem (Payment Confirmation Snippet)</label>
-              <div class="flex flex-wrap items-center gap-4 rounded-md bg-[#222] p-2.5">
-                <label class="text-[#ccc]">Start (s): <input type="number" id="epl-start-input" min="0" value="0" class="w-[70px] rounded border border-[#444] bg-[#111] p-1 text-white"></label>
-                <label class="text-[#ccc]">End (s): <input type="number" id="epl-end-input" min="1" value="180" class="w-[70px] rounded border border-[#444] bg-[#111] p-1 text-white"></label>
-                <label class="cursor-pointer text-white"><input type="checkbox" id="epl-whole-checkbox" checked> Play Whole Song</label>
-              </div>
-            </div>
-            <div class="audio-setting-block mb-6">
-              <label class="mb-2.5 block font-bold text-white" for="ucl-start-input">UEFA Champions League Legacy Anthem (Round Advancement Snippet)</label>
-              <div class="flex flex-wrap items-center gap-4 rounded-md bg-[#222] p-2.5">
-                <label class="text-[#ccc]">Start (s): <input type="number" id="ucl-start-input" min="0" value="0" class="w-[70px] rounded border border-[#444] bg-[#111] p-1 text-white"></label>
-                <label class="text-[#ccc]">End (s): <input type="number" id="ucl-end-input" min="1" value="180" class="w-[70px] rounded border border-[#444] bg-[#111] p-1 text-white"></label>
-                <label class="cursor-pointer text-white"><input type="checkbox" id="ucl-whole-checkbox" checked> Play Whole Song</label>
-              </div>
-            </div>
+          <div id="super-admin-tournament-controls" class="admin-panel-wrapper mt-6 rounded-lg bg-[#1a1a1a] p-5">
+            <h3 class="mb-5 pl-2.5 text-white">Tournament Controls</h3>
             <p class="mb-4 text-xs text-[#ccc]">Ready buttons use the verified member session when available; otherwise they use a clearly marked local simulation identity.</p>
             <div class="mt-5 flex flex-wrap gap-3">
               <button type="button" id="super-admin-save-changes-btn" class="epl-btn-primary rounded px-5 py-2.5">Save Changes</button>
@@ -772,7 +725,7 @@
         <div class="glass-panel rounded-2xl p-5 shadow-xl flex flex-col justify-between h-full">
           <div class="bg-pitchDark/90 p-4 rounded-xl border border-cardBorder min-h-[90px] flex items-center mb-3">
             <p id="announcementText" class="text-xs sm:text-sm text-slate-100 font-medium italic leading-relaxed editable-node">
-              No active announcements yet. Admin broadcasts will chime with sound!
+              No active announcements yet.
             </p>
           </div>
 
@@ -1002,7 +955,7 @@
     // { endpoint: '/api/fpl-state', saveMethod: 'PUT', headers: {}, credentials: 'same-origin' }.
     // The endpoint must expose GET for one JSON state document and accept that document using saveMethod.
     // Keep private provider keys on the server; only use public-safe credentials with server-side policies.
-    // Shared layout data lives in the configured JSON endpoint; browser storage is an offline fallback.
+    // Shared application data lives in the configured JSON endpoint.
     let lastSharedPayload = null;
     let hasLoadedSharedState = false;
     let sharedSaveQueue = Promise.resolve();
@@ -1013,18 +966,12 @@
     const KV_NOTEBOOK_URL = 'https://kv.co.ke/collyonmolly_fpl_site';
     const CLOUD_STATE_CONFIG = window.FPL_CLOUD_CONFIG || {};
     const CLOUD_STATE_ENDPOINT = CLOUD_STATE_CONFIG.endpoint || KV_NOTEBOOK_URL;
-    const LOCAL_STATE_STORAGE_KEY = 'fpl-community-local-state';
-    let suppressNextAdminToast = false;
     let state = {
       accessMode: 'member', // 'member', 'admin', 'superadmin'
       gameweek: 'Gameweek 1', tournamentEntries: [], tournamentParticipants: [], tournamentByes: [], tournamentGroups: [], tournamentMatches: [], swapRequests: [], saviorEntries: [], announcementLedger: [],
       branding: { title: 'FPL COMMUNITY' },
       tournamentState: { started: false },
       tournamentReadyActions: [],
-      audioTrims: {
-        epl: { start: 0, end: 180, whole: true },
-        ucl: { start: 0, end: 180, whole: true }
-      },
       contribPhone: '',
       contribName: '',
       supportPhone: '',
@@ -1034,9 +981,7 @@
       payoutConfirmedAt: '',
       anthemType: 'current',
       currentAnthemUrl: '',
-      currentAnthemPeak: 0,
       classicAnthemUrl: '',
-      classicAnthemPeak: 0,
       countdownTarget: '',
       proofText: '',
       proofImageData: '',
@@ -1098,29 +1043,6 @@
         throw new Error(`Cloud ${method} failed (${response.status}): ${detail.slice(0, 180)}`);
       }
       return response;
-    }
-    function readLocalSharedState() {
-      const stored = localStorage.getItem(LOCAL_STATE_STORAGE_KEY);
-      if (!stored) return null;
-      const payload = JSON.parse(stored);
-      return payload && typeof payload === 'object' && !Array.isArray(payload) ? payload : null;
-    }
-    function restoreLocalSharedState(payload) {
-      state = { ...state, ...payload, accessMode: state.accessMode };
-      pendingCloudRuntimeConfig = extractCloudRuntimeConfig(payload);
-      state.members = Array.isArray(state.members) ? state.members : [];
-      state.suggestions = Array.isArray(state.suggestions) ? state.suggestions : [];
-      state.trashTalks = Array.isArray(state.trashTalks) ? state.trashTalks : [];
-      state.announcementLedger = Array.isArray(state.announcementLedger) ? state.announcementLedger : [];
-      state.saviorEntries = Array.isArray(state.saviorEntries) ? state.saviorEntries : [];
-      state.tournamentReadyActions = Array.isArray(state.tournamentReadyActions) ? state.tournamentReadyActions : [];
-      lastSharedPayload = stateSnapshot();
-      hasLoadedSharedState = true;
-      lastAnnouncementId = state.announcementLedger.length ? state.announcementLedger[state.announcementLedger.length - 1].id : null;
-      lastPayoutAlertAt = state.payoutConfirmedAt || null;
-      renderApp();
-      renderActivities();
-      renderPayoutControls();
     }
     function saveStateToCloud() { return saveSharedState(); }
     function storedAdminMode() {
@@ -1184,20 +1106,7 @@
         cloudErrorShown = false;
       } catch (error) {
         console.error('Cloud state load failed:', error);
-        if (!hasLoadedSharedState) {
-          try {
-            const localPayload = readLocalSharedState();
-            if (localPayload) {
-              restoreLocalSharedState(localPayload);
-              console.info('Restored the saved local application state.');
-              cloudErrorShown = true;
-              return;
-            }
-          } catch (localError) {
-            console.error('Local state restore failed:', localError);
-          }
-        }
-        if (!cloudErrorShown) { showToast('Could not load live cloud state. Check the notebook endpoint and network.'); cloudErrorShown = true; }
+        cloudErrorShown = true;
       }
     }
 
@@ -1212,55 +1121,15 @@
           if (result.status && result.status !== 'success') throw new Error(`Cloud POST returned status "${result.status}"`);
           lastSharedPayload = payload;
           hasLoadedSharedState = true;
-          try {
-            localStorage.removeItem(LOCAL_STATE_STORAGE_KEY);
-          } catch (storageError) {
-            console.warn('Could not clear the outdated local state after cloud save:', storageError);
-          }
+          cloudErrorShown = false;
           renderPayoutControls();
           return true;
         } catch (error) {
           console.error('Cloud state save failed:', error);
-          try {
-            localStorage.setItem(LOCAL_STATE_STORAGE_KEY, JSON.stringify(payload));
-            lastSharedPayload = payload;
-            hasLoadedSharedState = true;
-            suppressNextAdminToast = true;
-            showToast('Saved locally');
-            window.setTimeout(() => { suppressNextAdminToast = false; }, 0);
-            return true;
-          } catch (storageError) {
-            console.error('Local state save failed:', storageError);
-            showToast('Cloud and local saves failed. Your changes were not saved.');
-            return false;
-          }
+          return false;
         }
       });
       return sharedSaveQueue;
-    }
-
-    // Web Audio API Notification Sound
-    function playChimeSound() {
-      try {
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
-        osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.15); // A5
-
-        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.6);
-
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.6);
-      } catch (e) {
-        console.log('Audio playback restricted');
-      }
     }
 
     function changeAccessMode(mode) {
@@ -1335,7 +1204,7 @@
       if (state.announcement && state.announcement.trim() !== '') {
         document.getElementById('announcementText').textContent = state.announcement;
       } else {
-        document.getElementById('announcementText').textContent = "No active announcements yet. Admin broadcasts will chime with sound!";
+        document.getElementById('announcementText').textContent = "No active announcements yet.";
       }
       document.getElementById('announcementInput').value = state.announcement || '';
 
@@ -1570,7 +1439,7 @@
       if (!saved) return;
       renderApp();
       showAdminAlertPopup('Attention! Admin has made some announcements.');
-      showToast('Announcement broadcasted with sound 🔔');
+      showToast('Announcement broadcasted');
     }
 
     function saveProofVault() {
@@ -1685,7 +1554,7 @@
 
       document.getElementById('trashAuthorInput').value = '';
       document.getElementById('trashTextInput').value = '';
-      showToast(shared?.queued?'Saved offline; it will post when you reconnect':'Banter posted 🔥'); if(!shared?.queued)playMemberSound();
+      if (!shared?.queued) showToast('Banter posted 🔥');
     }
 
     function deleteTrashTalk(id) {
@@ -1753,7 +1622,7 @@
 
       document.getElementById('sugAuthorInput').value = '';
       document.getElementById('sugTextInput').value = '';
-      showToast(shared?.queued?'Saved offline; it will post when you reconnect':'Suggestion posted 💬'); if(!shared?.queued)playMemberSound();
+      if (!shared?.queued) showToast('Suggestion posted 💬');
     }
 
     function deleteSuggestion(id) {
@@ -1802,7 +1671,7 @@
       state.countdownTarget = document.getElementById('countdownInput').value;
       const saved = await saveStateToCloud();
       updateCountdownDisplay();
-      showToast(saved ? (state.countdownTarget ? 'Gameweek deadline saved' : 'Gameweek deadline cleared') : 'Cloud save failed; deadline is not shared');
+      if (saved) showToast(state.countdownTarget ? 'Gameweek deadline saved' : 'Gameweek deadline cleared');
     }
 
     function startCountdownTimer() {
@@ -1881,7 +1750,6 @@
       if (!modal || !body) return;
       body.textContent = message;
       modal.classList.remove('hidden');
-      playAdminSound();
       setTimeout(() => {
         modal.classList.add('hidden');
       }, 4000);
@@ -1908,7 +1776,7 @@
       }, 3000);
     }
 
-    async function saveAllChanges(){if(!['admin','superadmin'].includes(state.accessMode))return;const saved=await saveStateToCloud();showToast(saved?'Changes saved and shared with members':'Cloud save failed; changes are not shared')}
+    async function saveAllChanges(){if(!['admin','superadmin'].includes(state.accessMode))return;const saved=await saveStateToCloud();if(saved)showToast('Saved to public')}
     function saveTournament(){if(state.accessMode!=='superadmin')return;state.tournamentEntries=document.getElementById('tournamentInput').value.split(/\r?\n/).map(x=>{let a=x.split(',');return{name:(a[0]||'').trim(),points:+a[1]||0}}).filter(x=>x.name).sort((a,b)=>b.points-a.points);saveStateToCloud();renderActivities()}
     function submitSwapRequest(){let a=document.getElementById('swapAuthor').value.trim(),d=document.getElementById('swapDetails').value.trim();if(!a||!d)return showToast('Enter your name and swap details');state.swapRequests.unshift({a,d});saveStateToCloud();renderActivities();showToast('Request sent')}
     function escapeHTML(x){return String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
@@ -1921,45 +1789,10 @@
     const priorSaveAll=saveAllChanges; saveAllChanges=async function(){if(!['admin','superadmin'].includes(state.accessMode))return;if(state.accessMode==='superadmin'){tagEditableNodes();document.querySelectorAll('.editable-node[data-save-key]').forEach(n=>state.customTexts[n.dataset.saveKey]=n.textContent);const title=document.querySelector('header h1 span');if(title){state.branding={...state.branding,title:title.textContent.trim()};document.title=state.branding.title}}await priorSaveAll()};
     const priorRenderRoster=renderRoster; renderRoster=function(){priorRenderRoster();document.querySelectorAll('.editable-node[data-save-key]').forEach(n=>{if(state.customTexts[n.dataset.saveKey]!==undefined)n.textContent=state.customTexts[n.dataset.saveKey]});const title=document.querySelector('header h1 span');if(title){state.branding={...state.branding,title:title.textContent.trim()};document.title=state.branding.title}};
     document.addEventListener('DOMContentLoaded',()=>{const main=document.querySelector('main');if(!main)return;const sections=[...main.children].filter(e=>e.tagName==='SECTION');if(sections.length>=3){const winner=sections[1],standings=sections[2];main.insertBefore(standings,winner)}});
-    state.adminSound=state.adminSound||'chime'; state.memberSound=state.memberSound||'pop';
-    function saveSoundChoice(){const adminSel=document.getElementById('adminSoundSelect');const memberSel=document.getElementById('memberSoundSelect');state.adminSound=(adminSel&&adminSel.value)||state.adminSound||'imperial';state.memberSound=(memberSel&&memberSel.value)||state.memberSound||'pop';saveStateToCloud();showToast('Sound choices saved')}
-    function playSoundPreset(which){
-      try {
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const presets = {
-          imperial: [523, 659, 784, 1046],
-          stadium: [196, 262, 330, 392, 262],
-          digital: [880, 660, 880, 660],
-          gavel: [220, 176, 132],
-          chime: [587, 880],
-          beep: [740],
-          fanfare: [523, 659, 784],
-          soft: [440, 523],
-          pop: [880, 660]
-        };
-        const seq = presets[which] || presets.chime;
-        seq.forEach((f, i) => {
-          const o = ctx.createOscillator();
-          const g = ctx.createGain();
-          o.type = which === 'soft' || which === 'gavel' ? 'sine' : 'triangle';
-          o.frequency.value = f;
-          g.gain.setValueAtTime(0.001, ctx.currentTime + i * 0.13);
-          g.gain.exponentialRampToValueAtTime(0.12, ctx.currentTime + i * 0.13 + 0.025);
-          g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.13 + 0.17);
-          o.connect(g);
-          g.connect(ctx.destination);
-          o.start(ctx.currentTime + i * 0.13);
-          o.stop(ctx.currentTime + i * 0.13 + 0.19);
-        });
-      } catch (e) {}
-    }
-    function playAdminSound(){playSoundPreset(state.adminSound||'imperial')}
-    function playMemberSound(){playSoundPreset(state.memberSound||'pop')}
-    const oldRenderSound=renderApp;renderApp=function(){oldRenderSound();const a=document.getElementById('adminSoundSelect'),m=document.getElementById('memberSoundSelect');if(a)a.value=state.adminSound||'imperial';if(m)m.value=state.memberSound||'pop'};
     const saveTournamentBase=saveTournament;saveTournament=function(){saveTournamentBase();state.tournamentRound=document.getElementById('tournamentRoundInput').value.trim();state.advancingNames=document.getElementById('advancingInput').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);saveStateToCloud();renderActivities();showToast('Round progression saved')};
     const renderActivitiesBase=renderActivities;renderActivities=function(){renderActivitiesBase();const input=document.getElementById('tournamentRoundInput'),adv=document.getElementById('advancingInput');if(input&&document.activeElement!==input)input.value=state.tournamentRound||'';if(adv&&document.activeElement!==adv)adv.value=(state.advancingNames||[]).join('\n');const d=document.getElementById('tournamentDisplay');if(d&&(state.tournamentRound||state.advancingNames?.length)){const extra=`<div class="font-bold text-cyan-200">${escapeHTML(state.tournamentRound||'Current round')}</div>`+(state.advancingNames||[]).map((n,i)=>`<div>${i+1}. ${escapeHTML(n)} ${state.tournamentRound?.toLowerCase().includes('final')?'🏆':''}</div>`).join('');d.innerHTML=extra+d.innerHTML}};
 
-    const showToastBase=showToast;showToast=function(message){const text=String(message);if(suppressNextAdminToast&&text!=='Saved locally'){suppressNextAdminToast=false;return}showToastBase(message);if(text==='Saved locally')return;if((state.accessMode==='admin'||state.accessMode==='superadmin')&&!text.startsWith('New community update')){playAdminSound();showAdminAlertPopup(text);}};
+    const showToastBase=showToast;showToast=function(message){showToastBase(message)};
 
     function openAdminModal() {
       const modal = document.getElementById('adminAccessModal');
@@ -2020,7 +1853,7 @@
       state.tournamentMatches=document.getElementById('tournamentKnockoutInput').value.split(/\r?\n/).map(line=>{const p=line.split(',').map(x=>x.trim());if(p.length<6||!p[1]||!p[3])return null;return{round:p[0],home:p[1],homeScore:Number(p[2])||0,away:p[3],awayScore:Number(p[4])||0,winner:p[5]};}).filter(Boolean);
       renderActivities();
       const saved = await saveStateToCloud();
-      showToast(saved ? 'Tournament standings saved' : 'Cloud save failed; tournament standings are not shared');
+      if (saved) showToast('Tournament standings saved');
     }
     function shuffleManagers(names){const shuffled=[...names];for(let i=shuffled.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]]}return shuffled}
     function roundNameForEntrants(count){if(count<=2)return 'Final';if(count<=4)return 'Semi-final';if(count<=8)return 'Quarter-final';if(count<=16)return 'Round of 16';return `Round of ${count}`}
@@ -2037,7 +1870,7 @@
       const gi=document.getElementById('tournamentGroupInput'),ki=document.getElementById('tournamentKnockoutInput'),pi=document.getElementById('tournamentParticipantsInput');if(gi&&document.activeElement!==gi)gi.value=rows.map(r=>[r.group,r.name,r.played,r.won,r.drawn,r.lost,r.gf,r.ga,r.points,r.totalFplPoints||0].join(', ')).join('\n');if(ki&&document.activeElement!==ki)ki.value=matches.map(m=>[m.round,m.home,m.homeScore,m.away,m.awayScore,m.winner].join(', ')).join('\n');if(pi&&document.activeElement!==pi)pi.value=(state.tournamentParticipants||[]).join('\n');
     }
     renderActivities=function(){renderTournamentTables();const host=document.getElementById('swapRequests');if(host){const requests=state.swapRequests||[];host.innerHTML=requests.length?requests.map((r,i)=>`<div class="flex items-start justify-between gap-2 rounded-lg border border-cardBorder bg-cardDark p-3 text-xs"><div><b class="text-white">${escapeHTML(r.a||r.author||'Manager')}</b><p class="mt-1 whitespace-pre-wrap text-slate-300">${escapeHTML(r.d||r.details||'')}</p></div>${['admin','superadmin'].includes(state.accessMode)?`<button onclick="deleteSwapRequest(${i})" class="shrink-0 font-bold text-rose-300">Delete</button>`:''}</div>`).join(''):'<p class="rounded-lg border border-dashed border-cardBorder p-3 text-xs text-slate-400">No swap requests yet.</p>'}};
-    async function submitSwapRequest(){const a=document.getElementById('swapAuthor').value.trim(),d=document.getElementById('swapDetails').value.trim();if(!a||!d){showToast('Enter your name and swap details');return;}const shared=await postMemberAction('swap-request',{author:a,text:d});if(shared===false)return;if(shared===null){state.swapRequests.unshift({a,d});saveStateToCloud();renderActivities()}document.getElementById('swapAuthor').value='';document.getElementById('swapDetails').value='';showToast(shared?.queued?'Saved offline; it will send when you reconnect':'Swap request sent');if(!shared?.queued)playMemberSound();}
+    async function submitSwapRequest(){const a=document.getElementById('swapAuthor').value.trim(),d=document.getElementById('swapDetails').value.trim();if(!a||!d){showToast('Enter your name and swap details');return;}const shared=await postMemberAction('swap-request',{author:a,text:d});if(shared===false)return;if(shared===null){state.swapRequests.unshift({a,d});saveStateToCloud();renderActivities()}document.getElementById('swapAuthor').value='';document.getElementById('swapDetails').value='';if(!shared?.queued)showToast('Swap request sent');}
     function deleteSwapRequest(index){if(!['admin','superadmin'].includes(state.accessMode))return;state.swapRequests.splice(index,1);saveStateToCloud();renderActivities();showToast('Swap request deleted');}
     if(!state.tournamentGroups)state.tournamentGroups=[];if(!state.tournamentMatches)state.tournamentMatches=[];
 
@@ -2067,8 +1900,7 @@
       state.saviorEntries = parsed;
       renderSaviorTable();
       const saved = await saveStateToCloud();
-      if (!saved) { showToast('Cloud save failed; Savior activity is not shared'); return; }
-      showToast('Savior activity saved');
+      if (saved) showToast('Savior activity saved');
     }
 
     function bracketMatchCard(match, title) {
@@ -2134,11 +1966,7 @@
       state.tournamentReadyActions = Array.isArray(state.tournamentReadyActions) ? state.tournamentReadyActions : [];
       state.tournamentReadyActions.push(action);
       const saved = await saveStateToCloud();
-      if (saved) {
-        showToast(identity.simulated ? `Ready recorded for ${identity.userId} (simulation)` : 'Ready status recorded');
-      } else {
-        showToast('Ready status was recorded locally, but the cloud save failed.');
-      }
+      if (saved) showToast(identity.simulated ? `Ready recorded for ${identity.userId} (simulation)` : 'Ready status recorded');
     }
 
     document.getElementById('tournamentBracket')?.addEventListener('click', event => {
@@ -2216,7 +2044,7 @@
       if (authorized) { authorized.innerHTML = options; authorized.value = previousAuthorized; }
       const anthemType = document.getElementById('anthemTypeSelect');
       if (anthemType) anthemType.value = state.anthemType || 'current';
-      const fields = [['currentAnthemUrlInput', 'currentAnthemUrl'], ['currentAnthemPeakInput', 'currentAnthemPeak'], ['classicAnthemUrlInput', 'classicAnthemUrl'], ['classicAnthemPeakInput', 'classicAnthemPeak']];
+      const fields = [['currentAnthemUrlInput', 'currentAnthemUrl'], ['classicAnthemUrlInput', 'classicAnthemUrl']];
       fields.forEach(([id, key]) => { const input = document.getElementById(id); if (input && document.activeElement !== input) input.value = state[key] ?? ''; });
       const status = document.getElementById('payoutStatusText');
       if (status) status.textContent = state.payoutConfirmedBy ? `${state.payoutConfirmedBy} has confirmed this payout.` : state.authorizedWinner ? `Payout confirmation authorized for ${state.authorizedWinner}.` : 'Payout confirmation is locked until Admin authorizes a winner.';
@@ -2241,9 +2069,7 @@
       state.authorizedWinner = document.getElementById('authorizedWinnerSelect').value;
       state.anthemType = document.getElementById('anthemTypeSelect').value;
       state.currentAnthemUrl = document.getElementById('currentAnthemUrlInput').value.trim();
-      state.currentAnthemPeak = Number(document.getElementById('currentAnthemPeakInput').value) || 0;
       state.classicAnthemUrl = document.getElementById('classicAnthemUrlInput').value.trim();
-      state.classicAnthemPeak = Number(document.getElementById('classicAnthemPeakInput').value) || 0;
       if (!state.authorizedWinner) { showToast('Select an active manager to authorize'); return; }
       state.payoutConfirmedBy = '';
       state.payoutConfirmedAt = '';
@@ -2270,30 +2096,20 @@
         window.alert('You are not authorized to claim this payout.');
         return;
       }
-      const audio = document.getElementById('payoutAnthemAudio');
       const isClassic = state.anthemType === 'classic';
       const streamUrl = isClassic ? state.classicAnthemUrl : state.currentAnthemUrl;
-      const peak = Math.max(0, Number(isClassic ? state.classicAnthemPeak : state.currentAnthemPeak) || 0);
-      if (!streamUrl) { showToast('Admin has not configured the selected anthem stream.'); return; }
       state.payoutConfirmedBy = managerName;
       state.payoutConfirmedAt = new Date().toISOString();
       sessionStorage.setItem('fpl_manager_identity', managerName);
       renderPayoutControls();
-      await saveStateToCloud();
-      if (audio) {
+      const saved = await saveStateToCloud();
+      if (!saved) return;
+      const audio = document.getElementById('payoutAnthemAudio');
+      if (audio && streamUrl) {
         audio.pause();
-        audio.muted = true;
         audio.src = streamUrl;
         audio.volume = 1.0;
         audio.classList.remove('hidden');
-        audio.onloadedmetadata = () => {
-          const target = Math.min(peak, Number.isFinite(audio.duration) ? audio.duration : peak);
-          if (!target) { audio.muted = false; return; }
-          audio.onseeked = () => { audio.muted = false; audio.onseeked = null; };
-          try { audio.currentTime = target; } catch (error) { audio.pause(); showToast('This anthem stream does not support seeking to its peak.'); }
-        };
-        audio.onerror = () => showToast('The selected anthem stream could not be loaded.');
-        audio.play().catch(error => { console.error('Anthem playback failed:', error); showToast('Tap the audio player to start the anthem.'); });
       }
       showToast('Payout confirmation submitted');
     }
@@ -2336,67 +2152,8 @@
     };
 
     let tournamentState = { started: false };
-    let audioTrimDraft = {
-      epl: { start: 0, end: 180, whole: true },
-      ucl: { start: 0, end: 180, whole: true }
-    };
-    let audioTrimDirty = false;
-    const localAudioTracks = {
-      epl: { source: 'audio/epl.mp3', audio: null, runId: 0 },
-      ucl: { source: 'audio/ucl.mp3', audio: null, runId: 0 }
-    };
-
-    function normalizeAudioTrackTrim(value, fallback) {
-      if (!value || typeof value !== 'object') return { ...fallback };
-      const start = Number(value.start);
-      const end = Number(value.end);
-      if (!Number.isFinite(start) || !Number.isFinite(end) || start < 0 || end <= start) return { ...fallback };
-      return { start, end, whole: typeof value.whole === 'boolean' ? value.whole : fallback.whole };
-    }
-
-    function normalizeAudioTrims(value) {
-      const defaults = {
-        epl: { start: 0, end: 180, whole: true },
-        ucl: { start: 0, end: 180, whole: true }
-      };
-      if (!value || typeof value !== 'object' || Array.isArray(value)) return defaults;
-      return {
-        epl: normalizeAudioTrackTrim(value.epl, defaults.epl),
-        ucl: normalizeAudioTrackTrim(value.ucl, defaults.ucl)
-      };
-    }
-
     function normalizeTournamentState(value) {
       return { started: Boolean(value && typeof value === 'object' && value.started === true) };
-    }
-
-    function updateAudioConfigInputs() {
-      const settings = normalizeAudioTrims(audioTrimDraft);
-      for (const key of ['epl', 'ucl']) {
-        const trim = settings[key];
-        const start = document.getElementById(`${key}-start-input`);
-        const end = document.getElementById(`${key}-end-input`);
-        const whole = document.getElementById(`${key}-whole-checkbox`);
-        if (start) start.value = String(trim.start);
-        if (end) end.value = String(trim.end);
-        if (whole) whole.checked = trim.whole;
-      }
-    }
-
-    function readAudioConfigInputs() {
-      const settings = {};
-      for (const key of ['epl', 'ucl']) {
-        const startInput = document.getElementById(`${key}-start-input`);
-        const endInput = document.getElementById(`${key}-end-input`);
-        const wholeInput = document.getElementById(`${key}-whole-checkbox`);
-        const start = Number(startInput?.value);
-        const end = Number(endInput?.value);
-        if (!Number.isFinite(start) || !Number.isFinite(end) || start < 0 || end <= start) {
-          throw new Error(`Enter valid ${key.toUpperCase()} audio boundaries (end must be greater than start).`);
-        }
-        settings[key] = { start, end, whole: Boolean(wholeInput?.checked) };
-      }
-      return settings;
     }
 
     function extractCloudRuntimeConfig(response) {
@@ -2404,7 +2161,6 @@
       const payload = response.payload && typeof response.payload === 'object' ? response.payload : response;
       const config = payload.config && typeof payload.config === 'object' ? payload.config : payload;
       const result = {};
-      if (config.audioTrims && typeof config.audioTrims === 'object') result.audioTrims = normalizeAudioTrims(config.audioTrims);
       if (config.tournamentState && typeof config.tournamentState === 'object') result.tournamentState = normalizeTournamentState(config.tournamentState);
       if (typeof config.branding === 'string' && config.branding.trim()) result.branding = { title: config.branding.trim() };
       else if (config.branding && typeof config.branding === 'object' && typeof config.branding.title === 'string' && config.branding.title.trim()) {
@@ -2424,15 +2180,10 @@
         if (brand) brand.textContent = state.branding.title;
         if (state.branding.title) document.title = state.branding.title;
       }
-      if (config.audioTrims) {
-        state.audioTrims = normalizeAudioTrims(config.audioTrims);
-        if (!audioTrimDirty) audioTrimDraft = normalizeAudioTrims(state.audioTrims);
-      }
       if (config.tournamentState) {
         state.tournamentState = normalizeTournamentState(config.tournamentState);
         tournamentState = { ...state.tournamentState };
       }
-      updateAudioConfigInputs();
       updateKickoffButton();
       if (previousStarted !== tournamentState.started) renderActivities();
     }
@@ -2442,8 +2193,6 @@
         applyRuntimeConfiguration(pendingCloudRuntimeConfig);
         pendingCloudRuntimeConfig = null;
       }
-      const trims = normalizeAudioTrims(state.audioTrims);
-      state.audioTrims = trims;
       tournamentState = normalizeTournamentState(state.tournamentState);
       state.tournamentState = { ...tournamentState };
       if (state.branding?.title) {
@@ -2451,8 +2200,6 @@
         if (brand) brand.textContent = state.branding.title;
         document.title = state.branding.title;
       }
-      if (!audioTrimDirty) audioTrimDraft = normalizeAudioTrims(trims);
-      updateAudioConfigInputs();
       updateKickoffButton();
     }
 
@@ -2490,84 +2237,29 @@
       updateKickoffButton();
       renderActivities();
       const saved = await saveStateToCloud();
-      showToast(saved ? 'Tournament started' : 'Tournament started locally; cloud save failed');
+      if (saved) showToast('Tournament started');
     }
 
-    function getLocalAudiotrack(key) {
-      const track = localAudioTracks[key];
-      if (!track) throw new Error(`Unknown audio track: ${key}`);
-      if (track.audio) return track;
-      const audio = new Audio(track.source);
-      audio.preload = 'auto';
-      audio.volume = 0.7;
-      audio.addEventListener('timeupdate', () => {
-        const trim = audioTrimDraft[key];
-        if (!trim.whole && audio.currentTime >= trim.end) audio.pause();
-      });
-      audio.addEventListener('error', () => {
-        console.error(`Unable to load ${key.toUpperCase()} audio from ${track.source}`);
-        showToast(`${key.toUpperCase()} audio could not be loaded.`);
-      });
-      track.audio = audio;
-      return track;
-    }
-
-    function playTrimmedAudio(key) {
-      const track = getLocalAudiotrack(key);
-      const trim = normalizeAudioTrackTrim(audioTrimDraft[key], { start: 0, end: 180, whole: true });
-      const audio = track.audio;
-      const runId = ++track.runId;
-      audio.pause();
-      audio.volume = 0.7;
-      if (audio.getAttribute('src') !== track.source) {
-        audio.src = track.source;
-        audio.load();
-      }
-      const restart = () => {
-        if (runId !== track.runId) return;
-        try {
-          audio.currentTime = Math.min(trim.start, Number.isFinite(audio.duration) ? audio.duration : trim.start);
-        } catch (error) {
-          console.error(`${key.toUpperCase()} audio seek failed:`, error);
-          showToast(`${key.toUpperCase()} audio cannot seek to the selected start time.`);
-          return;
-        }
-        audio.play().catch(error => {
-          console.error(`${key.toUpperCase()} audio playback failed:`, error);
-          showToast(`${key.toUpperCase()} audio playback was blocked.`);
-        });
-      };
-      if (audio.readyState >= 1) {
-        restart();
-      } else {
-        audio.addEventListener('loadedmetadata', restart, { once: true });
-      }
-    }
-
-    async function saveSuperAdminAudioConfiguration() {
+    async function saveSuperAdminChanges() {
       if (state.accessMode !== 'superadmin' || storedAdminMode() !== 'superadmin') {
         showToast('Super Admin access is required to save these changes.');
         return;
       }
-      const panel = document.getElementById('super-admin-audio-config');
+      const panel = document.getElementById('super-admin-tournament-controls');
       const button = document.getElementById('super-admin-save-changes-btn');
       if (!panel || !button || button.disabled) return;
       const controls = [...panel.querySelectorAll('input, button')];
       const priorDisabledStates = controls.map(control => control.disabled);
       const originalLabel = button.innerHTML;
       try {
-        const trims = readAudioConfigInputs();
         controls.forEach(control => { control.disabled = true; });
         button.innerHTML = 'Saving... <span class="spinner-icon" aria-hidden="true">🔄</span>';
-        state.audioTrims = trims;
         state.tournamentState = { ...tournamentState };
         const saved = await saveStateToCloud();
         if (!saved) return;
-        audioTrimDraft = normalizeAudioTrims(trims);
-        audioTrimDirty = false;
-        showToast('Audio settings and application state saved');
+        showToast('Saved to public');
       } catch (error) {
-        console.error('Super Admin configuration save failed:', error);
+        console.error('Super Admin state save failed:', error);
         showToast(error.message || 'Configuration could not be saved.');
       } finally {
         controls.forEach((control, index) => { control.disabled = priorDisabledStates[index]; });
@@ -2576,30 +2268,8 @@
       }
     }
 
-    document.getElementById('super-admin-save-changes-btn')?.addEventListener('click', saveSuperAdminAudioConfiguration);
+    document.getElementById('super-admin-save-changes-btn')?.addEventListener('click', saveSuperAdminChanges);
     document.getElementById('admin-master-kickoff-btn')?.addEventListener('click', startTournamentLifecycle);
-    for (const key of ['epl', 'ucl']) {
-      for (const suffix of ['start-input', 'end-input', 'whole-checkbox']) {
-        document.getElementById(`${key}-${suffix}`)?.addEventListener('input', () => {
-          audioTrimDirty = true;
-          try { audioTrimDraft = readAudioConfigInputs(); } catch (_) {}
-        });
-      }
-    }
-
-    const togglePaymentWithEplAudio = togglePayment;
-    togglePayment = function(id) {
-      togglePaymentWithEplAudio(id);
-      const member = state.members.find(item => String(item.id) === String(id));
-      if (member?.paid) playTrimmedAudio('epl');
-    };
-
-    const drawNextRoundWithUclAudio = drawTournamentNextRound;
-    drawTournamentNextRound = function() {
-      const previousMatchCount = (state.tournamentMatches || []).length;
-      drawNextRoundWithUclAudio();
-      if ((state.tournamentMatches || []).length > previousMatchCount) playTrimmedAudio('ucl');
-    };
 
     synchronizeRuntimeConfiguration();
 
