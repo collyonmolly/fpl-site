@@ -1023,7 +1023,7 @@
 
     function stateSnapshot(source=state) { const payload={...source};delete payload.accessMode;return payload; }
     function stableStateJSON(value) { if(Array.isArray(value))return '['+value.map(stableStateJSON).join(',')+']';if(value&&typeof value==='object')return '{'+Object.keys(value).sort().map(key=>JSON.stringify(key)+':'+stableStateJSON(value[key])).join(',')+'}';return JSON.stringify(value); }
-    function cloudNotebookUrl() { return CLOUD_STATE_ENDPOINT; }
+    function cloudNotebookUrl() { return 'https://oxkayvcndarwkbtoxheka.supabase.co'; }
     async function cloudRequest(method, payload) {
       const headers = new Headers(CLOUD_STATE_CONFIG.headers || {});
       headers.set('Accept', 'application/json');
