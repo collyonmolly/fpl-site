@@ -1,0 +1,2280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FPL COMMUNITY</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts & Font Awesome Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <script>
+    /*
+      Project context: FPL COMMUNITY is owned by Admin collyonmolly and uses a clean HTML layout.
+      Explain non-obvious steps with direct technical comments, not analogies; preserve the Admin's published contribution rules.
+    */
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            pitchDark: '#070913',
+            cardDark: '#0e1326',
+            cardBorder: 'rgba(168, 85, 247, 0.3)',
+            emeraldGlow: '#8b5cf6',
+            emeraldNeon: '#06b6d4',
+            roseHot: '#ff007f',
+            goldRoyal: '#fbbf24',
+            goldLight: '#fef08a',
+            skyBright: '#38bdf8',
+            purpleGlow: '#a855f7',
+            electricCyan: '#00f0ff',
+            neonViolet: '#a855f7',
+            sunsetPink: '#f43f5e',
+          },
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+          },
+          animation: {
+            'burn-glow': 'burnGlow 2.5s ease-in-out infinite alternate',
+            'gold-shimmer': 'goldShimmer 3s ease-in-out infinite alternate',
+            'pulse-subtle': 'pulseSubtle 2.5s infinite',
+            'bg-shift': 'bgShift 12s ease infinite alternate',
+          },
+          keyframes: {
+            burnGlow: {
+              '0%': { boxShadow: '0 0 15px rgba(255, 0, 127, 0.4)', backgroundColor: 'rgba(255, 0, 127, 0.15)' },
+              '100%': { boxShadow: '0 0 35px rgba(255, 0, 127, 0.85)', backgroundColor: 'rgba(255, 0, 127, 0.35)' },
+            },
+            goldShimmer: {
+              '0%': { boxShadow: '0 0 20px rgba(168, 85, 247, 0.3)', borderColor: 'rgba(168, 85, 247, 0.6)' },
+              '100%': { boxShadow: '0 0 45px rgba(6, 182, 212, 0.75)', borderColor: 'rgba(6, 182, 212, 1)' },
+            },
+            pulseSubtle: {
+              '0%, 100%': { opacity: 1 },
+              '50%': { opacity: 0.85 },
+            },
+            bgShift: {
+              '0%': { backgroundPosition: '0% 0%' },
+              '100%': { backgroundPosition: '100% 100%' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #070913;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #a855f7;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #06b6d4;
+    }
+
+    /* Vibrant Midnight Aurora Background */
+    body {
+      background: linear-gradient(135deg, #05060f 0%, #12092b 25%, #08172e 50%, #1d072b 75%, #050b14 100%);
+      background-size: 200% 200%;
+      animation: bgShift 15s ease infinite alternate;
+      background-attachment: fixed;
+    }
+
+    .glass-panel {
+      background: rgba(14, 19, 38, 0.85);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      box-shadow: 0 12px 35px -10px rgba(0, 0, 0, 0.75);
+    }
+
+    .glass-panel-gold {
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.25) 0%, rgba(14, 19, 38, 0.95) 50%, rgba(6, 182, 212, 0.25) 100%);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 2px solid rgba(0, 240, 255, 0.75);
+    }
+
+    .glass-panel-rose {
+      background: linear-gradient(135deg, rgba(255, 0, 127, 0.2) 0%, rgba(14, 12, 28, 0.95) 50%, rgba(168, 85, 247, 0.2) 100%);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 0, 127, 0.5);
+    }
+
+    .glass-panel-amber {
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.2) 0%, rgba(12, 20, 36, 0.95) 50%, rgba(168, 85, 247, 0.2) 100%);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(6, 182, 212, 0.5);
+    }
+
+    .toast-enter {
+      opacity: 0;
+      transform: translateY(15px);
+    }
+    .toast-active {
+      opacity: 1;
+      transform: translateY(0);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .admin-alert-modal {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(2, 6, 23, 0.78);
+      backdrop-filter: blur(10px);
+      z-index: 80;
+    }
+    .admin-alert-modal.hidden {
+      display: none;
+    }
+    .admin-alert-card {
+      width: min(92vw, 440px);
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.22), rgba(6, 182, 212, 0.18), rgba(14, 19, 38, 0.96));
+      border: 1px solid rgba(6, 182, 212, 0.7);
+      border-radius: 1.25rem;
+      box-shadow: 0 22px 70px rgba(0,0,0,0.6);
+      padding: 1.25rem;
+      color: white;
+    }
+    .rule-card {
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.18), rgba(9, 18, 39, 0.95));
+      border: 1px solid rgba(168, 85, 247, 0.45);
+      border-radius: 1rem;
+      padding: 1rem;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
+    }
+    .member-list-panel {
+      background: rgba(14,19,38,0.9);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      border-radius: 1rem;
+      padding: 1rem;
+      display: grid;
+      gap: 0.75rem;
+    }
+    .share-link-input {
+      background: rgba(7, 9, 19, 0.9);
+      border: 1px solid rgba(6, 182, 212, 0.35);
+      border-radius: 0.75rem;
+      color: #dbeafe;
+      width: 100%;
+      padding: 0.6rem 0.75rem;
+      font-size: 0.72rem;
+      font-family: monospace;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    .bracket-scroll { overflow-x: auto; padding-bottom: .5rem; }
+    .bracket-tree {
+      display: grid;
+      grid-template-columns: minmax(135px, 1fr) 28px minmax(135px, 1fr) minmax(170px, 1.15fr) minmax(135px, 1fr) 28px minmax(135px, 1fr);
+      align-items: center;
+      gap: .5rem;
+      min-width: 930px;
+    }
+    .bracket-wing { display: grid; grid-template-rows: 1fr 1fr; gap: 1.5rem; position: relative; }
+    .bracket-wing::before { content: ""; position: absolute; top: 25%; bottom: 25%; width: 1px; background: rgba(251,191,36,.65); }
+    .bracket-wing.left::before { right: -0.75rem; }
+    .bracket-wing.right::before { left: -0.75rem; }
+    .bracket-match {
+      position: relative;
+      border: 1px solid rgba(168,85,247,.45);
+      border-radius: .75rem;
+      background: rgba(7,9,19,.92);
+      padding: .65rem;
+      min-height: 4.25rem;
+    }
+    .bracket-match::after { content: ""; position: absolute; top: 50%; width: .8rem; border-top: 1px solid rgba(251,191,36,.65); }
+    .bracket-wing.left .bracket-match::after { right: -.8rem; }
+    .bracket-wing.right .bracket-match::after { left: -.8rem; }
+    .bracket-semi { position: relative; display: grid; gap: 3rem; }
+    .bracket-semi .bracket-match::after { width: .8rem; }
+    .bracket-semi.left .bracket-match::after { right: -.8rem; }
+    .bracket-semi.right .bracket-match::after { left: -.8rem; }
+    .bracket-final {
+      border: 1px solid rgba(251,191,36,.75);
+      border-radius: 1rem;
+      background: linear-gradient(145deg, rgba(251,191,36,.15), rgba(14,19,38,.96));
+      padding: 1rem;
+      text-align: center;
+      box-shadow: 0 0 32px rgba(251,191,36,.13);
+    }
+    .bracket-link { height: 1px; background: rgba(251,191,36,.65); }
+    .announcement-pop { animation: announcementPop .45s cubic-bezier(.16,1,.3,1) both; }
+    @keyframes announcementPop { from { opacity: 0; transform: scale(.88) translateY(12px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+    .payout-audio { width: 100%; }
+
+    /* Super Admin Live Cursor Glow Indicator */
+    .superadmin-active [contenteditable="true"] {
+      outline: 2px dashed rgba(6, 182, 212, 0.8) !important;
+      outline-offset: 3px;
+      cursor: text !important;
+    }
+    .superadmin-active [contenteditable="true"]:focus {
+      outline: 2px solid #00f0ff !important;
+      background-color: rgba(6, 182, 212, 0.2) !important;
+      border-radius: 4px;
+    }
+      @media (max-width: 640px) {
+      #saveAllButton { left: 1rem; right: 1rem; bottom: 5.25rem; width: calc(100% - 2rem); justify-content: center; }
+      #toastContainer { left: 1rem; right: 1rem; bottom: 1rem; }
+      #toastContainer > div { max-width: 100%; }
+    }
+  </style>
+  <style>
+    :root {
+      --epl-bg-dark: #111111;
+      --epl-purple-main: #3D195D;
+      --epl-accent-green: #00FF87;
+      --epl-admin-pink: #E90052;
+      --epl-text-light: #FFFFFF;
+      --epl-text-muted: #CCCCCC;
+    }
+    html, body {
+      background-color: var(--epl-bg-dark) !important;
+    }
+    body {
+      background: var(--epl-bg-dark) !important;
+      background-color: var(--epl-bg-dark) !important;
+      background-image: none !important;
+      background-attachment: initial;
+      animation: none;
+      color: var(--epl-text-light) !important;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .epl-navbar, .dashboard-table-title, .fun-activities-header, .tournament-card-header {
+      background-color: var(--epl-purple-main) !important;
+      color: var(--epl-text-light) !important;
+    }
+    .action-trigger-ready, .epl-btn-primary {
+      background-color: var(--epl-accent-green) !important;
+      color: #000000 !important;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s ease;
+    }
+    .action-trigger-ready:hover, .epl-btn-primary:hover {
+      opacity: 0.9;
+    }
+    .admin-control-badge, #super-admin-tournament-controls {
+      border-left: 4px solid var(--epl-admin-pink) !important;
+    }
+    .spinner-icon {
+      display: inline-block;
+      animation: spin-rotate 1s linear infinite;
+      margin-left: 8px;
+    }
+    @keyframes spin-rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body id="bodyRoot" class="text-slate-100 min-h-screen font-sans selection:bg-purple-600 selection:text-white pb-20">
+
+  <header class="sticky top-0 z-40 bg-pitchDark/90 backdrop-blur-xl border-b border-cardBorder shadow-2xl">
+    <div class="max-w-6xl mx-auto px-4 py-3 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+
+      <!-- Top Left High-Visibility Slogan -->
+      <div class="text-center sm:text-left">
+        <span class="inline-block bg-gradient-to-r from-purple-600/30 via-cyan-500/30 to-purple-600/30 border-2 border-cyan-400 text-cyan-300 font-black text-xs sm:text-sm px-4 py-1.5 rounded-full shadow-[0_0_20px_rgba(6,182,212,0.4)] tracking-wide">
+          form ni kununua mercdiis 🏎️💨
+        </span>
+      </div>
+
+      <!-- Strictly Centered App Title -->
+      <div class="text-center">
+        <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-white flex items-center justify-center gap-2">
+          <span class="editable-node">FPL COMMUNITY</span> <button type="button" id="crownMark" aria-label="Crown" title="Crown" tabindex="0" class="text-cyan-400 drop-shadow-[0_0_12px_rgba(6,182,212,0.9)] bg-transparent border-0 text-2xl" style="cursor:pointer;outline:none">👑</button>
+        </h1>
+        <p class="text-[10px] sm:text-xs text-purple-400 font-black uppercase tracking-widest mt-0.5 editable-node">Official Sweepstake Hub & Standings</p>
+      </div>
+
+      <!-- Access Mode Switcher -->
+      <div class="flex items-center gap-2 bg-cardDark/90 px-3.5 py-1.5 rounded-full border border-cardBorder shadow-inner">
+        <i id="modeIcon" class="fa-solid fa-user text-slate-400 text-xs"></i>
+        <select id="accessModeSelect" onchange="changeAccessMode(this.value)" class="bg-transparent text-xs font-bold text-slate-200 focus:outline-none cursor-pointer">
+          <option value="member" class="bg-cardDark text-slate-200">Member View</option>
+        </select>
+      </div>
+
+    </div>
+  </header>
+
+  <nav aria-label="Quick sections" class="epl-navbar fixed inset-x-0 bottom-0 z-40 border-t border-cardBorder px-1 pb-[env(safe-area-inset-bottom)] shadow-2xl backdrop-blur-xl sm:sticky sm:top-[88px] sm:bottom-auto sm:z-30 sm:border-x-0 sm:border-t-0 sm:border-b sm:px-4">
+    <div class="mx-auto grid max-w-6xl grid-cols-5 gap-1 py-2 sm:flex sm:justify-center sm:gap-3">
+      <a href="#homeTop" class="flex min-h-11 flex-col items-center justify-center gap-1 rounded-lg px-1 text-[9px] font-bold text-slate-200 hover:bg-white/10 sm:flex-row sm:gap-2 sm:px-4 sm:text-xs"><i class="fa-solid fa-house" aria-hidden="true"></i><span>Home</span></a>
+      <a href="#league" class="flex min-h-11 flex-col items-center justify-center gap-1 rounded-lg px-1 text-[9px] font-bold text-slate-200 hover:bg-white/10 sm:flex-row sm:gap-2 sm:px-4 sm:text-xs"><i class="fa-solid fa-ranking-star" aria-hidden="true"></i><span>League</span></a>
+      <a href="#payments" class="flex min-h-11 flex-col items-center justify-center gap-1 rounded-lg px-1 text-[9px] font-bold text-slate-200 hover:bg-white/10 sm:flex-row sm:gap-2 sm:px-4 sm:text-xs"><i class="fa-solid fa-receipt" aria-hidden="true"></i><span>Payments</span></a>
+      <a href="#community" class="flex min-h-11 flex-col items-center justify-center gap-1 rounded-lg px-1 text-[9px] font-bold text-slate-200 hover:bg-white/10 sm:flex-row sm:gap-2 sm:px-4 sm:text-xs"><i class="fa-solid fa-comments" aria-hidden="true"></i><span>Community</span></a>
+      <a href="#funActivities" class="flex min-h-11 flex-col items-center justify-center gap-1 rounded-lg px-1 text-[9px] font-bold text-slate-200 hover:bg-white/10 sm:flex-row sm:gap-2 sm:px-4 sm:text-xs"><i class="fa-solid fa-trophy" aria-hidden="true"></i><span>Activities</span></a>
+    </div>
+  </nav>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 mt-6 space-y-8">
+
+    <section id="homeTop" class="space-y-3 scroll-mt-28">
+      <div class="flex items-center justify-between border-b border-cardBorder pb-2">
+        <h2 class="text-xs font-black uppercase tracking-widest text-electricCyan flex items-center gap-2">
+          <i class="fa-regular fa-clock"></i> <span class="editable-node">Time & Deadline</span>
+        </h2>
+        <span class="text-[11px] text-slate-300 font-semibold editable-node">Gameweek Deadline Countdown</span>
+      </div>
+
+      <div class="glass-panel rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row items-center justify-between gap-4 shadow-lg">
+        <div>
+          <span class="text-[10px] uppercase font-black text-cyan-300 tracking-wider block editable-node">Next Gameweek Deadline</span>
+          <div class="flex items-center gap-3 mt-2">
+            <div class="text-center"><span id="days" class="text-2xl sm:text-3xl font-black text-white">00</span><span class="block text-[9px] text-slate-400 font-bold uppercase">Days</span></div>
+            <span class="text-slate-500 font-black text-xl">:</span>
+            <div class="text-center"><span id="hours" class="text-2xl sm:text-3xl font-black text-white">00</span><span class="block text-[9px] text-slate-400 font-bold uppercase">Hours</span></div>
+            <span class="text-slate-500 font-black text-xl">:</span>
+            <div class="text-center"><span id="minutes" class="text-2xl sm:text-3xl font-black text-white">00</span><span class="block text-[9px] text-slate-400 font-bold uppercase">Mins</span></div>
+            <span class="text-slate-500 font-black text-xl">:</span>
+            <div class="text-center"><span id="seconds" class="text-2xl sm:text-3xl font-black text-electricCyan">00</span><span class="block text-[9px] text-slate-400 font-bold uppercase">Secs</span></div>
+          </div>
+        </div>
+
+        <div class="bg-purple-600/20 border-2 border-cyan-400/50 px-4 py-2.5 rounded-xl text-center md:text-right w-full md:w-auto">
+          <span class="block text-[10px] uppercase font-extrabold text-electricCyan tracking-wider editable-node">Status</span>
+          <span id="deadlineStatusText" class="text-xs font-bold text-white editable-node">Set a deadline</span>
+        </div>
+      </div>
+
+      <div class="rule-card mt-3">
+        <div class="space-y-2 text-xs sm:text-sm text-slate-100">
+          <div class="font-black uppercase tracking-wide text-cyan-300">📢 WEEKLY GAME WEEK CONTRIBUTION 📢</div>
+          <p>All active league members are required to send a standard entry fee of 50 Shillings to the Admin ahead of every game week deadline.</p>
+          <div class="font-black uppercase tracking-wide text-rose-300 mt-2">⚠️ DEADLINE PENALTY ⚠️</div>
+          <p>The countdown clock tracks the official payment deadline. If you send your mandatory 50 Shillings contribution late after the timer hits zero, a mandatory late penalty fee of 30 Shillings will be automatically charged to your balance.</p>
+        </div>
+      </div>
+
+      <div class="rule-card admin-only hidden mt-3">
+        <div class="space-y-3">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-bold text-cyan-300 mb-1">Current Gameweek:</label>
+              <input id="gameweekInput" type="text" value="Gameweek 1" onchange="saveGameweek()" class="w-full bg-pitchDark border border-cardBorder text-xs text-white p-2 rounded-lg">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-cyan-300 mb-1">Set Target Deadline:</label>
+              <input type="datetime-local" id="countdownInput" class="w-full bg-pitchDark border border-cardBorder text-xs text-white p-2 rounded-lg focus:outline-none focus:border-cyan-400" onchange="updateCountdownTarget()">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="superadmin-only hidden mt-3 member-list-panel">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-2">
+          <h3 class="text-[10px] font-black uppercase tracking-[0.22em] text-cyan-300">Manage Members</h3>
+          <button type="button" onclick="addManualMember()" class="bg-cyan-400 hover:bg-cyan-300 text-pitchDark text-[10px] font-black px-3 py-2 rounded-lg">Add Member</button>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <input id="manualMemberName" type="text" placeholder="Manager Name" class="bg-pitchDark border border-cardBorder text-xs text-white p-2.5 rounded-lg focus:outline-none focus:border-cyan-400">
+          <input id="manualMemberGw" type="number" placeholder="GW Points" class="bg-pitchDark border border-cardBorder text-xs text-white p-2.5 rounded-lg focus:outline-none focus:border-cyan-400">
+          <input id="manualMemberTotal" type="number" placeholder="Total Points" class="bg-pitchDark border border-cardBorder text-xs text-white p-2.5 rounded-lg focus:outline-none focus:border-cyan-400">
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-[minmax(0,1fr)_auto] gap-3 items-center">
+          <input id="shareLinkInput" class="share-link-input" type="text" readonly value="https://fplcommunity.example/share?code=community" aria-label="Shareable link">
+          <button type="button" onclick="copyShareLink()" class="bg-purple-500 hover:bg-purple-400 text-white text-[10px] font-black px-3 py-2 rounded-lg">Copy Share</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="space-y-3">
+      <div class="border-b border-cardBorder pb-2">
+        <h2 class="text-xs font-black uppercase tracking-widest text-cyan-300 flex items-center gap-2">
+          <i class="fa-solid fa-crown"></i> <span class="editable-node">Winner Spotlight</span>
+        </h2>
+      </div>
+
+      <div class="glass-panel-gold rounded-2xl p-6 shadow-2xl relative overflow-hidden text-center sm:text-left animate-gold-shimmer">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-6 relative z-10">
+
+          <div class="flex flex-col sm:flex-row items-center gap-4">
+            <div class="text-4xl sm:text-5xl drop-shadow-[0_0_20px_rgba(0,240,255,0.9)]">👑</div>
+            <div>
+              <span class="text-[10px] sm:text-xs uppercase tracking-widest font-black text-cyan-300 block editable-node">Gameweek Champion</span>
+              <div class="flex items-center justify-center sm:justify-start gap-3 mt-1">
+                <h3 id="winnerNameDisplay" class="text-2xl sm:text-4xl font-black text-white tracking-tight drop-shadow-md editable-node">Gemini</h3>
+                <span class="text-3xl sm:text-4xl">👑</span>
+              </div>
+              <p class="text-xs sm:text-sm text-cyan-100 font-bold mt-2 leading-relaxed editable-node">
+                Congratulations! Outstanding performance this gameweek. Long live the king! ⚽🔥
+              </p>
+            </div>
+          </div>
+
+          <div class="bg-pitchDark/90 border-2 border-cyan-400 px-7 py-4 rounded-2xl text-center shadow-2xl shrink-0">
+            <span class="block text-[10px] uppercase font-black text-cyan-300 tracking-wider mb-1 editable-node">Winning Score</span>
+            <span id="winnerPointsDisplay" class="text-3xl sm:text-4xl font-black text-electricCyan editable-node">88</span>
+          </div>
+
+        </div>
+
+        <div class="admin-only hidden mt-6 pt-4 border-t border-cyan-400/40 text-left">
+          <label class="block text-xs font-bold text-cyan-300 mb-2">Publish / Edit Gameweek Champion:</label>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <input type="text" id="winnerNameInput" placeholder="Type Winner Name" class="bg-pitchDark border border-cyan-400/40 text-xs text-white p-2.5 rounded-lg focus:outline-none focus:border-cyan-300">
+            <input type="number" id="winnerPointsInput" placeholder="GW Score (e.g. 88)" class="bg-pitchDark border border-cyan-400/40 text-xs text-white p-2.5 rounded-lg focus:outline-none focus:border-cyan-300">
+            <button onclick="saveWinnerDetails()" class="bg-cyan-400 hover:bg-cyan-300 text-pitchDark font-black text-xs px-4 py-2.5 rounded-lg transition-all shadow-md">
+              Publish Winner 👑
+            </button>
+          </div>
+        </div>
+        <div class="mt-5 border-t border-cyan-400/30 pt-4">
+          <label for="payoutManagerIdentity" class="block text-xs font-bold text-cyan-200">Manager account</label>
+          <select id="payoutManagerIdentity" onchange="updatePayoutButton()" class="mt-2 w-full rounded-lg border border-cyan-400/30 bg-pitchDark p-2.5 text-xs text-white">
+            <option value="">Select your manager name</option>
+          </select>
+          <button id="confirmPayoutButton" type="button" aria-disabled="true" onclick="confirmPayoutReceipt()" class="mt-3 w-full rounded-lg bg-amber-300 px-4 py-3 text-xs font-black text-pitchDark opacity-50 cursor-not-allowed">
+            Confirm My Payout Receipt 🏆
+          </button>
+          <audio id="payoutAnthemAudio" class="payout-audio mt-3 hidden" controls></audio>
+          <p id="payoutStatusText" class="mt-2 text-center text-[10px] text-slate-400">Payout confirmation is locked until Admin authorizes a winner.</p>
+        </div>
+        <div class="superadmin-only hidden mt-5 border-t border-amber-300/30 pt-4 text-left">
+          <h4 class="text-xs font-black uppercase tracking-wider text-amber-200">Authorize Winner Payout</h4>
+          <label class="mt-3 block text-xs font-bold text-slate-200">Authorized winner
+            <select id="authorizedWinnerSelect" class="mt-1 w-full rounded-lg border border-cardBorder bg-pitchDark p-2.5 text-xs text-white"></select>
+          </label>
+          <label class="mt-3 block text-xs font-bold text-slate-200">Anthem selection
+            <select id="anthemTypeSelect" onchange="renderPayoutControls()" class="mt-1 w-full rounded-lg border border-cardBorder bg-pitchDark p-2.5 text-xs text-white">
+              <option value="current">Current Official EPL Anthem</option>
+              <option value="classic">Classic Official EPL Anthem</option>
+            </select>
+          </label>
+          <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <label class="text-[10px] font-bold text-slate-300">Current anthem stream URL
+              <input id="currentAnthemUrlInput" type="url" placeholder="Official stream URL" class="mt-1 w-full rounded-lg border border-cardBorder bg-pitchDark p-2.5 text-xs text-white">
+            </label>
+            <label class="text-[10px] font-bold text-slate-300">Classic anthem stream URL
+              <input id="classicAnthemUrlInput" type="url" placeholder="Official stream URL" class="mt-1 w-full rounded-lg border border-cardBorder bg-pitchDark p-2.5 text-xs text-white">
+            </label>
+          </div>
+          <div class="mt-3 flex flex-wrap gap-2">
+            <button type="button" onclick="authorizePayoutWinner()" class="rounded-lg bg-cyan-400 px-4 py-2.5 text-xs font-black text-pitchDark">Authorize Winner</button>
+            <button type="button" onclick="resetPayoutStatus()" class="rounded-lg border border-rose-400/50 bg-rose-500/10 px-4 py-2.5 text-xs font-bold text-rose-200">Reset Payout Status</button>
+          </div>
+          <div id="super-admin-tournament-controls" class="admin-panel-wrapper mt-6 rounded-lg bg-[#1a1a1a] p-5">
+            <h3 class="mb-5 pl-2.5 text-white">Tournament Controls</h3>
+            <p class="mb-4 text-xs text-[#ccc]">Ready buttons use the verified member session when available; otherwise they use a clearly marked local simulation identity.</p>
+            <div class="mt-5 flex flex-wrap gap-3">
+              <button type="button" id="super-admin-save-changes-btn" class="epl-btn-primary rounded px-5 py-2.5">Save Changes</button>
+              <button type="button" id="admin-master-kickoff-btn" class="rounded bg-[var(--epl-admin-pink)] px-5 py-2.5 font-bold text-white">Start Tournament</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="league" class="space-y-3 scroll-mt-28">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-cardBorder pb-2 gap-2">
+        <div class="flex items-center gap-3">
+          <h2 class="text-xs font-black uppercase tracking-widest text-electricCyan flex items-center gap-2">
+            <i class="fa-solid fa-list-ol"></i> <span class="editable-node">League Standings & Roster</span>
+          </h2>
+          <span id="gameweekBadge" class="bg-purple-600/20 text-cyan-300 border border-purple-500/40 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full editable-node">
+            GW 1-38 Active
+          </span>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <span class="text-xs font-extrabold text-roseHot bg-roseHot/15 border border-roseHot/40 px-3 py-1 rounded-full uppercase tracking-wider shadow-sm editable-node">
+
+          </span>
+          <span class="text-xs font-bold text-slate-300">
+            Managers: <span id="memberCount" class="text-white font-black">0</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- Financial Progress Tracker -->
+      <div class="glass-panel p-4 rounded-2xl space-y-2 border border-purple-500/40">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs font-bold">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-chart-pie text-cyan-400 text-sm"></i>
+            <span class="text-slate-200">Sweepstake Payment Progress:</span>
+            <span id="paymentPercentageText" class="text-electricCyan font-black text-sm">0% Process Done</span>
+          </div>
+          <div class="text-slate-300">
+            Pot Collection: <span id="paymentAmountText" class="text-cyan-300 font-mono font-bold">KSh 0 / KSh 0</span>
+          </div>
+        </div>
+        <div class="w-full bg-pitchDark/90 rounded-full h-3.5 overflow-hidden p-0.5 border border-cardBorder">
+          <div id="paymentProgressBar" class="bg-gradient-to-r from-purple-600 via-cyan-400 to-pink-500 h-full rounded-full transition-all duration-500 ease-out" style="width: 0%"></div>
+        </div>
+      </div>
+      <a href="#transparencyProof" class="inline-flex min-h-10 items-center gap-2 rounded-lg border border-purple-400/40 bg-purple-400/10 px-4 py-2 text-xs font-bold text-purple-200 hover:bg-purple-400/20"><i class="fa-solid fa-receipt" aria-hidden="true"></i> View payment updates and proof</a>
+
+      <!-- Standings Table Container -->
+      <div class="glass-panel rounded-2xl overflow-hidden shadow-2xl border border-cardBorder">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead class="dashboard-table-title">
+              <tr class="border-b border-cardBorder text-[10px] uppercase tracking-wider text-purple-300 font-black bg-cardDark/90">
+                <th class="py-3.5 px-4 editable-node">Rank</th>
+                <th class="py-3.5 px-4 editable-node">Manager Name</th>
+                <th class="py-3.5 px-4 text-center editable-node">Payment Status (KSh 50)</th>
+                <th class="py-3.5 px-4 text-right editable-node">GW Points</th>
+                <th class="py-3.5 px-4 text-right editable-node">Total Points</th>
+                <th class="admin-only hidden py-3.5 px-4 text-center">Admin Controls</th>
+              </tr>
+            </thead>
+            <tbody id="rosterTableBody" class="divide-y divide-cardBorder/50 text-sm">
+              <!-- Dynamic Roster Rows -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="admin-only hidden bg-cardDark/90 p-4 border-t border-cardBorder space-y-4">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-cardBorder/60 pb-3">
+            <h3 class="text-xs font-black uppercase tracking-wider text-cyan-300 flex items-center gap-2">
+              <i class="fa-solid fa-user-plus"></i> Add Manager to Roster
+            </h3>
+            <button onclick="clearEntireRoster()" class="superadmin-only hidden bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white border border-rose-500/40 text-xs font-bold px-3 py-1.5 rounded-lg transition-all">
+              <i class="fa-solid fa-rotate-left"></i> Reset Roster From Scratch
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+              <label class="block text-[10px] text-slate-300 mb-1 font-semibold">Manager Name:</label>
+              <input type="text" id="newMemberName" placeholder="Manager Name..." class="w-full bg-pitchDark border border-cardBorder text-xs text-white p-2.5 rounded-lg focus:outline-none focus:border-cyan-400">
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-300 mb-1 font-semibold">GW Points:</label>
+              <input type="number" id="newMemberGwPoints" placeholder="0" class="w-full bg-pitchDark border border-cardBorder text-xs text-white p-2.5 rounded-lg focus:outline-none focus:border-cyan-400">
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-300 mb-1 font-semibold">Total Points:</label>
+              <input type="number" id="newMemberPoints" placeholder="0" class="w-full bg-pitchDark border border-cardBorder text-xs text-white p-2.5 rounded-lg focus:outline-none focus:border-cyan-400">
+            </div>
+          </div>
+          <button onclick="addMember()" class="bg-cyan-400 hover:bg-cyan-300 text-pitchDark font-black text-xs px-5 py-2.5 rounded-lg transition-all flex items-center gap-2 shadow-md">
+            <i class="fa-solid fa-plus"></i> Add Manager to League
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section id="payments" class="space-y-3 scroll-mt-28">
+      <div class="border-b border-cardBorder pb-2">
+        <h2 class="text-xs font-black uppercase tracking-widest text-skyBright flex items-center gap-2">
+          <i class="fa-solid fa-money-bill-wave"></i> <span class="editable-node">Payments & Contributions</span>
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <div class="glass-panel rounded-2xl p-5 flex flex-col justify-between shadow-xl border-t-2 border-t-cyan-400">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="bg-cyan-500/20 text-cyan-300 border border-cyan-400/50 text-[10px] font-black px-2.5 py-1 rounded-full uppercase editable-node">
+                Sweepstake Contribution
+              </span>
+              <span class="text-sm font-black text-cyan-300 editable-node">KSh 50</span>
+            </div>
+
+            <h3 class="text-sm font-bold text-white mb-3 editable-node">Each member should contribute 50 shillings before the gameweek deadline.</h3>
+
+            <div class="space-y-3 my-4">
+              <div class="bg-pitchDark/90 p-3.5 rounded-xl border border-cardBorder flex items-center justify-between">
+                <div>
+                  <span class="block text-[9px] uppercase text-slate-300 font-bold editable-node">M-Pesa Number</span>
+                  <span id="contribPhoneDisplay" class="text-base font-mono font-bold text-cyan-300 editable-node">Not Set Yet</span>
+                </div>
+                <button onclick="copyToClipboard('contribPhoneDisplay')" class="bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-400/40 px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5">
+                  <i class="fa-regular fa-copy"></i> Copy
+                </button>
+              </div>
+
+              <div class="bg-pitchDark/90 p-3.5 rounded-xl border border-cardBorder">
+                <span class="block text-[9px] uppercase text-slate-300 font-bold editable-node">Account / Name</span>
+                <span id="contribNameDisplay" class="text-xs font-semibold text-white editable-node">Not Set Yet</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="superadmin-only hidden space-y-2 mt-3 pt-3 border-t border-cardBorder">
+            <label class="block text-xs font-bold text-cyan-300">Edit Contribution Details (Super Admin):</label>
+            <input type="text" id="contribPhoneInput" placeholder="M-Pesa number..." class="w-full bg-pitchDark border border-cardBorder text-xs text-white p-2 rounded-lg focus:outline-none focus:border-cyan-400">
+            <input type="text" id="contribNameInput" placeholder="Account name..." class="w-full bg-pitchDark border border-cardBorder text-xs text-white p-2 rounded-lg focus:outline-none focus:border-cyan-400">
+            <button onclick="saveContribDetails()" class="w-full bg-cyan-400 hover:bg-cyan-300 text-pitchDark font-bold text-xs py-2 rounded-lg transition-all">
+              Save Details
+            </button>
+          </div>
+        </div>
+
+        <!-- Voluntary Support Card -->
+        <div class="glass-panel-amber rounded-2xl p-5 flex flex-col justify-between shadow-2xl border-2 border-cyan-400/80">
+          <div>
+            <div class="flex flex-col items-center justify-center text-center mb-4 space-y-2">
+              <div class="flex items-center justify-between w-full">
+                <span class="bg-purple-500/25 text-purple-300 border border-purple-400/60 text-[10px] font-black px-3 py-1 rounded-full uppercase editable-node shadow-sm">
+                  Voluntary Support
+                </span>
+              </div>
+
+              <!-- Centered "Za Githeri. 🥺" Badge -->
+              <div class="my-3 w-full flex justify-center">
+                <span class="inline-block bg-gradient-to-r from-purple-600/40 via-cyan-500/30 to-purple-600/40 border-2 border-cyan-300 text-cyan-200 font-black text-base sm:text-lg px-7 py-3 rounded-full shadow-[0_0_30px_rgba(6,182,212,0.6)] tracking-wide editable-node">
+                  "Za Githeri. 🥺"
+                </span>
+              </div>
+            </div>
+
+            <h3 class="text-sm font-bold text-slate-100 text-center sm:text-left mb-3 editable-node leading-relaxed">
+              Any support, any contribution that you will put will be highly respected. 🤝
+            </h3>
+
+            <div class="bg-pitchDark/90 p-3.5 rounded-xl border border-cyan-400/40 flex items-center justify-between my-4 shadow-lg">
+              <div>
+                <span class="block text-[9px] uppercase text-cyan-300 font-black editable-node">Voluntary Support Number</span>
+                <span id="supportPhoneDisplay" class="text-base font-mono font-bold text-cyan-300 editable-node">Not Set Yet</span>
+              </div>
+              <button onclick="copyToClipboard('supportPhoneDisplay')" class="bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-400/50 px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm">
+                <i class="fa-regular fa-copy"></i> Copy
+              </button>
+            </div>
+          </div>
+
+          <div class="superadmin-only hidden space-y-2 mt-3 pt-3 border-t border-cardBorder">
+            <label class="block text-xs font-bold text-cyan-300">Edit Voluntary Support Number (Super Admin):</label>
+            <input type="text" id="supportPhoneInput" placeholder="Voluntary number..." class="w-full bg-pitchDark border border-cardBorder text-xs text-white p-2 rounded-lg focus:outline-none focus:border-cyan-400">
+            <button onclick="saveSupportDetails()" class="w-full bg-cyan-400 hover:bg-cyan-300 text-pitchDark font-bold text-xs py-2 rounded-lg transition-all">
+              Save Support Number
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section id="transparencyProof" class="space-y-3 scroll-mt-6">
+      <div class="border-b border-cardBorder pb-2">
+        <h2 class="text-xs font-black uppercase tracking-widest text-purple-400 flex items-center gap-2">
+          <i class="fa-solid fa-vault"></i> <span class="editable-node">Payment Updates & Proof</span>
+        </h2>
+      </div>
+
+      <div class="glass-panel rounded-2xl p-5 shadow-xl space-y-4">
+        <p class="text-xs text-slate-200 font-semibold editable-node">
+          Admin-posted M-Pesa message and receipt image for members to review. This page displays what was submitted; it does not independently verify a transaction. Please redact private phone numbers and transaction details before posting.
+        </p>
+
+        <div class="bg-pitchDark/90 p-4 sm:p-5 rounded-xl border border-cardBorder space-y-4">
+          <div id="proofTextDisplay" class="text-xs sm:text-sm text-slate-100 whitespace-pre-wrap font-mono leading-relaxed editable-node">
+            No M-Pesa receipt message posted yet.
+          </div>
+
+          <div id="proofImageContainer" class="hidden">
+            <p class="text-[10px] text-purple-300 font-black uppercase tracking-wider mb-2 editable-node">M-Pesa Receipt Screenshot Proof:</p>
+            <div class="w-full min-h-[300px] max-h-[600px] overflow-hidden rounded-xl border border-cardBorder bg-pitchDark/90 p-3 flex items-center justify-center">
+              <img id="proofImageDisplay" src="" alt="Proof Screenshot" class="max-h-[560px] w-auto object-contain rounded-lg shadow-2xl">
+            </div>
+          </div>
+        </div>
+
+        <div class="superadmin-only hidden space-y-3 pt-3 border-t border-cardBorder">
+          <h3 class="text-xs font-bold text-amber-300 uppercase">Publish M-Pesa Receipt Proof (Super Admin)</h3>
+          <div>
+            <label class="block text-[10px] text-slate-300 mb-1">Paste M-Pesa Message Text:</label>
+            <textarea id="proofTextInput" rows="3" placeholder="Paste M-Pesa receipt text..." class="w-full bg-pitchDark border border-cardBorder text-xs text-white p-2.5 rounded-lg focus:outline-none focus:border-purple-400 font-mono"></textarea>
+          </div>
+          <div>
+            <label class="block text-[10px] text-slate-300 mb-1">Upload Receipt Screenshot:</label>
+            <input type="file" id="proofImageInput" accept="image/*" class="text-xs text-slate-400 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-purple-600 file:text-white hover:file:bg-purple-500 cursor-pointer">
+          </div>
+          <button onclick="saveProofVault()" class="bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs px-5 py-2.5 rounded-lg transition-all shadow-md">
+            Publish Proof Vault
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+      <section class="space-y-3">
+        <div class="border-b border-cardBorder pb-2">
+          <h2 class="text-xs font-black uppercase tracking-widest text-skyBright flex items-center gap-2">
+            <i class="fa-solid fa-bullhorn"></i> <span class="editable-node">Announcements</span>
+          </h2>
+        </div>
+
+        <div class="glass-panel rounded-2xl p-5 shadow-xl flex flex-col justify-between h-full">
+          <div class="bg-pitchDark/90 p-4 rounded-xl border border-cardBorder min-h-[90px] flex items-center mb-3">
+            <p id="announcementText" class="text-xs sm:text-sm text-slate-100 font-medium italic leading-relaxed editable-node">
+              No active announcements yet.
+            </p>
+          </div>
+
+          <div class="admin-only hidden space-y-2 pt-2 border-t border-cardBorder">
+            <label class="block text-[10px] text-amber-300 font-bold">Broadcast Announcement:</label>
+            <div class="flex flex-col sm:flex-row gap-2">
+              <textarea rows="3" id="announcementInput" placeholder="Write announcement or paste M-Pesa message..." class="flex-grow bg-pitchDark border border-cardBorder text-xs text-white p-2.5 rounded-lg focus:outline-none focus:border-skyBright"></textarea>
+              <button onclick="saveAnnouncement()" class="admin-only hidden bg-skyBright hover:bg-sky-300 text-pitchDark font-bold text-xs px-4 py-2.5 rounded-lg transition-all shrink-0">
+                Broadcast 🔔
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="space-y-3">
+        <div class="border-b border-cardBorder pb-2">
+          <h2 class="text-xs font-black uppercase tracking-widest text-emeraldNeon flex items-center gap-2">
+            <i class="fa-solid fa-book-open"></i> <span class="editable-node">Rules & Guidelines</span>
+          </h2>
+        </div>
+
+        <div class="glass-panel rounded-2xl p-5 shadow-xl flex flex-col justify-between h-full">
+          <div id="rulesDisplay" class="bg-pitchDark/90 p-4 rounded-xl border border-cardBorder text-xs text-slate-100 font-medium whitespace-pre-wrap leading-relaxed font-sans mb-3 editable-node">
+1. All members must submit their KSh 50 contribution before the Gameweek deadline.
+2. The Gameweek winner with the highest score takes the designated weekly pot.
+3. Ranking ties will share the week's pot equally.
+4. Ensure your payment is verified by Admin for payment tick approvals.
+5. Have fun, support each other, and enjoy the Premier League season! ⚽🔥
+          </div>
+
+          <div class="superadmin-only hidden space-y-2 pt-2 border-t border-cardBorder">
+            <label class="block text-[10px] text-amber-300 font-bold">Edit Rules (Super Admin):</label>
+            <textarea id="rulesInput" rows="4" class="w-full bg-pitchDark border border-cardBorder text-xs text-white p-2.5 rounded-lg focus:outline-none focus:border-emeraldNeon font-sans"></textarea>
+            <button onclick="saveRules()" class="bg-emeraldNeon hover:bg-emerald-400 text-pitchDark font-bold text-xs px-4 py-2 rounded-lg transition-all">
+              Save Rules
+            </button>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+      <!-- Trash Talk Arena -->
+      <section id="community" class="space-y-3 scroll-mt-28">
+        <div class="border-b border-roseHot/40 pb-2">
+          <h2 class="text-xs font-black uppercase tracking-widest text-roseHot flex items-center gap-2">
+            <i class="fa-solid fa-fire-flame-curved"></i> <span class="editable-node">Trash Talk & Banter 🗣️🔥</span>
+          </h2>
+        </div>
+
+        <div class="glass-panel-rose rounded-2xl p-5 shadow-2xl space-y-4">
+          <p class="text-xs text-rose-100 font-semibold editable-node">
+            Roast your rivals, celebrate wins, or acknowledge payout receipts!
+          </p>
+
+          <div class="bg-pitchDark/90 p-4 rounded-xl border border-roseHot/40 space-y-3 shadow-inner">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+              <input type="text" id="trashAuthorInput" placeholder="Your Name" class="bg-cardDark border border-roseHot/40 text-xs text-white p-2.5 rounded-lg focus:outline-none focus:border-roseHot font-bold placeholder-slate-400">
+              <textarea rows="3" id="trashTextInput" placeholder="Type banter or paste a message..." class="sm:col-span-2 bg-cardDark border border-roseHot/40 text-xs text-white p-2.5 rounded-lg focus:outline-none focus:border-roseHot font-medium placeholder-slate-400"></textarea>
+            </div>
+            <button onclick="submitTrashTalk()" class="w-full sm:w-auto bg-gradient-to-r from-rose-600 to-roseHot hover:from-rose-500 hover:to-rose-400 text-white font-black text-xs px-5 py-2.5 rounded-lg transition-all shadow-lg flex items-center justify-center gap-2">
+              <i class="fa-solid fa-paper-plane"></i> Post Banter 🔥
+            </button>
+          </div>
+
+          <div id="trashFeed" class="space-y-2.5 mt-3 max-h-72 overflow-y-auto pr-1">
+            <!-- Dynamic Banter Cards -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Suggestions Feed -->
+      <section class="space-y-3">
+        <div class="border-b border-amber-400/40 pb-2">
+          <h2 class="text-xs font-black uppercase tracking-widest text-amber-300 flex items-center gap-2">
+            <i class="fa-solid fa-comments"></i> <span class="editable-node">Suggestions</span>
+          </h2>
+        </div>
+
+        <div class="glass-panel-amber rounded-2xl p-5 shadow-2xl space-y-4">
+          <p class="text-xs text-amber-100 font-semibold editable-node">
+            Open discussion space for managers and admin to share feedback and ideas.
+          </p>
+
+          <div class="bg-pitchDark/90 p-4 rounded-xl border border-amber-400/40 space-y-3 shadow-inner">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+              <input type="text" id="sugAuthorInput" placeholder="Your Name" class="bg-cardDark border border-amber-400/40 text-xs text-white p-2.5 rounded-lg focus:outline-none focus:border-amber-400 font-bold placeholder-slate-400">
+              <textarea rows="3" id="sugTextInput" placeholder="Type or paste a suggestion..." class="sm:col-span-2 bg-cardDark border border-amber-400/40 text-xs text-white p-2.5 rounded-lg focus:outline-none focus:border-amber-400 font-medium placeholder-slate-400"></textarea>
+            </div>
+            <button onclick="submitSuggestion()" class="w-full sm:w-auto bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-pitchDark font-black text-xs px-5 py-2.5 rounded-lg transition-all shadow-lg flex items-center justify-center gap-2">
+              <i class="fa-solid fa-paper-plane"></i> Post Suggestion 💬
+            </button>
+          </div>
+
+          <div id="suggestionFeed" class="space-y-2.5 mt-3 max-h-72 overflow-y-auto pr-1">
+            <!-- Dynamic Suggestion Cards -->
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <section id="funActivities" class="glass-panel rounded-2xl p-5 sm:p-7 space-y-6">
+      <div class="fun-activities-header rounded-xl border-b border-cardBorder p-3 pb-3">
+        <h2 class="text-base sm:text-lg font-black uppercase tracking-wider text-cyan-300 flex items-center gap-3"><i class="fa-solid fa-trophy"></i> Fun Activities</h2>
+        <p class="mt-2 text-sm text-slate-300">Community tournament and squad features. Members can view standings and send requests; Admin manages the schedule and results.</p>
+      </div>
+      <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+        <article class="rounded-2xl border border-amber-400/40 bg-pitchDark/80 p-4 sm:p-5 space-y-5">
+          <div class="tournament-card-header flex flex-wrap items-start justify-between gap-3 rounded-xl p-3">
+            <div><h3 class="text-base sm:text-lg font-black text-amber-300 flex items-center gap-2"><i class="fa-solid fa-trophy"></i> Manager Tournament</h3><p class="text-xs text-slate-300 mt-1">The Ultimate Test of Consistency! 🏎💨 Don't let one bad gameweek ruin your season. This tournament doesn't care about a single lucky weekend—it rewards the most consistent manager over time. Enter the cup, stack up your FPL points week after week, and prove you have the endurance to climb the Champions League tree, lift the cup, and claim the ultimate cash pot! 🔥👑</p><p id="tournamentIdentityNotice" class="mt-2 text-[10px] text-slate-400" aria-live="polite"></p></div>
+          </div>
+          <div class="rule-card leading-relaxed text-[11px] sm:text-xs text-slate-100">
+            <p class="font-black uppercase tracking-[0.18em] text-amber-300">🏆 MANAGER TOURNAMENT 🏆</p>
+            <p class="mt-2">The knockout bracket gives eight managers a balanced path from quarter-finals through the semi-finals to a central grand final.</p>
+            <p class="mt-2 font-bold text-amber-200">How it works and rules:</p>
+            <ol class="mt-2 list-decimal space-y-1 pl-5">
+              <li>Entry fee is 100 KSh (fully optional to join).</li>
+              <li>The tournament structure displays side-by-side draws just like the UEFA Champions League tournament tree, tracking matches from quarter-finals up to a final, with an admirable trophy graphic featured right in the center.</li>
+              <li>The knockout tree is built for eight managers: four quarter-final matches feed two semi-finals and one central final.</li>
+              <li>The Admin manually registers the participants, sets the matchups, and updates the draws. The tournament standings table will automatically arrange and update itself in a sensible manner.</li>
+              <li>The ultimate winner who takes home the total cash pot is the manager who accumulates the most total points over the specified number of consecutive game weeks set for the tournament!</li>
+            </ol>
+          </div>
+          <div class="grid grid-cols-2 gap-2 rounded-xl border border-amber-300/25 bg-amber-400/5 p-3 text-xs"><div><span class="block text-[9px] font-bold uppercase text-slate-400">Managers entered</span><b id="tournamentEntrantCount" class="mt-1 block text-white">0</b></div><div class="text-right"><span class="block text-[9px] font-bold uppercase text-slate-400">Expected pot · KSh 100 one-time entry</span><b id="tournamentExpectedPot" class="mt-1 block text-amber-200">KSh 0</b></div><p class="col-span-2 text-[10px] leading-relaxed text-slate-400">The KSh 100 registration fee is paid once for the entire tournament, not per gameweek. The prize estimate multiplies the number of confirmed entrants by KSh 100; Admin confirms payments and the final payout.</p></div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            <div class="rounded-xl bg-cardDark p-3"><b class="text-white">1 · Register</b><p class="mt-1 text-slate-300">Entry is a one-time KSh 100 per manager for the whole tournament. It is not charged again for each gameweek. Admin writes the confirmed participants and tracks the collected entry pot.</p></div>
+            <div class="rounded-xl bg-cardDark p-3"><b class="text-white">2 · Play the groups</b><p class="mt-1 text-slate-300">The tournament runs over the gameweeks Admin sets. Admin enters each manager’s group record and combined FPL points for those gameweeks. Group tables sort by group points, goal difference, goals scored, then name.</p></div>
+            <div class="rounded-xl bg-cardDark p-3"><b class="text-white">3 · Draw and advance</b><p class="mt-1 text-slate-300">Admin enters the participants and draws fair random pairings. After recording each round’s winners, Admin can draw the next round automatically through the final.</p></div>
+            <div class="rounded-xl bg-cardDark p-3"><b class="text-white">4 · Prize winner</b><p class="mt-1 text-slate-300">The manager with the highest combined FPL points across the tournament gameweeks wins the KSh 100-per-entry pot and is shown with the cup. A points tie is decided by group points, goal difference, goals scored, then manager name. The knockout bracket tracks progression; it does not decide the cash prize.</p></div>
+          </div>
+          <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_190px] gap-3 items-stretch">
+            <div class="space-y-2 min-w-0"><h4 class="text-xs font-black uppercase tracking-widest text-amber-200">Group Standings</h4><p class="text-[11px] text-slate-400">Champions League-style group tables. Admin enters each manager’s group results and combined FPL points; each group table sorts itself.</p><div id="tournamentGroupTable" class="space-y-4"></div></div>
+            <aside class="rounded-2xl border border-amber-300/40 bg-gradient-to-b from-amber-400/15 to-cardDark p-4 flex flex-col items-center justify-center text-center min-h-52"><div class="text-[10px] font-black uppercase tracking-[0.2em] text-amber-200">FPL Points Cup</div><i class="fa-solid fa-trophy text-6xl sm:text-7xl text-amber-300 drop-shadow-[0_0_18px_rgba(251,191,36,0.35)] my-4" aria-hidden="true"></i><div id="tournamentCupWinner" class="text-xs font-black text-white">Waiting for FPL points</div><p class="mt-2 text-[10px] leading-relaxed text-slate-300">The highest combined FPL points across the tournament gameweeks wins the prize and lifts the cup.</p></aside>
+          </div>
+          <div class="space-y-2"><h4 class="text-xs font-black uppercase tracking-widest text-amber-200">Knockout Bracket</h4><div class="bracket-scroll"><div id="tournamentBracket"></div></div></div>
+          <div class="admin-only hidden space-y-3 rounded-xl border border-cyan-400/30 bg-cardDark p-4">
+            <h4 class="font-black text-cyan-200">Admin tournament desk</h4>
+            <label class="block text-xs font-bold text-slate-200">Eight confirmed participants — one manager per line:<textarea id="tournamentParticipantsInput" rows="8" placeholder="Manager One&#10;Manager Two&#10;Manager Three&#10;Manager Four&#10;Manager Five&#10;Manager Six&#10;Manager Seven&#10;Manager Eight" class="mt-1 w-full rounded-lg border border-cardBorder bg-pitchDark p-2.5 text-xs text-white"></textarea></label>
+            <div class="flex flex-wrap gap-2"><button onclick="drawTournamentFixtures()" class="rounded-lg bg-amber-300 px-4 py-2.5 text-xs font-black text-pitchDark">Draw opening fixtures</button><button onclick="drawTournamentNextRound()" class="rounded-lg border border-cyan-300/50 bg-cyan-400/10 px-4 py-2.5 text-xs font-bold text-cyan-100">Draw next round from winners</button></div>
+            <p class="text-[10px] leading-relaxed text-slate-400">For uneven entrant counts, some managers receive a bye into the next round. Enter each match result and the advancing manager in the fixture list, save, then draw the next round.</p>
+            <label class="block text-xs font-bold text-slate-200">Group table — one manager per line (include combined FPL points):<textarea id="tournamentGroupInput" rows="6" placeholder="Group, Manager, P, W, D, L, GF, GA, Group Pts, Total FPL Pts&#10;A, Manager One, 3, 2, 1, 0, 7, 3, 7, 245" class="mt-1 w-full rounded-lg border border-cardBorder bg-pitchDark p-2.5 text-xs text-white"></textarea></label>
+            <label class="block text-xs font-bold text-slate-200">Knockout fixtures — one match per line:<textarea id="tournamentKnockoutInput" rows="5" placeholder="Round, Manager A, Score A, Manager B, Score B, Winner&#10;Quarter-final, Manager One, 2, Manager Two, 1, Manager One" class="mt-1 w-full rounded-lg border border-cardBorder bg-pitchDark p-2.5 text-xs text-white"></textarea></label>
+            <button onclick="saveTournamentStandings()" class="rounded-lg bg-cyan-400 px-4 py-2.5 text-xs font-black text-pitchDark">Save tournament tables</button>
+          </div>
+        </article>
+        <article class="rounded-2xl border border-cyan-400/40 bg-pitchDark/80 p-4 sm:p-5 space-y-4">
+          <div class="flex flex-wrap items-start justify-between gap-3">
+            <div><h3 class="text-base sm:text-lg font-black text-cyan-300 flex items-center gap-2"><i class="fa-solid fa-arrows-rotate"></i> Bench Swapping</h3><p class="mt-1 text-xs text-slate-300">Your Ultimate Game-Changer! 🚀🔥 We have all felt the pain of watching our bench players explode with massive points while our starting lineup lets us down. Why leave your victory up to sheer luck when you can claim an equal opportunity to fight back? This is your ultimate safety net—a fair and level playing field designed to reward your strategic depth. Don't look back with regret or wonder what could have been. Seize the moment, protect your squad, and activate your swap today! 🔄💥</p></div>
+          </div>
+          <div class="rule-card leading-relaxed text-[11px] sm:text-xs text-slate-100">
+            <p class="font-black uppercase tracking-[0.18em] text-cyan-300">🔄 BENCH SWAPPING 🔄</p>
+            <p class="mt-2">Bench swaps are managed using the published participation rules and current gameweek status.</p>
+            <p class="mt-2 font-bold text-cyan-200">If you want to use it, the process and strict requirements are:</p>
+            <ol class="mt-2 list-decimal space-y-1 pl-5">
+              <li>Send 30 shillings to the Admin.</li>
+              <li>The Admin will swap a player from your starting 11 with the player on your bench who has the highest points.</li>
+              <li>Strict Starting 11 Requirements: The player being taken out of your starting 11 must match at least ONE of these conditions:
+                <ul class="mt-1 list-disc pl-5 space-y-1">
+                  <li>They did not start or play the game at all.</li>
+                  <li>They received a red card.</li>
+                  <li>They were injured during the match.</li>
+                </ul>
+              </li>
+              <li>Special Captain Rule: If you want to swap out your Captain, he must have exactly 0 points for the swap to be valid.</li>
+            </ol>
+          </div>
+          <div class="rounded-xl border border-cyan-300/20 bg-cardDark p-3"><h4 class="text-xs font-black uppercase tracking-widest text-cyan-100">How Bench Swapping works</h4><ol class="mt-2 list-decimal space-y-2 pl-5 text-xs text-slate-300"><li>Send your manager name, the starting player, and the reason for the request.</li><li>The request fee is KSh 30; Admin confirms payment before approving a swap.</li><li>The replacement must be the highest-scoring eligible player on your substitutes bench.</li><li>The starting player must be injured or have a red card; zero points qualifies only when that starting player is your captain.</li><li>Admin checks the player status, points, captain status, and payment before confirming the outcome.</li></ol></div>
+          <div class="rounded-xl border border-roseHot/30 bg-roseHot/10 p-3 text-xs text-rose-100"><b>Late contribution penalty:</b> Pay by the countdown deadline. A KSh 30 penalty applies to a contribution recorded after it. Admin checks payment time and marks the payment status.</div>
+          <div class="space-y-2"><label class="block text-xs font-bold text-slate-200">Manager name<input id="swapAuthor" type="text" placeholder="Your manager name" class="mt-1 w-full rounded-lg border border-cardBorder bg-cardDark p-2.5 text-xs text-white"></label><label class="block text-xs font-bold text-slate-200">Player and reason<textarea id="swapDetails" rows="3" placeholder="Bench player, starting player, and reason" class="mt-1 w-full rounded-lg border border-cardBorder bg-cardDark p-2.5 text-xs text-white"></textarea></label><button onclick="submitSwapRequest()" class="rounded-lg bg-cyan-400 px-4 py-2.5 text-xs font-black text-pitchDark">Send swap request</button></div>
+          <div class="space-y-2"><h4 class="text-xs font-black uppercase tracking-widest text-cyan-200">Swap Requests</h4><div id="swapRequests" class="space-y-2"></div></div>
+        </article>
+      </div>
+      <article class="rounded-2xl border border-violet-400/40 bg-pitchDark/80 p-4 sm:p-5 space-y-4">
+        <div>
+          <h3 class="text-base sm:text-lg font-black text-violet-200">The Savior: Unleash Your 12th Man! ⚡🔱</h3>
+          <p class="mt-2 text-xs leading-relaxed text-slate-200">Ever wished you could sign that one superstar player who is lighting up the Premier League, without messing up your official budget or breaking your current team structure? Now you can! The Savior gives every single manager an equal, fair opportunity to recruit an extraordinary 12th player to their ranks. Pick any player in the entire Premier League who is not already in your official squad or bench. Pay your 30 Shillings entry fee to the Admin, lock in your secret weapon, and watch them rack up extra points for your tournament campaign. Will your Savior rescue your gameweek and carry you to glory? Don't leave your victory to chance—activate your 12th man today! 🚀⚽</p>
+        </div>
+        <div class="overflow-x-auto rounded-xl border border-violet-300/25">
+          <table class="w-full min-w-[690px] text-left text-xs">
+            <thead class="bg-violet-400/10 text-violet-100">
+              <tr><th class="p-3">Manager Name</th><th class="p-3">Savior Chosen</th><th class="p-3 text-right">GW Points</th><th class="p-3 text-right">Total Savior Points</th><th class="p-3">Payment Status</th></tr>
+            </thead>
+            <tbody id="saviorTableBody" class="divide-y divide-cardBorder/60"></tbody>
+          </table>
+        </div>
+        <div class="admin-only hidden rounded-xl border border-violet-300/30 bg-cardDark p-4">
+          <label for="saviorInput" class="block text-xs font-bold text-violet-100">Manage Savior Activity (one manager per line: name,savior,gw_pts,total_pts,status)</label>
+          <textarea id="saviorInput" rows="5" placeholder="peter,Palmer,0,0,Paid" class="mt-2 w-full rounded-lg border border-cardBorder bg-pitchDark p-2.5 text-xs text-white"></textarea>
+          <button type="button" onclick="saveSaviorActivity()" class="mt-2 rounded-lg bg-violet-300 px-4 py-2.5 text-xs font-black text-pitchDark">Save Savior Activity</button>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <!-- Notification Toast Container -->
+  <div id="toastContainer" class="fixed bottom-20 right-3 sm:bottom-5 sm:right-5 z-50 pointer-events-none"></div>
+  <button id="saveAllButton" onclick="saveAllChanges()" class="hidden fixed bottom-20 left-3 sm:bottom-5 sm:left-5 z-50 bg-cyan-400 text-pitchDark font-black px-5 py-3 rounded-xl shadow-2xl">Save changes</button>
+  <div id="adminAccessModal" class="admin-alert-modal hidden" aria-hidden="true">
+    <div class="admin-alert-card">
+      <div class="flex items-center justify-between gap-3 mb-3">
+        <div class="text-xs font-black uppercase tracking-[0.22em] text-cyan-300">Secure Access</div>
+        <button type="button" onclick="closeAdminModal()" class="text-lg font-black text-white">✕</button>
+      </div>
+      <p class="text-sm text-slate-200">Enter the hidden admin password to unlock the restricted control panels.</p>
+      <input id="adminPasswordInput" type="password" placeholder="Password" class="mt-3 w-full bg-pitchDark border border-cyan-400/40 text-white text-sm p-3 rounded-xl focus:outline-none focus:border-cyan-300">
+      <div class="mt-4 flex justify-end gap-2">
+        <button type="button" onclick="closeAdminModal()" class="bg-slate-700 text-white font-bold text-xs px-3 py-2 rounded-lg">Cancel</button>
+        <button type="button" onclick="unlockAdminAccess()" class="bg-cyan-400 text-pitchDark font-black text-xs px-4 py-2 rounded-lg">Unlock</button>
+      </div>
+    </div>
+  </div>
+  <div id="adminAlertPopup" class="admin-alert-modal hidden" aria-hidden="true">
+    <div class="admin-alert-card max-w-sm text-center announcement-pop">
+      <div class="text-[10px] uppercase tracking-[0.26em] font-black text-cyan-300">Official Notification</div>
+      <div class="mt-3 text-lg font-black text-white" id="adminAlertBody">Admin update</div>
+      <div class="mt-3 text-[10px] text-slate-300">Administrative action published and broadcast to members.</div>
+    </div>
+  </div>
+
+  <script>
+    // FPL COMMUNITY is a clean, single-page HTML app owned by Admin collyonmolly.
+    // Optional adapter: set window.FPL_CLOUD_CONFIG before this script with
+    // { endpoint: '/api/fpl-state', saveMethod: 'PUT', headers: {}, credentials: 'same-origin' }.
+    // The endpoint must expose GET for one JSON state document and accept that document using saveMethod.
+    // Keep private provider keys on the server; only use public-safe credentials with server-side policies.
+    // Shared application data lives in the configured JSON endpoint.
+    let lastSharedPayload = null;
+    let hasLoadedSharedState = false;
+    let sharedSaveQueue = Promise.resolve();
+    let cloudErrorShown = false;
+    let pendingCloudRuntimeConfig = null;
+    let lastAnnouncementId = null;
+    let lastPayoutAlertAt = null;
+    const KV_NOTEBOOK_URL = 'https://kv.co.ke/collyonmolly_fpl_site';
+    const CLOUD_STATE_CONFIG = window.FPL_CLOUD_CONFIG || {};
+    const CLOUD_STATE_ENDPOINT = CLOUD_STATE_CONFIG.endpoint || KV_NOTEBOOK_URL;
+    let state = {
+      accessMode: 'member', // 'member', 'admin', 'superadmin'
+      gameweek: 'Gameweek 1', tournamentEntries: [], tournamentParticipants: [], tournamentByes: [], tournamentGroups: [], tournamentMatches: [], swapRequests: [], saviorEntries: [], announcementLedger: [],
+      branding: { title: 'FPL COMMUNITY' },
+      tournamentState: { started: false },
+      tournamentReadyActions: [],
+      contribPhone: '',
+      contribName: '',
+      supportPhone: '',
+      announcement: '',
+      authorizedWinner: '',
+      payoutConfirmedBy: '',
+      payoutConfirmedAt: '',
+      anthemType: 'current',
+      currentAnthemUrl: '',
+      classicAnthemUrl: '',
+      countdownTarget: '',
+      proofText: '',
+      proofImageData: '',
+      winnerName: 'Gemini',
+      winnerPoints: 88,
+      rulesText: `1. All members must submit their KSh 50 contribution before the Gameweek deadline.\n2. The Gameweek winner with the highest score takes the designated weekly pot.\n3. Ranking ties will share the week's pot equally.\n4. Ensure your payment is verified by Admin for payment tick approvals.\n5. Have fun, support each other, and enjoy the Premier League season! ⚽🔥`,
+      suggestions: [],
+      trashTalks: [],
+      members: [
+        { id: '1', name: 'Manager 1', points: 142, gwPoints: 88, paid: true },
+        { id: '2', name: 'Manager 2', points: 128, gwPoints: 65, paid: true },
+        { id: '3', name: 'Manager 3', points: 115, gwPoints: 58, paid: false },
+        { id: '4', name: 'Manager 4', points: 110, gwPoints: 42, paid: true },
+        { id: '5', name: 'Manager 5', points: 85, gwPoints: 31, paid: false }
+      ]
+    };
+
+    window.onload = async function() {
+      await loadSharedState();
+      renderApp();
+      const restoredMode=storedAdminMode();if(restoredMode)changeAccessMode(restoredMode);
+      startCountdownTimer();
+      renderActivities();
+      renderPayoutControls();
+      scheduleCloudPoll();
+      window.addEventListener('focus', refreshCloudState);
+    };
+
+    function refreshCloudState() {
+      return loadSharedState();
+    }
+
+    function scheduleCloudPoll() {
+      window.setTimeout(async () => {
+        await loadSharedState();
+        scheduleCloudPoll();
+      }, cloudErrorShown ? 30000 : 3000);
+    }
+
+    function stateSnapshot(source=state) { const payload={...source};delete payload.accessMode;return payload; }
+    function stableStateJSON(value) { if(Array.isArray(value))return '['+value.map(stableStateJSON).join(',')+']';if(value&&typeof value==='object')return '{'+Object.keys(value).sort().map(key=>JSON.stringify(key)+':'+stableStateJSON(value[key])).join(',')+'}';return JSON.stringify(value); }
+    function cloudNotebookUrl() { return CLOUD_STATE_ENDPOINT; }
+    async function cloudRequest(method, payload) {
+      const headers = new Headers(CLOUD_STATE_CONFIG.headers || {});
+      headers.set('Accept', 'application/json');
+      const options = {
+        method,
+        headers,
+        credentials: CLOUD_STATE_CONFIG.credentials || 'same-origin',
+        cache: method === 'GET' ? 'no-store' : 'no-cache'
+      };
+      if (payload !== undefined) {
+        headers.set('Content-Type', 'application/json');
+        options.body = JSON.stringify(payload);
+      }
+      const response = await fetch(cloudNotebookUrl(), options);
+      if (!response.ok) {
+        const detail = await response.text().catch(() => '');
+        throw new Error(`Cloud ${method} failed (${response.status}): ${detail.slice(0, 180)}`);
+      }
+      return response;
+    }
+    function saveStateToCloud() { return saveSharedState(); }
+    function storedAdminMode() {
+      try {
+        const token=sessionStorage.getItem('fpl_admin_session');
+        if(!token)return null;
+        if (token === 'admin' || token === 'superadmin') return token;
+        if (typeof token === 'string' && token.includes('.')) {
+          const encoded=token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');
+          const claims=JSON.parse(atob(encoded+'='.repeat((4-encoded.length%4)%4)));
+          if(claims.exp<=Date.now()/1000||!['admin','superadmin'].includes(claims.mode))return null;
+          return claims.mode;
+        }
+        const parsed=JSON.parse(token);
+        if(parsed && ['admin','superadmin'].includes(parsed.mode)) return parsed.mode;
+        return null;
+      } catch (_) { return null; }
+    }
+    async function postMemberAction() { return null; }
+    // The notebook exposes one JSON record. Polling reads that full record; a detected revision is merged
+    // into the page state and rerendered, while an active form edit is left untouched until it is finished.
+    async function loadSharedState() {
+      try {
+        const response = await cloudRequest('GET');
+        const returned = await response.json();
+        const payload = returned && returned.payload && typeof returned.payload === 'object' ? returned.payload : returned;
+        if (!payload || typeof payload !== 'object' || Array.isArray(payload)) throw new Error('Cloud GET returned an invalid state object');
+        if (!Object.keys(payload).length) throw new Error('Cloud GET returned an empty state object');
+        pendingCloudRuntimeConfig = extractCloudRuntimeConfig(payload);
+        const firstLoad = !hasLoadedSharedState;
+        const changed = hasLoadedSharedState && stableStateJSON(payload) !== stableStateJSON(lastSharedPayload);
+        if (hasLoadedSharedState && !changed) return;
+        const active = document.activeElement;
+        const editing = active && (active.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(active.tagName));
+        if (changed && editing) return;
+        const priorAnnouncementId = lastAnnouncementId;
+        const priorPayoutAt = lastPayoutAlertAt;
+        state = { ...state, ...payload, accessMode: state.accessMode };
+        state.members = Array.isArray(state.members) ? state.members : [];
+        state.suggestions = Array.isArray(state.suggestions) ? state.suggestions : [];
+        state.trashTalks = Array.isArray(state.trashTalks) ? state.trashTalks : [];
+        state.announcementLedger = Array.isArray(state.announcementLedger) ? state.announcementLedger : [];
+        state.saviorEntries = Array.isArray(state.saviorEntries) ? state.saviorEntries : [];
+        state.tournamentReadyActions = Array.isArray(state.tournamentReadyActions) ? state.tournamentReadyActions : [];
+        lastSharedPayload = stateSnapshot();
+        hasLoadedSharedState = true;
+        lastAnnouncementId = state.announcementLedger.length ? state.announcementLedger[state.announcementLedger.length - 1].id : null;
+        lastPayoutAlertAt = state.payoutConfirmedAt || null;
+        renderApp();
+        renderActivities();
+        renderPayoutControls();
+        if (!firstLoad && lastAnnouncementId && priorAnnouncementId !== lastAnnouncementId) {
+          showAdminAlertPopup('Attention! Admin has made some announcements.');
+        }
+        if (!firstLoad && priorPayoutAt && priorPayoutAt !== lastPayoutAlertAt) {
+          clearPayoutAlert();
+        } else if (!firstLoad && lastPayoutAlertAt && priorPayoutAt !== lastPayoutAlertAt && state.payoutConfirmedBy !== getSelectedManagerName()) {
+          showAdminAlertPopup('A winner has confirmed the confirmation message.');
+          window.setTimeout(clearPayoutAlert, 7000);
+        }
+        cloudErrorShown = false;
+      } catch (error) {
+        console.error('Cloud state load failed:', error);
+        cloudErrorShown = true;
+      }
+    }
+
+    function saveSharedState() {
+      const payload = JSON.parse(JSON.stringify(stateSnapshot()));
+      sharedSaveQueue = sharedSaveQueue.then(async () => {
+        try {
+          const response = await cloudRequest(CLOUD_STATE_CONFIG.saveMethod || 'POST', payload);
+          const responseText = await response.text();
+          let result = {};
+          try { result = responseText ? JSON.parse(responseText) : {}; } catch (_) {}
+          if (result.status && result.status !== 'success') throw new Error(`Cloud POST returned status "${result.status}"`);
+          lastSharedPayload = payload;
+          hasLoadedSharedState = true;
+          cloudErrorShown = false;
+          renderPayoutControls();
+          return true;
+        } catch (error) {
+          console.error('Cloud state save failed:', error);
+          return false;
+        }
+      });
+      return sharedSaveQueue;
+    }
+
+    function changeAccessMode(mode) {
+      if (mode === 'member') sessionStorage.removeItem('fpl_admin_session');
+      const authorizedMode=mode==='member'?null:storedAdminMode();
+      if (mode !== 'member' && (!authorizedMode || (mode==='superadmin'&&authorizedMode!=='superadmin'))) { state.accessMode = 'member'; return; }
+      state.accessMode = mode;
+
+      const saveButton = document.getElementById('saveAllButton'); if (saveButton) saveButton.classList.toggle('hidden', !['admin','superadmin'].includes(mode));
+      const adminEls = document.querySelectorAll('.admin-only');
+      const superAdminEls = document.querySelectorAll('.superadmin-only');
+      const icon = document.getElementById('modeIcon');
+      const body = document.getElementById('bodyRoot');
+
+      if (mode === 'member') {
+        adminEls.forEach(el => el.classList.add('hidden'));
+        superAdminEls.forEach(el => el.classList.add('hidden'));
+        icon.className = "fa-solid fa-user text-slate-400 text-xs";
+        body.classList.remove('superadmin-active');
+        setInlineEditable(false);
+        showToast('Member View Active (Read-Only)');
+      } else if (mode === 'admin') {
+        adminEls.forEach(el => el.classList.remove('hidden'));
+        superAdminEls.forEach(el => el.classList.add('hidden'));
+        icon.className = "fa-solid fa-user-gear text-emeraldNeon text-xs";
+        body.classList.remove('superadmin-active');
+        setInlineEditable(false);
+        showToast('Admin View Active (Roster & Winner Controls)');
+      } else if (mode === 'superadmin') {
+        adminEls.forEach(el => el.classList.remove('hidden'));
+        superAdminEls.forEach(el => el.classList.remove('hidden'));
+        icon.className = "fa-solid fa-user-ninja text-amber-400 text-xs";
+        body.classList.add('superadmin-active');
+        setInlineEditable(true);
+        showToast('Super Admin Mode Active ⚡ (Cursor Edit Anything)');
+      }
+
+      renderRoster();
+      renderSuggestions();
+      renderTrashTalk();
+      refreshCloudState();
+    }
+
+    function setInlineEditable(editable) {
+      const editableNodes = document.querySelectorAll('.editable-node');
+      editableNodes.forEach(node => {
+        if (editable) {
+          node.setAttribute('contenteditable', 'true');
+        } else {
+          node.removeAttribute('contenteditable');
+        }
+      });
+    }
+
+    function renderApp() {
+      document.getElementById('contribPhoneDisplay').textContent = state.contribPhone || 'Not Set Yet';
+      document.getElementById('contribNameDisplay').textContent = state.contribName || 'Not Set Yet';
+      document.getElementById('contribPhoneInput').value = state.contribPhone || '';
+      document.getElementById('contribNameInput').value = state.contribName || '';
+
+      document.getElementById('supportPhoneDisplay').textContent = state.supportPhone || 'Not Set Yet';
+      document.getElementById('supportPhoneInput').value = state.supportPhone || '';
+
+      document.getElementById('winnerNameDisplay').textContent = state.winnerName || 'Gemini';
+      document.getElementById('winnerPointsDisplay').textContent = (state.winnerPoints || 0).toLocaleString();
+      document.getElementById('winnerNameInput').value = state.winnerName || '';
+      document.getElementById('winnerPointsInput').value = state.winnerPoints || '';
+
+      document.getElementById('rulesDisplay').textContent = state.rulesText || '';
+      document.getElementById('rulesInput').value = state.rulesText || '';
+
+      if (state.announcement && state.announcement.trim() !== '') {
+        document.getElementById('announcementText').textContent = state.announcement;
+      } else {
+        document.getElementById('announcementText').textContent = "No active announcements yet.";
+      }
+      document.getElementById('announcementInput').value = state.announcement || '';
+
+      if (state.countdownTarget) {
+        document.getElementById('countdownInput').value = state.countdownTarget;
+      }
+      const shareLink = `${window.location.origin}${window.location.pathname}?community=share`;
+      const shareInput = document.getElementById('shareLinkInput');
+      if (shareInput) shareInput.value = shareLink;
+
+      document.getElementById('proofTextDisplay').textContent = state.proofText || 'No M-Pesa receipt message posted yet.';
+      document.getElementById('proofTextInput').value = state.proofText || '';
+
+      const imgContainer = document.getElementById('proofImageContainer');
+      const imgDisplay = document.getElementById('proofImageDisplay');
+      if (state.proofImageData) {
+        imgDisplay.src = state.proofImageData;
+        imgContainer.classList.remove('hidden');
+      } else {
+        imgContainer.classList.add('hidden');
+      }
+
+      renderRoster();
+      renderSuggestions();
+      renderTrashTalk();
+
+      if (state.accessMode === 'superadmin') {
+        setInlineEditable(true);
+      }
+    }
+
+    function updatePaymentProgress() {
+      const totalMembers = state.members.length;
+      if (totalMembers === 0) {
+        document.getElementById('paymentPercentageText').textContent = '0% Process Done';
+        document.getElementById('paymentAmountText').textContent = 'KSh 0 / KSh 0';
+        document.getElementById('paymentProgressBar').style.width = '0%';
+        return;
+      }
+
+      const paidMembersCount = state.members.filter(m => m.paid).length;
+      const percentage = Math.round((paidMembersCount / totalMembers) * 100);
+
+      const lateFees = state.members.reduce((sum, m) => sum + (m.paid ? (m.lateFee || 0) : 0), 0);
+      const currentPotSum = paidMembersCount * 50 + lateFees;
+      const targetPotSum = totalMembers * 50;
+
+      document.getElementById('paymentPercentageText').textContent = `${percentage}% Process Done`;
+      document.getElementById('paymentAmountText').textContent = `KSh ${currentPotSum} / KSh ${targetPotSum}`;
+      document.getElementById('paymentProgressBar').style.width = `${percentage}%`;
+    }
+
+    function renderRoster() {
+      const tbody = document.getElementById('rosterTableBody');
+      tbody.innerHTML = '';
+
+      const sortedMembers = [...state.members].sort((a, b) => b.points - a.points);
+      document.getElementById('memberCount').textContent = sortedMembers.length;
+
+      updatePaymentProgress();
+
+      if (sortedMembers.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" class="py-8 text-center text-slate-300 text-xs italic font-medium">
+              No managers on the roster yet. Use Admin / Super Admin view to add managers or build from scratch!
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      const totalCount = sortedMembers.length;
+      const isAdminOrSuper = state.accessMode === 'admin' || state.accessMode === 'superadmin';
+
+      sortedMembers.forEach((m, index) => {
+        const rank = index + 1;
+        const isLeader = rank === 1;
+        const isBottom = rank === totalCount && totalCount > 1;
+
+        let paidHTML = '';
+        if (isAdminOrSuper) {
+          paidHTML = `
+            <button onclick="togglePayment(this.dataset.memberId)" data-member-id="${escapeHTML(m.id)}" class="px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${m.paid ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/40' : 'bg-roseHot/20 text-roseHot border border-roseHot/40'}">
+              ${m.paid ? 'Paid' : 'Pending'}
+            </button>
+          `;
+        } else {
+          paidHTML = m.paid
+            ? '<span class="text-cyan-300 bg-cyan-500/20 px-2.5 py-1 rounded-md border border-cyan-400/50 font-black text-xs shadow-sm">Paid</span>'
+            : '<span class="text-roseHot bg-roseHot/20 px-2.5 py-1 rounded-md border border-roseHot/50 font-black text-xs shadow-sm">Pending</span>';
+        }
+
+        let nameDisplayHTML = '';
+        let gwPointsHTML = '';
+        let totalPointsHTML = '';
+
+        if (isAdminOrSuper) {
+          nameDisplayHTML = `
+            <input type="text" value="${escapeHTML(m.name)}" data-member-id="${escapeHTML(m.id)}" onchange="updateMemberName(this.dataset.memberId, this.value)" class="bg-pitchDark border border-cardBorder text-xs text-white p-1.5 rounded focus:outline-none focus:border-cyan-400 w-full max-w-[150px]">
+          `;
+          gwPointsHTML = `
+            <input type="number" value="${Number(m.gwPoints) || 0}" data-member-id="${escapeHTML(m.id)}" onchange="updateMemberGwPoints(this.dataset.memberId, this.value)" class="bg-pitchDark border border-cardBorder text-xs text-skyBright p-1 rounded focus:outline-none text-right w-16 font-semibold">
+          `;
+          totalPointsHTML = `
+            <input type="number" value="${Number(m.points) || 0}" data-member-id="${escapeHTML(m.id)}" onchange="updateMemberTotalPoints(this.dataset.memberId, this.value)" class="bg-pitchDark border border-cardBorder text-xs text-electricCyan p-1 rounded focus:outline-none text-right w-16 font-bold">
+          `;
+        } else {
+          nameDisplayHTML = `<span class="font-bold text-white editable-node">${escapeHTML(m.name)}</span>`;
+          gwPointsHTML = `<span class="font-semibold text-skyBright editable-node">${Number(m.gwPoints !== undefined ? m.gwPoints : 0).toLocaleString()}</span>`;
+          totalPointsHTML = `<span class="font-bold text-electricCyan editable-node">${Number(m.points || 0).toLocaleString()}</span>`;
+        }
+
+        const row = document.createElement('tr');
+
+        if (isBottom) {
+          row.className = "animate-burn-glow border-b border-roseHot/60 transition-colors";
+        } else {
+          row.className = "hover:bg-cardDark/60 transition-colors border-b border-cardBorder/50";
+        }
+
+        row.innerHTML = `
+          <td class="py-3.5 px-4 font-bold">
+            <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg ${isLeader ? 'bg-amber-400/30 text-amber-300 border border-amber-400/60 font-black' : isBottom ? 'bg-roseHot/30 text-rose-200 border border-roseHot/60 font-black' : 'bg-pitchDark text-slate-200 border border-cardBorder'}">
+              ${isLeader ? '👑' : rank}
+            </span>
+          </td>
+          <td class="py-3.5 px-4">
+            <div class="flex items-center gap-2">
+              ${nameDisplayHTML}
+              ${isLeader ? '' : ''}
+              ${isBottom ? '' : ''}
+            </div>
+          </td>
+          <td class="py-3.5 px-4 text-center">${paidHTML}</td>
+          <td class="py-3.5 px-4 text-right">${gwPointsHTML}</td>
+          <td class="py-3.5 px-4 text-right">${totalPointsHTML}</td>
+          <td class="admin-only ${isAdminOrSuper ? '' : 'hidden'} py-3.5 px-4 text-center">
+            <button onclick="removeMember(this.dataset.memberId)" data-member-id="${escapeHTML(m.id)}" class="bg-roseHot/20 hover:bg-roseHot text-roseHot hover:text-white px-2.5 py-1 rounded text-xs font-bold transition-all border border-roseHot/30">
+              <i class="fa-solid fa-trash-can"></i> Remove
+            </button>
+          </td>
+        `;
+
+        tbody.appendChild(row);
+      });
+
+      if (state.accessMode === 'superadmin') {
+        setInlineEditable(true);
+      }
+    }
+
+    function updateMemberName(id, val) {
+      const member = state.members.find(m => m.id === id);
+      if (member) {
+        member.name = val.trim();
+        saveStateToCloud();
+      }
+    }
+
+    function updateMemberGwPoints(id, val) {
+      const member = state.members.find(m => m.id === id);
+      if (member) {
+        member.gwPoints = parseInt(val) || 0;
+        saveStateToCloud();
+      }
+    }
+
+    function updateMemberTotalPoints(id, val) {
+      const member = state.members.find(m => m.id === id);
+      if (member) {
+        member.points = parseInt(val) || 0;
+        saveStateToCloud();
+        renderRoster();
+      }
+    }
+
+    function togglePayment(id) {
+      const member = state.members.find(m => m.id === id);
+      if (member) {
+        member.paid = !member.paid;
+        member.paidAt = member.paid ? Date.now() : null;
+        const deadline = state.countdownTarget ? new Date(state.countdownTarget).getTime() : 0;
+        member.lateFee = member.paid && deadline && member.paidAt > deadline ? 30 : 0;
+        saveStateToCloud();
+        renderRoster();
+        showToast(`${member.name} payment: ${member.paid ? `PAID (KSh ${50 + (member.lateFee || 0)})` : 'PENDING'}`);
+      }
+    }
+
+    async function saveWinnerDetails() {
+      state.winnerName = document.getElementById('winnerNameInput').value.trim() || 'Gemini';
+      state.winnerPoints = parseInt(document.getElementById('winnerPointsInput').value) || 0;
+      const saved = await saveStateToCloud();
+      if (!saved) return;
+      renderApp();
+      showToast('Winner published 👑');
+    }
+
+    function saveRules() {
+      state.rulesText = document.getElementById('rulesInput').value.trim();
+      saveStateToCloud();
+      renderApp();
+      showToast('Rules saved 📖');
+    }
+
+    async function saveContribDetails() {
+      state.contribPhone = document.getElementById('contribPhoneInput').value.trim();
+      state.contribName = document.getElementById('contribNameInput').value.trim();
+      const saved = await saveStateToCloud();
+      if (!saved) return;
+      renderApp();
+      showToast('Contribution details saved 💳');
+    }
+
+    function saveSupportDetails() {
+      state.supportPhone = document.getElementById('supportPhoneInput').value.trim();
+      saveStateToCloud();
+      renderApp();
+      showToast('Support details saved 🤝');
+    }
+
+    async function saveAnnouncement() {
+      if (!['admin', 'superadmin'].includes(state.accessMode)) return;
+      state.announcement = document.getElementById('announcementInput').value.trim();
+      if (!state.announcement) { showToast('Write an announcement first'); return; }
+      state.announcementLedger = Array.isArray(state.announcementLedger) ? state.announcementLedger : [];
+      const notice = { id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`, text: state.announcement, createdAt: new Date().toISOString() };
+      state.announcementLedger.push(notice);
+      lastAnnouncementId = notice.id;
+      const saved = await saveStateToCloud();
+      if (!saved) return;
+      renderApp();
+      showAdminAlertPopup('Attention! Admin has made some announcements.');
+      showToast('Announcement broadcasted');
+    }
+
+    function saveProofVault() {
+      state.proofText = document.getElementById('proofTextInput').value.trim();
+      const fileInput = document.getElementById('proofImageInput');
+      if (fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          state.proofImageData = e.target.result;
+          saveStateToCloud();
+          renderApp();
+          showToast('Proof image uploaded to vault 🛡️');
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+      } else {
+        saveStateToCloud();
+        renderApp();
+        showToast('Proof text saved to vault 🛡️');
+      }
+    }
+
+    function addManualMember() {
+      const nameInput = document.getElementById('manualMemberName');
+      const gwPointsInput = document.getElementById('manualMemberGw');
+      const pointsInput = document.getElementById('manualMemberTotal');
+      const name = (nameInput && nameInput.value || '').trim();
+      const gwPoints = parseInt(gwPointsInput && gwPointsInput.value || '0') || 0;
+      const points = parseInt(pointsInput && pointsInput.value || '0') || 0;
+      if (!name) {
+        showToast('Type a manager name first');
+        return;
+      }
+      state.members.push({ id: `member-${Date.now()}-${Math.random().toString(36).slice(2,9)}`, name, points, gwPoints, paid: false });
+      saveStateToCloud();
+      renderRoster();
+      if (nameInput) nameInput.value = '';
+      if (gwPointsInput) gwPointsInput.value = '';
+      if (pointsInput) pointsInput.value = '';
+      showToast(`Added ${name} to roster ⚽`);
+    }
+
+    function addMember() {
+      const nameInput = document.getElementById('newMemberName');
+      const gwPointsInput = document.getElementById('newMemberGwPoints');
+      const pointsInput = document.getElementById('newMemberPoints');
+
+      const name = nameInput.value.trim();
+      const gwPoints = parseInt(gwPointsInput.value) || 0;
+      const points = parseInt(pointsInput.value) || 0;
+
+      if (!name) {
+        showToast('Please type a manager name');
+        return;
+      }
+
+      state.members.push({
+        id: `member-${Date.now()}-${Math.random().toString(36).slice(2,9)}`,
+        name: name,
+        points: points,
+        gwPoints: gwPoints,
+        paid: false,
+      });
+
+      saveStateToCloud();
+      renderRoster();
+
+      nameInput.value = '';
+      gwPointsInput.value = '';
+      pointsInput.value = '';
+      showToast(`Added ${name} to roster ⚽`);
+    }
+
+    function removeMember(id) {
+      const member = state.members.find(m => m.id === id);
+      const name = member ? member.name : 'this manager';
+
+      state.members = state.members.filter(m => m.id !== id);
+      saveStateToCloud();
+      renderRoster();
+      showToast(`Removed ${name} from roster`);
+    }
+
+    function clearEntireRoster() {
+      if (confirm('Are you sure you want to wipe the entire roster and start from scratch?')) {
+        state.members = [];
+        saveStateToCloud();
+        renderRoster();
+        showToast('Roster wiped clean. Build from scratch!');
+      }
+    }
+
+    async function submitTrashTalk() {
+      const author = document.getElementById('trashAuthorInput').value.trim();
+      const text = document.getElementById('trashTextInput').value.trim();
+
+      if (!author || !text) {
+        showToast('Type your name and banter message');
+        return;
+      }
+
+      const shared=await postMemberAction('banter',{author,text});
+      if(shared===false)return;
+      sessionStorage.setItem('fpl_manager_identity', author);
+      if(shared===null)state.trashTalks.unshift({
+        id: Date.now().toString(),
+        author: author,
+        text: text,
+      });
+
+      if(shared===null)saveStateToCloud();
+      renderTrashTalk();
+
+      document.getElementById('trashAuthorInput').value = '';
+      document.getElementById('trashTextInput').value = '';
+      if (!shared?.queued) showToast('Banter posted 🔥');
+    }
+
+    function deleteTrashTalk(id) {
+      const item = state.trashTalks.find(t => t.id === id);
+      if (!item || !canDeleteOwnPost(item.author)) { showToast('Enter the manager name that authored this post to delete it'); return; }
+      state.trashTalks = state.trashTalks.filter(t => t.id !== id);
+      saveStateToCloud();
+      renderTrashTalk();
+      showToast('Banter deleted');
+    }
+
+    function renderTrashTalk() {
+      const feed = document.getElementById('trashFeed');
+      feed.innerHTML = '';
+
+      if (state.trashTalks.length === 0) {
+        feed.innerHTML = `<p class="text-xs text-rose-200/70 italic py-2">No banter posted yet. Start the roasts!</p>`;
+        return;
+      }
+
+      state.trashTalks.forEach(t => {
+        const div = document.createElement('div');
+        div.className = "bg-pitchDark/95 p-3.5 rounded-xl border border-roseHot/50 flex items-start justify-between gap-3 text-xs shadow-lg";
+
+        const deleteBtn = `<button onclick="deleteTrashTalk('${t.id}')" class="text-roseHot hover:text-white hover:underline font-extrabold shrink-0">Delete</button>`;
+
+        div.innerHTML = `
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <span class="font-black text-rose-300 bg-rose-500/20 px-2 py-0.5 rounded border border-rose-500/40 editable-node">${escapeHTML(t.author)}</span>
+
+            </div>
+            <p class="text-white font-semibold text-sm leading-snug editable-node">${escapeHTML(t.text)}</p>
+          </div>
+          ${deleteBtn}
+        `;
+        feed.appendChild(div);
+      });
+
+      if (state.accessMode === 'superadmin') {
+        setInlineEditable(true);
+      }
+    }
+
+    async function submitSuggestion() {
+      const author = document.getElementById('sugAuthorInput').value.trim();
+      const text = document.getElementById('sugTextInput').value.trim();
+
+      if (!author || !text) {
+        showToast('Type your name and suggestion');
+        return;
+      }
+
+      const shared=await postMemberAction('suggestion',{author,text});
+      if(shared===false)return;
+      sessionStorage.setItem('fpl_manager_identity', author);
+      if(shared===null)state.suggestions.unshift({
+        id: Date.now().toString(),
+        author: author,
+        text: text,
+      });
+
+      if(shared===null)saveStateToCloud();
+      renderSuggestions();
+
+      document.getElementById('sugAuthorInput').value = '';
+      document.getElementById('sugTextInput').value = '';
+      if (!shared?.queued) showToast('Suggestion posted 💬');
+    }
+
+    function deleteSuggestion(id) {
+      const item = state.suggestions.find(s => s.id === id);
+      if (!item || !canDeleteOwnPost(item.author)) { showToast('Enter the manager name that authored this post to delete it'); return; }
+      state.suggestions = state.suggestions.filter(s => s.id !== id);
+      saveStateToCloud();
+      renderSuggestions();
+      showToast('Suggestion deleted');
+    }
+
+    function renderSuggestions() {
+      const feed = document.getElementById('suggestionFeed');
+      feed.innerHTML = '';
+
+      if (state.suggestions.length === 0) {
+        feed.innerHTML = `<p class="text-xs text-amber-200/70 italic py-2">No suggestions yet. Share your feedback!</p>`;
+        return;
+      }
+
+      state.suggestions.forEach(s => {
+        const div = document.createElement('div');
+        div.className = "bg-pitchDark/95 p-3.5 rounded-xl border border-amber-400/50 flex items-start justify-between gap-3 text-xs shadow-lg";
+
+        const deleteBtn = `<button onclick="deleteSuggestion('${s.id}')" class="text-roseHot hover:text-white hover:underline font-extrabold shrink-0">Delete</button>`;
+
+        div.innerHTML = `
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <span class="font-black text-amber-300 bg-amber-500/20 px-2 py-0.5 rounded border border-amber-400/40 editable-node">${escapeHTML(s.author)}</span>
+
+            </div>
+            <p class="text-white font-semibold text-sm leading-snug editable-node">${escapeHTML(s.text)}</p>
+          </div>
+          ${deleteBtn}
+        `;
+        feed.appendChild(div);
+      });
+
+      if (state.accessMode === 'superadmin') {
+        setInlineEditable(true);
+      }
+    }
+
+    async function updateCountdownTarget() {
+      state.countdownTarget = document.getElementById('countdownInput').value;
+      const saved = await saveStateToCloud();
+      updateCountdownDisplay();
+      if (saved) showToast(state.countdownTarget ? 'Gameweek deadline saved' : 'Gameweek deadline cleared');
+    }
+
+    function startCountdownTimer() {
+      updateCountdownDisplay();
+      setInterval(updateCountdownDisplay, 1000);
+    }
+
+    function updateCountdownDisplay() {
+        const status = document.getElementById('deadlineStatusText');
+        if (!state.countdownTarget) {
+          document.getElementById('days').textContent = '00';
+          document.getElementById('hours').textContent = '00';
+          document.getElementById('minutes').textContent = '00';
+          document.getElementById('seconds').textContent = '00';
+          if (status) status.textContent = 'Set a deadline';
+          return;
+        }
+
+        const target = new Date(state.countdownTarget).getTime();
+        const now = new Date().getTime();
+        const diff = target - now;
+
+        if (diff <= 0) {
+          document.getElementById('days').textContent = '00';
+          document.getElementById('hours').textContent = '00';
+          document.getElementById('minutes').textContent = '00';
+          document.getElementById('seconds').textContent = '00';
+          if (status) status.textContent = 'Deadline reached';
+          return;
+        }
+
+        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+        document.getElementById('days').textContent = d < 10 ? '0' + d : d;
+        document.getElementById('hours').textContent = h < 10 ? '0' + h : h;
+        document.getElementById('minutes').textContent = m < 10 ? '0' + m : m;
+        document.getElementById('seconds').textContent = s < 10 ? '0' + s : s;
+        if (status) status.textContent = 'Time remaining';
+    }
+
+    function copyToClipboard(elementId) {
+      const text = document.getElementById(elementId).textContent;
+      if (!text || text === 'Not Set Yet') {
+        showToast('Number not set by Admin yet');
+        return;
+      }
+
+      const tempInput = document.createElement('input');
+      tempInput.value = text;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempInput);
+
+      showToast('Number copied 🤝');
+    }
+
+    function copyShareLink() {
+      const link = document.getElementById('shareLinkInput');
+      if (!link) return;
+      const url = link.value;
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(url).then(() => showToast('Share link copied')).catch(() => showToast('Share link ready to copy'));
+      } else {
+        link.select();
+        document.execCommand('copy');
+        showToast('Share link copied');
+      }
+    }
+    function showAdminAlertPopup(message) {
+      const modal = document.getElementById('adminAlertPopup');
+      const body = document.getElementById('adminAlertBody');
+      if (!modal || !body) return;
+      body.textContent = message;
+      modal.classList.remove('hidden');
+      setTimeout(() => {
+        modal.classList.add('hidden');
+      }, 4000);
+    }
+    function showToast(message) {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+
+      toast.className = "bg-cardDark text-white border border-emeraldNeon/50 px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 text-xs sm:text-sm font-bold pointer-events-auto toast-enter mb-2";
+      const icon = document.createElement('span');
+      icon.className = 'text-amber-400 text-base';
+      icon.textContent = '👑';
+      const text = document.createElement('span');
+      text.textContent = String(message);
+      toast.append(icon, text);
+
+      container.appendChild(toast);
+
+      setTimeout(() => toast.classList.add('toast-active'), 10);
+
+      setTimeout(() => {
+        toast.classList.remove('toast-active');
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    async function saveAllChanges(){if(!['admin','superadmin'].includes(state.accessMode))return;const saved=await saveStateToCloud();if(saved)showToast('Saved to public')}
+    function saveTournament(){if(state.accessMode!=='superadmin')return;state.tournamentEntries=document.getElementById('tournamentInput').value.split(/\r?\n/).map(x=>{let a=x.split(',');return{name:(a[0]||'').trim(),points:+a[1]||0}}).filter(x=>x.name).sort((a,b)=>b.points-a.points);saveStateToCloud();renderActivities()}
+    function submitSwapRequest(){let a=document.getElementById('swapAuthor').value.trim(),d=document.getElementById('swapDetails').value.trim();if(!a||!d)return showToast('Enter your name and swap details');state.swapRequests.unshift({a,d});saveStateToCloud();renderActivities();showToast('Request sent')}
+    function escapeHTML(x){return String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+    function renderActivities(){let d=document.getElementById('tournamentDisplay');if(d)d.innerHTML=(state.tournamentEntries||[]).map((x,i)=>`<div>${i+1}. ${escapeHTML(x.name)} — ${Number(x.points||0).toLocaleString()}</div>`).join('')||'No standings entered yet';}
+    function saveGameweek(){state.gameweek=document.getElementById('gameweekInput').value.trim()||'Gameweek';document.getElementById('gameweekBadge').textContent=state.gameweek;saveStateToCloud();showToast('Gameweek saved')}
+    const priorRenderForGameweek=renderApp; renderApp=function(){priorRenderForGameweek();const b=document.getElementById('gameweekBadge');if(b)b.textContent=state.gameweek||'GW 1-38 Active';const i=document.getElementById('gameweekInput');if(i)i.value=state.gameweek||'Gameweek 1';renderActivities()};
+    state.customTexts=state.customTexts||{};
+    function tagEditableNodes(){document.querySelectorAll('.editable-node').forEach((n,i)=>{if(!n.dataset.saveKey&&!n.closest('#trashFeed,#suggestionFeed'))n.dataset.saveKey='text-'+i})}
+    document.addEventListener('DOMContentLoaded',tagEditableNodes);
+    const priorSaveAll=saveAllChanges; saveAllChanges=async function(){if(!['admin','superadmin'].includes(state.accessMode))return;if(state.accessMode==='superadmin'){tagEditableNodes();document.querySelectorAll('.editable-node[data-save-key]').forEach(n=>state.customTexts[n.dataset.saveKey]=n.textContent);const title=document.querySelector('header h1 span');if(title){state.branding={...state.branding,title:title.textContent.trim()};document.title=state.branding.title}}await priorSaveAll()};
+    const priorRenderRoster=renderRoster; renderRoster=function(){priorRenderRoster();document.querySelectorAll('.editable-node[data-save-key]').forEach(n=>{if(state.customTexts[n.dataset.saveKey]!==undefined)n.textContent=state.customTexts[n.dataset.saveKey]});const title=document.querySelector('header h1 span');if(title){state.branding={...state.branding,title:title.textContent.trim()};document.title=state.branding.title}};
+    document.addEventListener('DOMContentLoaded',()=>{const main=document.querySelector('main');if(!main)return;const sections=[...main.children].filter(e=>e.tagName==='SECTION');if(sections.length>=3){const winner=sections[1],standings=sections[2];main.insertBefore(standings,winner)}});
+    const saveTournamentBase=saveTournament;saveTournament=function(){saveTournamentBase();state.tournamentRound=document.getElementById('tournamentRoundInput').value.trim();state.advancingNames=document.getElementById('advancingInput').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);saveStateToCloud();renderActivities();showToast('Round progression saved')};
+    const renderActivitiesBase=renderActivities;renderActivities=function(){renderActivitiesBase();const input=document.getElementById('tournamentRoundInput'),adv=document.getElementById('advancingInput');if(input&&document.activeElement!==input)input.value=state.tournamentRound||'';if(adv&&document.activeElement!==adv)adv.value=(state.advancingNames||[]).join('\n');const d=document.getElementById('tournamentDisplay');if(d&&(state.tournamentRound||state.advancingNames?.length)){const extra=`<div class="font-bold text-cyan-200">${escapeHTML(state.tournamentRound||'Current round')}</div>`+(state.advancingNames||[]).map((n,i)=>`<div>${i+1}. ${escapeHTML(n)} ${state.tournamentRound?.toLowerCase().includes('final')?'🏆':''}</div>`).join('');d.innerHTML=extra+d.innerHTML}};
+
+    const showToastBase=showToast;showToast=function(message){showToastBase(message)};
+
+    function openAdminModal() {
+      const modal = document.getElementById('adminAccessModal');
+      const input = document.getElementById('adminPasswordInput');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.setAttribute('aria-hidden', 'false');
+      }
+      if (input) {
+        setTimeout(() => input.focus(), 80);
+      }
+    }
+    function closeAdminModal() {
+      const modal = document.getElementById('adminAccessModal');
+      const input = document.getElementById('adminPasswordInput');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.setAttribute('aria-hidden', 'true');
+      }
+      if (input) input.value = '';
+    }
+    function unlockAdminAccess() {
+      const entered = document.getElementById('adminPasswordInput')?.value || '';
+      if (entered !== '15469007') {
+        showToast('Incorrect access password');
+        return;
+      }
+      closeAdminModal();
+      const accessChoices = ['admin', 'superadmin'];
+      const choice = window.prompt('Enter 1 for Admin or 2 for Super Admin');
+      const mode = choice === '1' ? 'admin' : choice === '2' ? 'superadmin' : null;
+      if (!mode) {
+        showToast('Access cancelled');
+        return;
+      }
+      sessionStorage.setItem('fpl_admin_session', mode);
+      changeAccessMode(mode);
+      showToast('Access enabled for this session.');
+    }
+    function handleCrownClick(){
+      openAdminModal();
+    }
+    function bindAdminCrownTrigger() {
+      const brand = [...document.querySelectorAll('header h1 span')]
+        .find(node => node.textContent.trim().toLocaleUpperCase() === 'FPL COMMUNITY');
+      const adjacentCrown = brand?.nextElementSibling;
+      const crown = adjacentCrown?.matches('button[aria-label="Crown"]')
+        ? adjacentCrown
+        : document.getElementById('crownMark');
+      if (!crown || crown.dataset.adminTriggerBound === 'true') return;
+      crown.addEventListener('click', handleCrownClick);
+      crown.dataset.adminTriggerBound = 'true';
+    }
+    bindAdminCrownTrigger();
+    async function saveTournamentStandings(){
+      if(!['admin','superadmin'].includes(state.accessMode))return;
+      state.tournamentGroups=document.getElementById('tournamentGroupInput').value.split(/\r?\n/).map(line=>{const p=line.split(',').map(x=>x.trim());if(p.length<9||!p[1])return null;return{group:p[0]||'A',name:p[1],played:Number(p[2])||0,won:Number(p[3])||0,drawn:Number(p[4])||0,lost:Number(p[5])||0,gf:Number(p[6])||0,ga:Number(p[7])||0,points:Number(p[8])||0,totalFplPoints:Number(p[9])||0};}).filter(Boolean);
+      state.tournamentMatches=document.getElementById('tournamentKnockoutInput').value.split(/\r?\n/).map(line=>{const p=line.split(',').map(x=>x.trim());if(p.length<6||!p[1]||!p[3])return null;return{round:p[0],home:p[1],homeScore:Number(p[2])||0,away:p[3],awayScore:Number(p[4])||0,winner:p[5]};}).filter(Boolean);
+      renderActivities();
+      const saved = await saveStateToCloud();
+      if (saved) showToast('Tournament standings saved');
+    }
+    function shuffleManagers(names){const shuffled=[...names];for(let i=shuffled.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]]}return shuffled}
+    function roundNameForEntrants(count){if(count<=2)return 'Final';if(count<=4)return 'Semi-final';if(count<=8)return 'Quarter-final';if(count<=16)return 'Round of 16';return `Round of ${count}`}
+    function makeTournamentDraw(names){const shuffled=shuffleManagers(names),lowerPower=2**Math.floor(Math.log2(shuffled.length));if(shuffled.length===lowerPower)return{round:roundNameForEntrants(shuffled.length),byes:[],matches:Array.from({length:shuffled.length/2},(_,i)=>({round:roundNameForEntrants(shuffled.length),home:shuffled[i*2],homeScore:'',away:shuffled[i*2+1],awayScore:'',winner:''}))};const matchCount=shuffled.length-lowerPower,playing=shuffled.slice(0,matchCount*2),byes=shuffled.slice(matchCount*2);return{round:'Preliminary',byes,matches:Array.from({length:matchCount},(_,i)=>({round:'Preliminary',home:playing[i*2],homeScore:'',away:playing[i*2+1],awayScore:'',winner:''}))}}
+    function drawTournamentFixtures(){if(!['admin','superadmin'].includes(state.accessMode))return;const names=document.getElementById('tournamentParticipantsInput').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean),unique=new Set(names.map(x=>x.toLocaleLowerCase()));if(names.length<2){showToast('Enter at least two participants');return}if(unique.size!==names.length){showToast('Remove duplicate participant names before drawing');return}const draw=makeTournamentDraw(names);state.tournamentParticipants=names;state.tournamentByes=draw.byes;state.tournamentMatches=draw.matches;saveStateToCloud();renderActivities();showToast(`${draw.round} fixtures drawn`)}
+    function drawTournamentNextRound(){if(!['admin','superadmin'].includes(state.accessMode))return;const matches=state.tournamentMatches||[];if(!matches.length){showToast('Draw the opening fixtures first');return}const lastRound=matches[matches.length-1].round,current=matches.filter(m=>m.round===lastRound);if(current.some(m=>!m.winner||![m.home,m.away].includes(m.winner))){showToast(`Enter and save every ${lastRound} winner first`);return}const advancing=[...(state.tournamentByes||[]),...current.map(m=>m.winner)];if(advancing.length<2){showToast('The tournament winner is already decided');return}const draw=makeTournamentDraw(advancing);state.tournamentByes=draw.byes;state.tournamentMatches=[...matches,...draw.matches];saveStateToCloud();renderActivities();showToast(`${draw.round} fixtures drawn from the advancing managers`)}
+    function renderTournamentTables(){
+      const groupHost=document.getElementById('tournamentGroupTable'),bracketHost=document.getElementById('tournamentBracket');if(!groupHost||!bracketHost)return;
+      const rows=state.tournamentGroups||[];const grouped={};rows.forEach(row=>(grouped[row.group]||(grouped[row.group]=[])).push({...row,gd:row.gf-row.ga}));
+      const groupNames=Object.keys(grouped).sort((a,b)=>a.localeCompare(b));
+      groupHost.innerHTML=groupNames.length?groupNames.map(group=>{const sorted=grouped[group].sort((a,b)=>b.points-a.points||b.gd-a.gd||b.gf-a.gf||a.name.localeCompare(b.name));return `<div class="overflow-x-auto rounded-xl border border-cardBorder"><div class="bg-cardDark px-3 py-2 text-xs font-black text-amber-200">Group ${escapeHTML(group)}</div><table class="w-full min-w-[620px] text-left text-[10px]"><thead><tr class="bg-cardDark/70 text-slate-400"><th class="p-2">#</th><th class="p-2">Manager</th><th class="p-2">P</th><th class="p-2">W</th><th class="p-2">D</th><th class="p-2">L</th><th class="p-2">GF</th><th class="p-2">GA</th><th class="p-2">GD</th><th class="p-2">GROUP POINTS</th><th class="p-2">FPL POINTS</th></tr></thead><tbody>${sorted.map((r,i)=>`<tr class="border-t border-cardBorder/60 ${i<2?'text-white':'text-slate-300'}"><td class="p-2 font-bold">${i+1}</td><td class="p-2 font-semibold">${escapeHTML(r.name)}</td><td class="p-2">${r.played}</td><td class="p-2">${r.won}</td><td class="p-2">${r.drawn}</td><td class="p-2">${r.lost}</td><td class="p-2">${r.gf}</td><td class="p-2">${r.ga}</td><td class="p-2">${r.gd>0?'+':''}${r.gd}</td><td class="p-2 font-black text-amber-200">${Number(r.points||0).toLocaleString()}</td><td class="p-2 font-black text-cyan-200">${Number(r.totalFplPoints||0).toLocaleString()}</td></tr>`).join('')}</tbody></table></div>`}).join(''):'<p class="rounded-xl border border-dashed border-cardBorder p-4 text-xs text-slate-400">Group tables will appear here after Admin enters the results.</p>';
+      const matches=state.tournamentMatches||[];const rounds=[...new Set(matches.map(m=>m.round))];const byeCard=(state.tournamentByes||[]).length?`<div class="col-span-full rounded-xl border border-amber-300/30 bg-amber-400/5 p-3 text-xs"><b class="text-amber-200">Bye into the next round:</b> <span class="text-slate-200">${state.tournamentByes.map(escapeHTML).join(', ')}</span></div>`:'';const roundCards=rounds.map(round=>{const list=matches.filter(m=>m.round===round);return `<div class="rounded-xl border border-cardBorder bg-cardDark/70 p-3 space-y-2"><h5 class="text-[10px] font-black uppercase tracking-wider text-cyan-200">${escapeHTML(round)}</h5>${list.map((m,i)=>`<div class="rounded-lg border border-cardBorder/70 bg-pitchDark p-2 text-[11px]"><div class="mb-1 text-[9px] font-bold uppercase tracking-wide text-slate-500">Match ${i+1}</div><div class="flex justify-between gap-2 ${m.winner===m.home?'font-black text-amber-200':'text-slate-200'}"><span>${escapeHTML(m.home)}</span><b>${m.homeScore===''||m.homeScore===undefined?'—':m.homeScore}</b></div><div class="my-1 border-t border-cardBorder/50"></div><div class="flex justify-between gap-2 ${m.winner===m.away?'font-black text-amber-200':'text-slate-200'}"><span>${escapeHTML(m.away)}</span><b>${m.awayScore===''||m.awayScore===undefined?'—':m.awayScore}</b></div>${round.toLowerCase()==='final'&&m.winner?`<div class="mt-2 text-center text-[10px] font-black text-amber-300">Cup winner: ${escapeHTML(m.winner)} 🏆</div>`:''}</div>`).join('')}</div>`});bracketHost.innerHTML=roundCards.length?[byeCard,...roundCards].filter(Boolean).join(''):'<p class="col-span-full rounded-xl border border-dashed border-cardBorder p-4 text-xs text-slate-400">Fixtures will appear here when Admin draws the tournament.</p>';
+      const cupWinner=document.getElementById('tournamentCupWinner');const leader=[...rows].sort((a,b)=>(b.totalFplPoints||0)-(a.totalFplPoints||0)||b.points-a.points||b.gf-b.ga-(a.gf-a.ga)||b.gf-a.gf||a.name.localeCompare(b.name))[0];if(cupWinner)cupWinner.innerHTML=leader&&leader.totalFplPoints>0?`${escapeHTML(leader.name)} · ${leader.totalFplPoints} FPL points`:'Waiting for FPL points';const entrantCount=document.getElementById('tournamentEntrantCount'),expectedPot=document.getElementById('tournamentExpectedPot'),entrants=(state.tournamentParticipants||[]).length||rows.length;if(entrantCount)entrantCount.textContent=String(entrants);if(expectedPot)expectedPot.textContent=`KSh ${entrants*100}`;
+      const gi=document.getElementById('tournamentGroupInput'),ki=document.getElementById('tournamentKnockoutInput'),pi=document.getElementById('tournamentParticipantsInput');if(gi&&document.activeElement!==gi)gi.value=rows.map(r=>[r.group,r.name,r.played,r.won,r.drawn,r.lost,r.gf,r.ga,r.points,r.totalFplPoints||0].join(', ')).join('\n');if(ki&&document.activeElement!==ki)ki.value=matches.map(m=>[m.round,m.home,m.homeScore,m.away,m.awayScore,m.winner].join(', ')).join('\n');if(pi&&document.activeElement!==pi)pi.value=(state.tournamentParticipants||[]).join('\n');
+    }
+    renderActivities=function(){renderTournamentTables();const host=document.getElementById('swapRequests');if(host){const requests=state.swapRequests||[];host.innerHTML=requests.length?requests.map((r,i)=>`<div class="flex items-start justify-between gap-2 rounded-lg border border-cardBorder bg-cardDark p-3 text-xs"><div><b class="text-white">${escapeHTML(r.a||r.author||'Manager')}</b><p class="mt-1 whitespace-pre-wrap text-slate-300">${escapeHTML(r.d||r.details||'')}</p></div>${['admin','superadmin'].includes(state.accessMode)?`<button onclick="deleteSwapRequest(${i})" class="shrink-0 font-bold text-rose-300">Delete</button>`:''}</div>`).join(''):'<p class="rounded-lg border border-dashed border-cardBorder p-3 text-xs text-slate-400">No swap requests yet.</p>'}};
+    async function submitSwapRequest(){const a=document.getElementById('swapAuthor').value.trim(),d=document.getElementById('swapDetails').value.trim();if(!a||!d){showToast('Enter your name and swap details');return;}const shared=await postMemberAction('swap-request',{author:a,text:d});if(shared===false)return;if(shared===null){state.swapRequests.unshift({a,d});saveStateToCloud();renderActivities()}document.getElementById('swapAuthor').value='';document.getElementById('swapDetails').value='';if(!shared?.queued)showToast('Swap request sent');}
+    function deleteSwapRequest(index){if(!['admin','superadmin'].includes(state.accessMode))return;state.swapRequests.splice(index,1);saveStateToCloud();renderActivities();showToast('Swap request deleted');}
+    if(!state.tournamentGroups)state.tournamentGroups=[];if(!state.tournamentMatches)state.tournamentMatches=[];
+
+    function currentManagerName() { return sessionStorage.getItem('fpl_manager_identity') || ''; }
+    function canDeleteOwnPost(author) {
+      if (['admin', 'superadmin'].includes(state.accessMode)) return true;
+      const current = currentManagerName() || window.prompt('Enter the manager name used for this post:') || '';
+      if (current) sessionStorage.setItem('fpl_manager_identity', current.trim());
+      return current.trim().toLocaleLowerCase() === String(author || '').trim().toLocaleLowerCase();
+    }
+
+    function renderSaviorTable() {
+      const body = document.getElementById('saviorTableBody');
+      if (!body) return;
+      const entries = Array.isArray(state.saviorEntries) ? state.saviorEntries : [];
+      body.innerHTML = entries.length ? entries.map(entry => `<tr class="text-slate-100"><td class="p-3 font-semibold">${escapeHTML(entry.name)}</td><td class="p-3">${escapeHTML(entry.savior)}</td><td class="p-3 text-right">${Number(entry.gw_pts || 0).toLocaleString()}</td><td class="p-3 text-right font-bold text-violet-200">${Number(entry.total_pts || 0).toLocaleString()}</td><td class="p-3">${escapeHTML(entry.status)}</td></tr>`).join('') : '<tr><td colspan="5" class="p-4 text-center text-xs text-slate-400">No Savior entries yet.</td></tr>';
+      const input = document.getElementById('saviorInput');
+      if (input && document.activeElement !== input) input.value = entries.map(e => [e.name, e.savior, e.gw_pts, e.total_pts, e.status].join(',')).join('\n');
+    }
+
+    async function saveSaviorActivity() {
+      if (!['admin', 'superadmin'].includes(state.accessMode)) return;
+      const parsed = document.getElementById('saviorInput').value.split(/\r?\n/).map(line => {
+        const [name, savior, gw_pts, total_pts, status] = line.split(',').map(part => part.trim());
+        return name ? { name, savior: savior || '', gw_pts: Number(gw_pts) || 0, total_pts: Number(total_pts) || 0, status: status || 'Pending' } : null;
+      }).filter(Boolean);
+      state.saviorEntries = parsed;
+      renderSaviorTable();
+      const saved = await saveStateToCloud();
+      if (saved) showToast('Savior activity saved');
+    }
+
+    function bracketMatchCard(match, title) {
+      const home = match?.home || 'To be decided';
+      const away = match?.away || 'To be decided';
+      const winner = match?.winner || '';
+      const score = (value) => value === '' || value === undefined || value === null ? '—' : escapeHTML(value);
+      const playerRow = (name, points) => {
+        const eligible = isTournamentReadyEligible(match, name);
+        const readyAction = name !== 'To be decided' && eligible
+          ? `<button type="button" class="action-trigger-ready mt-2 rounded px-3 py-1 text-[10px]" data-match-round="${escapeHTML(match?.round || '')}" data-player-name="${escapeHTML(name)}">Ready</button>`
+          : '';
+        return `<div class="rounded-md p-1 ${winner === name ? 'font-black text-amber-200' : 'text-slate-200'}"><div class="flex justify-between gap-2 text-[11px]"><span class="truncate">${escapeHTML(name)}</span><b>${score(points)}</b></div>${readyAction}</div>`;
+      };
+      return `<div class="bracket-match"><div class="mb-2 text-[9px] font-black uppercase tracking-wider text-amber-200">${escapeHTML(title)}</div>${playerRow(home, match?.homeScore)}<div class="my-1 border-t border-cardBorder/60"></div>${playerRow(away, match?.awayScore)}</div>`;
+    }
+
+    function isTournamentReadyEligible(match, playerName) {
+      if (!playerName || playerName === 'To be decided') return false;
+      if (!tournamentState.started) return true;
+      const matches = Array.isArray(state.tournamentMatches) ? state.tournamentMatches : [];
+      const identity = getTournamentReadyIdentity();
+      const profile = (state.members || []).find(member => String(member.id) === identity.userId);
+      const currentManagerName = String(profile?.name || identity.userId).trim().toLocaleLowerCase();
+      const rounds = [...new Set(matches.map(item => item.round))];
+      for (let index = rounds.length - 1; index >= 0; index--) {
+        const completedMatches = matches.filter(item =>
+          item.round === rounds[index] &&
+          item.winner &&
+          [item.home, item.away].includes(item.winner)
+        );
+        if (completedMatches.length) {
+          return completedMatches.some(item =>
+            item === match &&
+            item.winner === playerName &&
+            String(playerName).trim().toLocaleLowerCase() === currentManagerName
+          );
+        }
+      }
+      return false;
+    }
+
+    function getTournamentReadyIdentity() {
+      if (typeof sessionUser !== 'undefined' && sessionUser && sessionUser.id !== undefined && sessionUser.id !== null && String(sessionUser.id).trim()) {
+        return { userId: String(sessionUser.id), simulated: false };
+      }
+      const savedName = sessionStorage.getItem('managerName');
+      return { userId: savedName && savedName.trim() ? savedName.trim() : 'Test_Manager', simulated: true };
+    }
+
+    function updateTournamentIdentityNotice() {
+      const notice = document.getElementById('tournamentIdentityNotice');
+      if (!notice) return;
+      const identity = getTournamentReadyIdentity();
+      notice.textContent = identity.simulated
+        ? `Local simulation identity: ${identity.userId} (not authenticated)`
+        : `Profile identity: ${identity.userId}`;
+    }
+
+    async function submitTournamentReadyAction() {
+      const identity = getTournamentReadyIdentity();
+      const action = { userId: identity.userId, status: 'ready', timestamp: Date.now() };
+      state.tournamentReadyActions = Array.isArray(state.tournamentReadyActions) ? state.tournamentReadyActions : [];
+      state.tournamentReadyActions.push(action);
+      const saved = await saveStateToCloud();
+      if (saved) showToast(identity.simulated ? `Ready recorded for ${identity.userId} (simulation)` : 'Ready status recorded');
+    }
+
+    document.getElementById('tournamentBracket')?.addEventListener('click', event => {
+      const trigger = event.target instanceof Element ? event.target.closest('.action-trigger-ready') : null;
+      if (trigger) submitTournamentReadyAction();
+    });
+
+    function roundMatches(matchList, key) {
+      return matchList.filter(match => String(match.round || '').toLowerCase().replace(/[^a-z]/g, '').includes(key));
+    }
+
+    // Each named round is projected into the same seven-position layout: two quarter-finals per wing,
+    // one semi-final per side, and the final at center. Missing results stay as explicit placeholders.
+    function renderTournamentTables() {
+      const groupHost = document.getElementById('tournamentGroupTable');
+      const bracketHost = document.getElementById('tournamentBracket');
+      if (!groupHost || !bracketHost) return;
+      const groups = {};
+      (state.tournamentGroups || []).forEach(row => (groups[row.group] || (groups[row.group] = [])).push({ ...row, gd: Number(row.gf || 0) - Number(row.ga || 0) }));
+      const groupNames = Object.keys(groups).sort((a, b) => a.localeCompare(b));
+      groupHost.innerHTML = groupNames.length ? groupNames.map(group => {
+        const sorted = groups[group].sort((a, b) => b.points - a.points || b.gd - a.gd || b.gf - a.gf || a.name.localeCompare(b.name));
+        return `<div class="overflow-x-auto rounded-xl border border-cardBorder"><div class="bg-cardDark px-3 py-2 text-xs font-black text-amber-200">Group ${escapeHTML(group)}</div><table class="w-full min-w-[620px] text-left text-[10px]"><thead><tr class="bg-cardDark/70 text-slate-400"><th class="p-2">#</th><th class="p-2">Manager</th><th class="p-2">P</th><th class="p-2">W</th><th class="p-2">D</th><th class="p-2">L</th><th class="p-2">GF</th><th class="p-2">GA</th><th class="p-2">GD</th><th class="p-2">GROUP POINTS</th><th class="p-2">FPL POINTS</th></tr></thead><tbody>${sorted.map((r, i) => `<tr class="border-t border-cardBorder/60 ${i < 2 ? 'text-white' : 'text-slate-300'}"><td class="p-2 font-bold">${i + 1}</td><td class="p-2 font-semibold">${escapeHTML(r.name)}</td><td class="p-2">${Number(r.played) || 0}</td><td class="p-2">${Number(r.won) || 0}</td><td class="p-2">${Number(r.drawn) || 0}</td><td class="p-2">${Number(r.lost) || 0}</td><td class="p-2">${Number(r.gf) || 0}</td><td class="p-2">${Number(r.ga) || 0}</td><td class="p-2">${r.gd > 0 ? '+' : ''}${Number(r.gd) || 0}</td><td class="p-2 font-black text-amber-200">${Number(r.points || 0).toLocaleString()}</td><td class="p-2 font-black text-cyan-200">${Number(r.totalFplPoints || 0).toLocaleString()}</td></tr>`).join('')}</tbody></table></div>`;
+      }).join('') : '<p class="rounded-xl border border-dashed border-cardBorder p-4 text-xs text-slate-400">Group tables will appear here after Admin enters the results.</p>';
+
+      const matches = Array.isArray(state.tournamentMatches) ? state.tournamentMatches : [];
+      const quarters = roundMatches(matches, 'quarter');
+      const semis = roundMatches(matches, 'semi');
+      const finals = matches.filter(match => String(match.round || '').toLowerCase().includes('final') && !String(match.round || '').toLowerCase().includes('semi') && !String(match.round || '').toLowerCase().includes('quarter'));
+      const qf = (index, side) => quarters[index] || { round: 'Quarter-final', home: state.tournamentParticipants?.[index * 2] || '', away: state.tournamentParticipants?.[index * 2 + 1] || '' };
+      bracketHost.innerHTML = `<div class="bracket-tree">
+        <div class="bracket-wing left">${bracketMatchCard(qf(0), 'Quarter-final 1')}${bracketMatchCard(qf(1), 'Quarter-final 2')}</div>
+        <div class="bracket-link"></div>
+        <div class="bracket-semi left">${bracketMatchCard(semis[0], 'Semi-final 1')}</div>
+        <div class="bracket-final"><div class="text-[9px] font-black uppercase tracking-[.2em] text-amber-200">Grand Final</div><div class="mt-2 flex items-center gap-2"><div class="min-w-0 flex-1">${bracketMatchCard(finals[0], 'Final')}</div><span class="text-4xl text-amber-300" aria-label="Trophy">🏆</span></div></div>
+        <div class="bracket-semi right">${bracketMatchCard(semis[1], 'Semi-final 2')}</div>
+        <div class="bracket-link"></div>
+        <div class="bracket-wing right">${bracketMatchCard(qf(2), 'Quarter-final 3')}${bracketMatchCard(qf(3), 'Quarter-final 4')}</div>
+      </div>`;
+      updateTournamentIdentityNotice();
+      const cupWinner = document.getElementById('tournamentCupWinner');
+      const leader = [...(state.tournamentGroups || [])].sort((a, b) => (b.totalFplPoints || 0) - (a.totalFplPoints || 0) || b.points - a.points)[0];
+      if (cupWinner) cupWinner.textContent = leader && leader.totalFplPoints > 0 ? `${leader.name} · ${leader.totalFplPoints} FPL points` : 'Waiting for FPL points';
+      const entrantCount = document.getElementById('tournamentEntrantCount');
+      const expectedPot = document.getElementById('tournamentExpectedPot');
+      const entrants = (state.tournamentParticipants || []).length || (state.tournamentGroups || []).length;
+      if (entrantCount) entrantCount.textContent = String(entrants);
+      if (expectedPot) expectedPot.textContent = `KSh ${entrants * 100}`;
+      const groupInput = document.getElementById('tournamentGroupInput');
+      const knockoutInput = document.getElementById('tournamentKnockoutInput');
+      const participantsInput = document.getElementById('tournamentParticipantsInput');
+      if (groupInput && document.activeElement !== groupInput) groupInput.value = (state.tournamentGroups || []).map(r => [r.group, r.name, r.played, r.won, r.drawn, r.lost, r.gf, r.ga, r.points, r.totalFplPoints || 0].join(', ')).join('\n');
+      if (knockoutInput && document.activeElement !== knockoutInput) knockoutInput.value = matches.map(m => [m.round, m.home, m.homeScore, m.away, m.awayScore, m.winner].join(', ')).join('\n');
+      if (participantsInput && document.activeElement !== participantsInput) participantsInput.value = (state.tournamentParticipants || []).join('\n');
+    }
+
+    renderActivities = function() {
+      renderTournamentTables();
+      renderSaviorTable();
+      const host = document.getElementById('swapRequests');
+      if (host) {
+        const requests = state.swapRequests || [];
+        host.innerHTML = requests.length ? requests.map((r, i) => `<div class="flex items-start justify-between gap-2 rounded-lg border border-cardBorder bg-cardDark p-3 text-xs"><div><b class="text-white">${escapeHTML(r.a || r.author || 'Manager')}</b><p class="mt-1 whitespace-pre-wrap text-slate-300">${escapeHTML(r.d || r.details || '')}</p></div>${['admin', 'superadmin'].includes(state.accessMode) ? `<button onclick="deleteSwapRequest(${i})" class="shrink-0 font-bold text-rose-300">Delete</button>` : ''}</div>`).join('') : '<p class="rounded-lg border border-dashed border-cardBorder p-3 text-xs text-slate-400">No swap requests yet.</p>';
+      }
+    };
+
+    function renderPayoutControls() {
+      const activeMembers = (state.members || []).filter(member => member.name);
+      const identity = document.getElementById('payoutManagerIdentity');
+      const authorized = document.getElementById('authorizedWinnerSelect');
+      const previousIdentity = identity?.value || '';
+      const previousAuthorized = authorized?.value || state.authorizedWinner || '';
+      const options = `<option value="">Select a manager</option>${activeMembers.map(member => `<option value="${escapeHTML(member.name)}">${escapeHTML(member.name)}</option>`).join('')}`;
+      if (identity) { identity.innerHTML = `<option value="">Select your manager name</option>${activeMembers.map(member => `<option value="${escapeHTML(member.name)}">${escapeHTML(member.name)}</option>`).join('')}`; identity.value = previousIdentity; }
+      if (authorized) { authorized.innerHTML = options; authorized.value = previousAuthorized; }
+      const anthemType = document.getElementById('anthemTypeSelect');
+      if (anthemType) anthemType.value = state.anthemType || 'current';
+      const fields = [['currentAnthemUrlInput', 'currentAnthemUrl'], ['classicAnthemUrlInput', 'classicAnthemUrl']];
+      fields.forEach(([id, key]) => { const input = document.getElementById(id); if (input && document.activeElement !== input) input.value = state[key] ?? ''; });
+      const status = document.getElementById('payoutStatusText');
+      if (status) status.textContent = state.payoutConfirmedBy ? `${state.payoutConfirmedBy} has confirmed this payout.` : state.authorizedWinner ? `Payout confirmation authorized for ${state.authorizedWinner}.` : 'Payout confirmation is locked until Admin authorizes a winner.';
+      updatePayoutButton();
+    }
+
+    // The notebook contract has no identity service, so this is client-side turn-taking only, not a security boundary.
+    function getSelectedManagerName() { return document.getElementById('payoutManagerIdentity')?.value || currentManagerName(); }
+    function updatePayoutButton() {
+      const button = document.getElementById('confirmPayoutButton');
+      if (!button) return;
+      const allowed = !!state.authorizedWinner && getSelectedManagerName().toLocaleLowerCase() === state.authorizedWinner.toLocaleLowerCase() && !state.payoutConfirmedAt;
+      button.setAttribute('aria-disabled', String(!allowed));
+      button.classList.toggle('opacity-50', !allowed);
+      button.classList.toggle('opacity-100', allowed);
+      button.classList.toggle('cursor-not-allowed', !allowed);
+      button.classList.toggle('cursor-pointer', allowed);
+    }
+
+    async function authorizePayoutWinner() {
+      if (state.accessMode !== 'superadmin') return;
+      state.authorizedWinner = document.getElementById('authorizedWinnerSelect').value;
+      state.anthemType = document.getElementById('anthemTypeSelect').value;
+      state.currentAnthemUrl = document.getElementById('currentAnthemUrlInput').value.trim();
+      state.classicAnthemUrl = document.getElementById('classicAnthemUrlInput').value.trim();
+      if (!state.authorizedWinner) { showToast('Select an active manager to authorize'); return; }
+      state.payoutConfirmedBy = '';
+      state.payoutConfirmedAt = '';
+      await saveStateToCloud();
+      renderPayoutControls();
+      showToast(`Payout authorized for ${state.authorizedWinner}`);
+    }
+
+    async function resetPayoutStatus() {
+      if (state.accessMode !== 'superadmin') return;
+      state.authorizedWinner = '';
+      state.payoutConfirmedBy = '';
+      state.payoutConfirmedAt = '';
+      clearPayoutAlert();
+      await saveStateToCloud();
+      renderPayoutControls();
+      showToast('Payout status reset');
+    }
+
+    async function confirmPayoutReceipt() {
+      let managerName = getSelectedManagerName();
+      if (!managerName) managerName = window.prompt('Enter your manager name:') || '';
+      if (!managerName || managerName.toLocaleLowerCase() !== String(state.authorizedWinner || '').toLocaleLowerCase() || state.payoutConfirmedAt) {
+        window.alert('You are not authorized to claim this payout.');
+        return;
+      }
+      const isClassic = state.anthemType === 'classic';
+      const streamUrl = isClassic ? state.classicAnthemUrl : state.currentAnthemUrl;
+      state.payoutConfirmedBy = managerName;
+      state.payoutConfirmedAt = new Date().toISOString();
+      sessionStorage.setItem('fpl_manager_identity', managerName);
+      renderPayoutControls();
+      const saved = await saveStateToCloud();
+      if (!saved) return;
+      const audio = document.getElementById('payoutAnthemAudio');
+      if (audio && streamUrl) {
+        audio.pause();
+        audio.src = streamUrl;
+        audio.volume = 1.0;
+        audio.classList.remove('hidden');
+      }
+      showToast('Payout confirmation submitted');
+    }
+
+    function clearPayoutAlert() {
+      const modal = document.getElementById('adminAlertPopup');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function saveGameweek() {
+      if (!['admin', 'superadmin'].includes(state.accessMode)) return;
+      state.gameweek = document.getElementById('gameweekInput').value.trim() || 'Gameweek';
+      const badge = document.getElementById('gameweekBadge');
+      if (badge) badge.textContent = state.gameweek;
+      saveStateToCloud();
+      showToast('Gameweek saved');
+    }
+
+    const renderRosterWithPayoutOptions = renderRoster;
+    renderRoster = function() { renderRosterWithPayoutOptions(); renderPayoutControls(); };
+    const renderAppWithPayoutControls = renderApp;
+    renderApp = function() { renderAppWithPayoutControls(); renderPayoutControls(); };
+
+    drawTournamentFixtures = function() {
+      if (!['admin', 'superadmin'].includes(state.accessMode)) return;
+      const names = document.getElementById('tournamentParticipantsInput').value.split(/\r?\n/).map(name => name.trim()).filter(Boolean);
+      const unique = new Set(names.map(name => name.toLocaleLowerCase()));
+      if (names.length !== 8) { showToast('Enter exactly eight managers to build the balanced knockout bracket'); return; }
+      if (unique.size !== names.length) { showToast('Remove duplicate manager names before drawing'); return; }
+      const draw = makeTournamentDraw(names);
+      state.tournamentParticipants = names;
+      state.tournamentByes = [];
+      state.tournamentMatches = draw.matches;
+      tournamentState.started = false;
+      state.tournamentState = { ...tournamentState };
+      updateKickoffButton();
+      saveStateToCloud();
+      renderActivities();
+      showToast('Eight-manager quarter-final bracket drawn');
+    };
+
+    let tournamentState = { started: false };
+    function normalizeTournamentState(value) {
+      return { started: Boolean(value && typeof value === 'object' && value.started === true) };
+    }
+
+    function extractCloudRuntimeConfig(response) {
+      if (!response || typeof response !== 'object' || Array.isArray(response)) return null;
+      const payload = response.payload && typeof response.payload === 'object' ? response.payload : response;
+      const config = payload.config && typeof payload.config === 'object' ? payload.config : payload;
+      const result = {};
+      if (config.tournamentState && typeof config.tournamentState === 'object') result.tournamentState = normalizeTournamentState(config.tournamentState);
+      if (typeof config.branding === 'string' && config.branding.trim()) result.branding = { title: config.branding.trim() };
+      else if (config.branding && typeof config.branding === 'object' && typeof config.branding.title === 'string' && config.branding.title.trim()) {
+        result.branding = { title: config.branding.title.trim() };
+      } else if (typeof config.brandTitle === 'string' && config.brandTitle.trim()) {
+        result.branding = { title: config.brandTitle.trim() };
+      }
+      return Object.keys(result).length ? result : null;
+    }
+
+    function applyRuntimeConfiguration(config) {
+      if (!config) return;
+      const previousStarted = tournamentState.started;
+      if (config.branding) {
+        state.branding = { ...state.branding, ...config.branding };
+        const brand = document.querySelector('header h1 span');
+        if (brand) brand.textContent = state.branding.title;
+        if (state.branding.title) document.title = state.branding.title;
+      }
+      if (config.tournamentState) {
+        state.tournamentState = normalizeTournamentState(config.tournamentState);
+        tournamentState = { ...state.tournamentState };
+      }
+      updateKickoffButton();
+      if (previousStarted !== tournamentState.started) renderActivities();
+    }
+
+    function synchronizeRuntimeConfiguration() {
+      if (pendingCloudRuntimeConfig) {
+        applyRuntimeConfiguration(pendingCloudRuntimeConfig);
+        pendingCloudRuntimeConfig = null;
+      }
+      tournamentState = normalizeTournamentState(state.tournamentState);
+      state.tournamentState = { ...tournamentState };
+      if (state.branding?.title) {
+        const brand = document.querySelector('header h1 span');
+        if (brand) brand.textContent = state.branding.title;
+        document.title = state.branding.title;
+      }
+      updateKickoffButton();
+    }
+
+    const loadSharedStateWithRuntimeConfig = loadSharedState;
+    let activeCloudStateLoad = null;
+    loadSharedState = function() {
+      if (activeCloudStateLoad) return activeCloudStateLoad;
+      const previousStarted = tournamentState.started;
+      activeCloudStateLoad = loadSharedStateWithRuntimeConfig()
+        .then(() => {
+          synchronizeRuntimeConfiguration();
+          if (previousStarted !== tournamentState.started) renderActivities();
+        })
+        .finally(() => { activeCloudStateLoad = null; });
+      return activeCloudStateLoad;
+    };
+
+    function updateKickoffButton() {
+      const button = document.getElementById('admin-master-kickoff-btn');
+      if (!button) return;
+      const started = Boolean(tournamentState.started);
+      button.disabled = started;
+      button.textContent = started ? 'Tournament Started' : 'Start Tournament';
+    }
+
+    async function startTournamentLifecycle() {
+      if (state.accessMode !== 'superadmin' || storedAdminMode() !== 'superadmin') {
+        showToast('Super Admin access is required to start the tournament.');
+        return;
+      }
+      if (tournamentState.started) return;
+      tournamentState.started = true;
+      state.tournamentState = { ...tournamentState };
+      document.querySelectorAll('.action-trigger-ready').forEach(button => button.remove());
+      updateKickoffButton();
+      renderActivities();
+      const saved = await saveStateToCloud();
+      if (saved) showToast('Tournament started');
+    }
+
+    async function saveSuperAdminChanges() {
+      if (state.accessMode !== 'superadmin' || storedAdminMode() !== 'superadmin') {
+        showToast('Super Admin access is required to save these changes.');
+        return;
+      }
+      const panel = document.getElementById('super-admin-tournament-controls');
+      const button = document.getElementById('super-admin-save-changes-btn');
+      if (!panel || !button || button.disabled) return;
+      const controls = [...panel.querySelectorAll('input, button')];
+      const priorDisabledStates = controls.map(control => control.disabled);
+      const originalLabel = button.innerHTML;
+      try {
+        controls.forEach(control => { control.disabled = true; });
+        button.innerHTML = 'Saving... <span class="spinner-icon" aria-hidden="true">🔄</span>';
+        state.tournamentState = { ...tournamentState };
+        const saved = await saveStateToCloud();
+        if (!saved) return;
+        showToast('Saved to public');
+      } catch (error) {
+        console.error('Super Admin state save failed:', error);
+        showToast(error.message || 'Configuration could not be saved.');
+      } finally {
+        controls.forEach((control, index) => { control.disabled = priorDisabledStates[index]; });
+        button.innerHTML = originalLabel;
+        updateKickoffButton();
+      }
+    }
+
+    document.getElementById('super-admin-save-changes-btn')?.addEventListener('click', saveSuperAdminChanges);
+    document.getElementById('admin-master-kickoff-btn')?.addEventListener('click', startTournamentLifecycle);
+
+    synchronizeRuntimeConfiguration();
+
+  </script>
+
+  <script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}))}</script>
+</body>
+</html>
