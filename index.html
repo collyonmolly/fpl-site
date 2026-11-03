@@ -1035,6 +1035,7 @@
       };
       if (payload !== undefined) {
         headers.set('Content-Type', 'application/json');
+        headers.set('Prefer', 'resolution=merge-duplicates,return=representation');
         options.body = JSON.stringify(payload);
       }
       const response = await fetch(cloudNotebookUrl(), options);
